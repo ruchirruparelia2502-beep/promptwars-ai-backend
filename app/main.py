@@ -18,7 +18,8 @@ from app.routers import (
     bookings,
     conflicts,
     approvals,
-    analytics
+    analytics,
+    copilot
 )
 
 app = FastAPI(
@@ -54,6 +55,7 @@ app.include_router(bookings.router)
 app.include_router(conflicts.router)
 app.include_router(approvals.router)
 app.include_router(analytics.router)
+app.include_router(copilot.router)
 
 # Mount Static UI Files (Accessible, Single-Repo Vercel Deployment)
 static_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "static")

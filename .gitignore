@@ -24,10 +24,12 @@ wheels/
 .installed.cfg
 *.egg
 
-# Virtual Environment
+# Environment & Secrets (Never committed to Git)
 .env
+.env*
 .env.local
 .env.*.local
+*.env
 
 # Node / Frontend (Critical to prevent 10MB limit breach!)
 node_modules/
