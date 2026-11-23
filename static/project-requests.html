@@ -1,0 +1,376 @@
+<!DOCTYPE html><html lang="en"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LabLink AI — Project Access Requests</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script id="tailwind-config">/** @type {import('tailwindcss').Config} */
+globalThis.tailwind = globalThis.tailwind || {};
+globalThis.tailwind.config = {
+  darkMode: 'class',
+  theme: {
+    extend: {
+      colors: {
+        'tangerine-orange': '#f3701e',
+        'slate-blue': '#4b607f',
+        'warm-cream': '#e8d8c9',
+        'hero-surface': '#3B2318',
+        'on-hero-surface': '#E8D8C9',
+        'primary': '#F3701E',
+        'on-primary': '#18120E',
+        'primary-container': '#552000',
+        'on-primary-container': '#FFDBCB',
+        'secondary': '#4B607F',
+        'on-secondary': '#F5F8FC',
+        'secondary-container': '#24344B',
+        'on-secondary-container': '#D4E3FF',
+        'tertiary': '#E8D8C9',
+        'on-tertiary': '#1C1B1B',
+        'background': '#141414',
+        'on-background': '#E8D8C9',
+        'surface': '#141414',
+        'surface-container-lowest': '#0E0E0E',
+        'surface-container-low': '#1B1A1A',
+        'surface-container': '#222121',
+        'surface-container-high': '#2B2A2A',
+        'surface-container-highest': '#363535',
+        'on-surface': '#E8D8C9',
+        'on-surface-variant': '#B8ABA0',
+        'outline': '#5E5650',
+        'outline-variant': '#36322F',
+        'success': '#4ADE80',
+        'on-success': '#052E16',
+        'warning': '#FBBF24',
+        'on-warning': '#451A03',
+        'error': '#F87171',
+        'on-error': '#450A0A',
+      },
+      borderRadius: {
+        'sm': '6px',
+        'DEFAULT': '10px',
+        'md': '12px',
+        'lg': '16px',
+        'xl': '24px',
+        'full': '9999px',
+      },
+      spacing: {
+        'gutter-xs': '4px',
+        'gutter-sm': '8px',
+        'gutter-md': '16px',
+        'gutter-lg': '24px',
+        'gutter-xl': '32px',
+        'section': '40px',
+        'page-margin': '28px',
+      },
+      fontFamily: {
+        'display': ['"Space Grotesk"', 'sans-serif'],
+        'headline': ['"Space Grotesk"', 'sans-serif'],
+        'title': ['"Geist"', 'sans-serif'],
+        'body': ['"Geist"', 'sans-serif'],
+        'label': ['"Geist"', 'sans-serif'],
+        'mono': ['"Space Mono"', 'monospace'],
+      },
+      fontSize: {
+        'display-lg': ['40px', { lineHeight: '48px', letterSpacing: '-0.5px', fontWeight: '700' }],
+        'display-lg-mobile': ['30px', { lineHeight: '36px', letterSpacing: '-0.25px', fontWeight: '700' }],
+        'headline-lg': ['28px', { lineHeight: '36px', letterSpacing: '-0.25px', fontWeight: '600' }],
+        'headline-md': ['22px', { lineHeight: '28px', letterSpacing: '0px', fontWeight: '600' }],
+        'title-lg': ['18px', { lineHeight: '26px', letterSpacing: '0px', fontWeight: '600' }],
+        'title-md': ['16px', { lineHeight: '24px', letterSpacing: '0px', fontWeight: '600' }],
+        'body-lg': ['16px', { lineHeight: '26px', letterSpacing: '0px', fontWeight: '400' }],
+        'body-md': ['14px', { lineHeight: '22px', letterSpacing: '0.1px', fontWeight: '400' }],
+        'label-lg': ['14px', { lineHeight: '20px', letterSpacing: '0.1px', fontWeight: '600' }],
+        'label-sm': ['12px', { lineHeight: '16px', letterSpacing: '0.3px', fontWeight: '500' }],
+        'mono-md': ['13px', { lineHeight: '20px', letterSpacing: '0px', fontWeight: '400' }],
+      },
+      transitionDuration: {
+        'state-change': '160ms',
+        'pov-switch': '280ms',
+        'card-enter': '320ms',
+      },
+      transitionDelay: {
+        'state-change': '0ms',
+        'pov-switch': '0ms',
+        'card-enter': '0ms',
+      },
+      transitionTimingFunction: {
+        'state-change': 'cubic-bezier(0.2, 0, 0, 1)',
+        'pov-switch': 'cubic-bezier(0.22, 1, 0.36, 1)',
+        'card-enter': 'cubic-bezier(0.16, 1, 0.3, 1)',
+      },
+    },
+  },
+};
+if (typeof module !== 'undefined') module.exports = globalThis.tailwind.config;
+</script>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&amp;family=Space+Grotesk:wght@500;600;700&amp;family=Space+Mono:wght@400;700&amp;display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=block" rel="stylesheet">
+  <style>
+    .material-symbols-outlined, .material-symbols-rounded, .material-symbols-sharp, .material-icons {
+      display: inline-block;
+      width: 1em;
+      height: 1em;
+      line-height: 1 !important;
+      box-sizing: content-box;
+      overflow: hidden;
+      white-space: nowrap;
+      direction: ltr;
+      vertical-align: middle;
+    }
+
+    @keyframes panelEnter {
+      0% { opacity: 0; transform: translateY(10px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    .animate-panel-enter {
+      animation: panelEnter 320ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .animate-panel-enter { animation: none; }
+      * { transition-duration: 0.01ms !important; }
+    }
+  </style>
+</head>
+<body class="bg-surface text-on-surface font-body antialiased selection:bg-primary selection:text-on-primary">
+
+  <div class="min-h-[1024px] flex flex-col lg:flex-row bg-surface text-on-surface" data-stitch-vh="min-h-[1024px]===min-h-screen">
+
+    <!-- Left Navigation Sidebar (Exact shell parity, Project Access active) -->
+    <aside class="w-full lg:w-[248px] lg:min-h-[1024px] shrink-0 bg-surface-container-low border-b lg:border-b-0 lg:border-r border-outline-variant p-gutter-lg flex flex-col justify-between gap-gutter-xl" data-stitch-vh="lg:min-h-[1024px]===lg:min-h-screen">
+      <div class="flex flex-col gap-gutter-xl">
+        <a href="../aetherlab-portal/AetherLabPortal.html" class="flex items-center gap-gutter-sm px-gutter-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-lg">
+          <span class="inline-flex items-center justify-center w-9 h-9 rounded-md bg-tangerine-orange text-on-primary">
+            <span class="material-symbols-outlined text-[20px]" style="font-variation-settings: &#39;FILL&#39; 1;">science</span>
+          </span>
+          <span class="font-headline text-headline-md text-tangerine-orange tracking-tight" data-design-text-token="headline-md">lablink AI</span>
+        </a>
+
+        <nav aria-label="Lab Portal Navigation" class="flex lg:flex-col gap-gutter-xs overflow-x-auto lg:overflow-visible pb-gutter-xs lg:pb-0">
+          <a href="../aetherlab-portal/AetherLabPortal.html" class="nav-item flex items-center gap-gutter-md px-gutter-md py-gutter-sm rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container font-label text-label-lg whitespace-nowrap transition-colors duration-state-change ease-state-change">
+            <span class="material-symbols-outlined text-[20px]">dashboard</span>
+            <span data-design-text-token="label-lg">Overview</span>
+          </a>
+          <a href="../aetherlab-portal/AetherLabPortal.html" class="nav-item flex items-center gap-gutter-md px-gutter-md py-gutter-sm rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container font-label text-label-lg whitespace-nowrap transition-colors duration-state-change ease-state-change">
+            <span class="material-symbols-outlined text-[20px]">precision_manufacturing</span>
+            <span data-design-text-token="label-lg">Equipment</span>
+          </a>
+          <a href="../equipment-booking/EquipmentBooking.html" class="nav-item flex items-center gap-gutter-md px-gutter-md py-gutter-sm rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container font-label text-label-lg whitespace-nowrap transition-colors duration-state-change ease-state-change">
+            <span class="material-symbols-outlined text-[20px]">calendar_month</span>
+            <span data-design-text-token="label-lg">Smart Slots</span>
+          </a>
+          <a href="#project-workspace" aria-current="page" class="nav-item flex items-center gap-gutter-md px-gutter-md py-gutter-sm rounded-full bg-surface-container-high text-on-surface font-label text-label-lg whitespace-nowrap transition-colors duration-state-change ease-state-change">
+            <span class="material-symbols-outlined text-[20px] text-tangerine-orange" style="font-variation-settings: &#39;FILL&#39; 1;">folder_special</span>
+            <span data-design-text-token="label-lg">Project Access</span>
+          </a>
+          <a href="../faculty-analytics/FacultyAnalytics.html" class="nav-item flex items-center gap-gutter-md px-gutter-md py-gutter-sm rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container font-label text-label-lg whitespace-nowrap transition-colors duration-state-change ease-state-change">
+            <span class="material-symbols-outlined text-[20px]">monitoring</span>
+            <span data-design-text-token="label-lg">Analytics</span>
+          </a>
+          <a href="../aetherlab-portal/AetherLabPortal.html" class="nav-item flex items-center gap-gutter-md px-gutter-md py-gutter-sm rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container font-label text-label-lg whitespace-nowrap transition-colors duration-state-change ease-state-change">
+            <span class="material-symbols-outlined text-[20px]">verified_user</span>
+            <span data-design-text-token="label-lg">Safety &amp; Docs</span>
+          </a>
+        </nav>
+      </div>
+
+      <div class="hidden lg:flex flex-col gap-gutter-md rounded-xl bg-tangerine-orange text-on-primary p-gutter-lg relative overflow-hidden">
+        <div class="flex items-center justify-between">
+          <span class="inline-flex items-center justify-center w-9 h-9 rounded-full bg-on-primary text-tangerine-orange">
+            <span class="material-symbols-outlined text-[18px]">auto_awesome</span>
+          </span>
+          <span class="font-mono text-label-sm px-gutter-sm py-gutter-xs rounded-full bg-on-primary text-warm-cream" data-design-text-token="label-sm">GenAI</span>
+        </div>
+        <div class="flex flex-col gap-gutter-xs">
+          <h2 class="font-headline text-headline-md text-on-primary leading-tight" data-design-text-token="headline-md">Lab Copilot</h2>
+          <p class="font-body text-body-md text-on-primary text-pretty" data-design-text-token="body-md">Estimate GPU hours from your project syllabus.</p>
+        </div>
+        <button type="button" onclick="showToast(&#39;AI Quota Estimator: Recommended 48 GPU hrs for Vision Capstone.&#39;)" data-component-id="button-copilot" data-component-type="button" data-component-variant="primary" class="inline-flex items-center justify-between w-full px-gutter-md py-gutter-sm rounded-full bg-on-primary text-warm-cream font-label text-label-lg transition-transform duration-state-change ease-state-change hover:-translate-y-0.5">
+          <span data-design-text-token="label-lg">Estimate</span>
+          <span class="material-symbols-outlined text-[16px]" aria-hidden="true">north_east</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Workspace Area -->
+    <div class="flex-1 flex flex-col min-w-0">
+
+      <!-- Top Header -->
+      <header class="sticky top-0 z-30 bg-surface/95 border-b border-outline-variant px-gutter-lg lg:px-gutter-xl py-gutter-md flex flex-wrap items-center justify-between gap-gutter-md">
+        <div class="relative flex-1 min-w-[220px] max-w-xs">
+          <span class="material-symbols-outlined text-[18px] text-on-surface-variant absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" aria-hidden="true">search</span>
+          <input type="search" placeholder="Search active project grants..." aria-label="Search project grants" class="w-full pl-10 pr-gutter-md py-gutter-sm rounded-full bg-surface-container-low border border-outline-variant text-body-md text-on-surface placeholder:text-on-surface-variant focus:outline-none focus:border-primary focus-visible:ring-2 focus-visible:ring-primary">
+        </div>
+
+        <div class="flex items-center gap-gutter-sm px-gutter-md py-gutter-xs rounded-full bg-surface-container-lowest border border-outline-variant">
+          <span class="material-symbols-outlined text-[18px] text-tangerine-orange" aria-hidden="true">folder_special</span>
+          <span class="font-label text-label-lg text-on-surface" data-design-text-token="label-lg">Project-Based Access</span>
+        </div>
+
+        <div class="flex items-center gap-gutter-sm">
+          <div class="hidden sm:flex items-center gap-gutter-xs px-gutter-md py-gutter-sm rounded-full bg-surface-container border border-outline-variant">
+            <span class="inline-block w-2 h-2 rounded-full bg-tangerine-orange"></span>
+            <span class="font-mono text-mono-md text-on-surface tabular-nums" data-design-text-token="mono-md">32 GPU hrs left</span>
+          </div>
+          <div class="flex items-center gap-gutter-sm pl-gutter-xs pr-gutter-md py-gutter-xs rounded-full bg-surface-container border border-outline-variant">
+            <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-slate-blue text-on-secondary font-headline text-label-lg">ML</span>
+            <div class="hidden md:flex flex-col">
+              <span class="font-label text-label-sm text-on-surface leading-none" data-design-text-token="label-sm">Maya Lin</span>
+              <span class="font-body text-label-sm text-on-surface-variant leading-tight" data-design-text-token="label-sm">CS &#39;26 · Student</span>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Main Project Access Content -->
+      <main id="project-workspace" class="flex-1 p-gutter-lg lg:p-gutter-xl pb-24 max-w-[1400px] w-full mx-auto flex flex-col gap-gutter-xl animate-panel-enter">
+
+        <div class="flex flex-wrap items-center justify-between gap-gutter-md">
+          <div>
+            <h1 class="font-display text-display-lg-mobile lg:text-display-lg text-on-surface text-balance" data-design-text-token="display-lg">
+              Request Cross-Department Lab Access
+            </h1>
+            <p class="font-body text-body-lg text-on-surface-variant text-pretty max-w-prose" data-design-text-token="body-lg">
+              Apply for multi-day GPU quotas, after-hours robotics bays, or portable dev kits tied to your course deadlines.
+            </p>
+          </div>
+          <a href="../aetherlab-portal/AetherLabPortal.html" class="inline-flex items-center gap-gutter-xs px-gutter-md py-gutter-sm rounded-full bg-surface-container border border-outline-variant text-on-surface font-label text-label-lg hover:bg-surface-container-high transition-colors duration-state-change ease-state-change">
+            <span class="material-symbols-outlined text-[18px]" aria-hidden="true">arrow_back</span>
+            <span data-design-text-token="label-lg">Back to Portal</span>
+          </a>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter-xl items-start">
+
+          <!-- Left 7 Cols: Interactive Grant Application Form -->
+          <form onsubmit="submitGrant(event)" class="lg:col-span-7 rounded-xl bg-surface-container border border-outline-variant p-gutter-lg lg:p-gutter-xl flex flex-col gap-gutter-lg">
+            <div>
+              <h2 class="font-headline text-headline-md text-on-surface" data-design-text-token="headline-md">New Access Application</h2>
+              <p class="font-body text-body-md text-on-surface-variant" data-design-text-token="body-md">Routed to your faculty advisor for priority scheduling.</p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-gutter-md">
+              <label class="flex flex-col gap-gutter-xs">
+                <span class="font-label text-label-sm text-on-surface-variant">Project Title</span>
+                <input id="grant-title" type="text" required value="Autonomous Campus Rover" class="w-full px-gutter-md py-gutter-sm rounded-lg bg-surface-container-low border border-outline-variant text-body-md text-on-surface focus:outline-none focus:border-primary focus-visible:ring-2 focus-visible:ring-primary">
+              </label>
+
+              <label class="flex flex-col gap-gutter-xs">
+                <span class="font-label text-label-sm text-on-surface-variant">Course &amp; Advisor</span>
+                <select class="w-full px-gutter-md py-gutter-sm rounded-lg bg-surface-container-low border border-outline-variant text-body-md text-on-surface focus:outline-none focus:border-primary focus-visible:ring-2 focus-visible:ring-primary">
+                  <option>CS-492 · Dr. Aris Thorne</option>
+                  <option>EE-310 · Prof. Nadia Chen</option>
+                  <option>ME-415 · Dr. Liam Vance</option>
+                </select>
+              </label>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-gutter-md">
+              <label class="flex flex-col gap-gutter-xs">
+                <span class="font-label text-label-sm text-on-surface-variant">Equipment &amp; Department</span>
+                <select id="grant-equip" class="w-full px-gutter-md py-gutter-sm rounded-lg bg-surface-container-low border border-outline-variant text-body-md text-on-surface focus:outline-none focus:border-primary focus-visible:ring-2 focus-visible:ring-primary">
+                  <option>NVIDIA H100 Node · CS AI Lab</option>
+                  <option>Jetson Orin Dev Kit · ECE Dept</option>
+                  <option>Franka Emika Arm · Mech &amp; Robotics</option>
+                  <option>Leica BLK360 · Spatial Lab</option>
+                </select>
+              </label>
+
+              <label class="flex flex-col gap-gutter-xs">
+                <span class="font-label text-label-sm text-on-surface-variant">Deadline Priority</span>
+                <select class="w-full px-gutter-md py-gutter-sm rounded-lg bg-surface-container-low border border-outline-variant text-body-md text-on-surface focus:outline-none focus:border-primary focus-visible:ring-2 focus-visible:ring-primary">
+                  <option>This Friday (Capstone Demo)</option>
+                  <option>Next Week (Midterm)</option>
+                  <option>End of Semester</option>
+                </select>
+              </label>
+            </div>
+
+            <label class="flex flex-col gap-gutter-xs">
+              <span class="font-label text-label-sm text-on-surface-variant">Technical Justification &amp; Compute Estimate</span>
+              <textarea rows="3" class="w-full px-gutter-md py-gutter-sm rounded-lg bg-surface-container-low border border-outline-variant text-body-md text-on-surface focus:outline-none focus:border-primary focus-visible:ring-2 focus-visible:ring-primary">Need 48 H100 hours to fine-tune vision-language navigation weights before Friday&#39;s demo.</textarea>
+            </label>
+
+            <div class="flex items-center justify-between gap-gutter-md pt-gutter-sm border-t border-outline-variant">
+              <span class="font-mono text-mono-md text-on-surface-variant" data-design-text-token="mono-md">Avg faculty SLA: 4h</span>
+              <button type="submit" class="inline-flex items-center gap-gutter-sm px-gutter-lg py-gutter-sm min-h-[44px] rounded-full bg-tangerine-orange text-on-primary font-label text-label-lg transition-transform duration-state-change ease-state-change hover:-translate-y-0.5">
+                <span data-design-text-token="label-lg">Submit Request</span>
+                <span class="material-symbols-outlined text-[18px]" aria-hidden="true">send</span>
+              </button>
+            </div>
+          </form>
+
+          <!-- Right 5 Cols: Active Grants & Status -->
+          <div class="lg:col-span-5 flex flex-col gap-gutter-lg">
+            <section class="rounded-xl bg-hero-surface border border-outline-variant p-gutter-lg flex flex-col gap-gutter-md">
+              <span class="font-mono text-label-sm text-warm-cream" data-design-text-token="label-sm">MY ACTIVE GRANTS</span>
+              <h2 class="font-headline text-headline-md text-warm-cream" data-design-text-token="headline-md">2 Approved · 1 Pending</h2>
+              <p class="font-body text-body-md text-warm-cream/90 text-pretty" data-design-text-token="body-md">
+                Approved project grants automatically boost your priority score in the Smart Slot Conflict Resolver.
+              </p>
+            </section>
+
+            <div id="grants-list" class="flex flex-col gap-gutter-md">
+              <article class="rounded-xl bg-surface-container-low border border-outline-variant p-gutter-lg flex items-start justify-between gap-gutter-md">
+                <div class="flex flex-col gap-gutter-xs">
+                  <h3 class="font-title text-title-md text-on-surface" data-design-text-token="title-md">CS-492 · Autonomous Vision</h3>
+                  <span class="font-body text-body-md text-on-surface-variant" data-design-text-token="body-md">48h H100 Node · CS AI Lab</span>
+                </div>
+                <span class="shrink-0 px-gutter-sm py-gutter-xs rounded-full bg-primary-container text-on-primary-container font-label text-label-sm">Pending</span>
+              </article>
+
+              <article class="rounded-xl bg-surface-container-low border border-outline-variant p-gutter-lg flex items-start justify-between gap-gutter-md">
+                <div class="flex flex-col gap-gutter-xs">
+                  <h3 class="font-title text-title-md text-on-surface" data-design-text-token="title-md">ECE-310 · Edge SLAM</h3>
+                  <span class="font-body text-body-md text-on-surface-variant" data-design-text-token="body-md">Jetson Orin Kit · ECE Dept</span>
+                </div>
+                <span class="shrink-0 px-gutter-sm py-gutter-xs rounded-full bg-secondary-container text-on-secondary-container font-label text-label-sm">Approved</span>
+              </article>
+            </div>
+          </div>
+
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <div id="toast" role="status" aria-live="polite" class="fixed bottom-6 right-6 z-50 hidden items-center gap-gutter-sm px-gutter-lg py-gutter-md rounded-full bg-warm-cream text-on-tertiary font-label text-label-lg">
+    <span class="material-symbols-outlined text-[18px] text-tangerine-orange" style="font-variation-settings: &#39;FILL&#39; 1;">check_circle</span>
+    <span id="toast-message">Request submitted</span>
+  </div>
+
+  <script>
+    function submitGrant(e) {
+      e.preventDefault();
+      const title = document.getElementById('grant-title').value;
+      const equip = document.getElementById('grant-equip').value;
+      const list = document.getElementById('grants-list');
+      const card = document.createElement('article');
+      card.className = 'rounded-xl bg-surface-container-low border border-outline-variant p-gutter-lg flex items-start justify-between gap-gutter-md animate-panel-enter';
+      card.innerHTML = `
+        <div class="flex flex-col gap-gutter-xs">
+          <h3 class="font-title text-title-md text-on-surface">${title}</h3>
+          <span class="font-body text-body-md text-on-surface-variant">${equip}</span>
+        </div>
+        <span class="shrink-0 px-gutter-sm py-gutter-xs rounded-full bg-primary-container text-on-primary-container font-label text-label-sm">Pending</span>
+      `;
+      list.prepend(card);
+      showToast(`Submitted "${title}" for faculty review.`);
+    }
+
+    let toastTimer;
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      document.getElementById('toast-message').textContent = msg;
+      toast.classList.remove('hidden');
+      toast.classList.add('flex');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        toast.classList.add('hidden');
+        toast.classList.remove('flex');
+      }, 2800);
+    }
+  </script>
+
+
+</body></html>

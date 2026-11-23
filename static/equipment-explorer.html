@@ -1,0 +1,504 @@
+<!DOCTYPE html><html lang="en"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LabLink AI — Equipment Explorer</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script id="tailwind-config">/** @type {import('tailwindcss').Config} */
+globalThis.tailwind = globalThis.tailwind || {};
+globalThis.tailwind.config = {
+  darkMode: 'class',
+  theme: {
+    extend: {
+      colors: {
+        'tangerine-orange': '#f3701e',
+        'slate-blue': '#4b607f',
+        'warm-cream': '#e8d8c9',
+        'hero-surface': '#3B2318',
+        'on-hero-surface': '#E8D8C9',
+        'primary': '#F3701E',
+        'on-primary': '#18120E',
+        'primary-container': '#552000',
+        'on-primary-container': '#FFDBCB',
+        'secondary': '#4B607F',
+        'on-secondary': '#F5F8FC',
+        'secondary-container': '#24344B',
+        'on-secondary-container': '#D4E3FF',
+        'tertiary': '#E8D8C9',
+        'on-tertiary': '#1C1B1B',
+        'background': '#141414',
+        'on-background': '#E8D8C9',
+        'surface': '#141414',
+        'surface-container-lowest': '#0E0E0E',
+        'surface-container-low': '#1B1A1A',
+        'surface-container': '#222121',
+        'surface-container-high': '#2B2A2A',
+        'surface-container-highest': '#363535',
+        'on-surface': '#E8D8C9',
+        'on-surface-variant': '#B8ABA0',
+        'outline': '#5E5650',
+        'outline-variant': '#36322F',
+        'success': '#4ADE80',
+        'on-success': '#052E16',
+        'warning': '#FBBF24',
+        'on-warning': '#451A03',
+        'error': '#F87171',
+        'on-error': '#450A0A',
+      },
+      borderRadius: {
+        'sm': '6px',
+        'DEFAULT': '10px',
+        'md': '12px',
+        'lg': '16px',
+        'xl': '24px',
+        'full': '9999px',
+      },
+      spacing: {
+        'gutter-xs': '4px',
+        'gutter-sm': '8px',
+        'gutter-md': '16px',
+        'gutter-lg': '24px',
+        'gutter-xl': '32px',
+        'section': '40px',
+        'page-margin': '28px',
+      },
+      fontFamily: {
+        'display': ['"Space Grotesk"', 'sans-serif'],
+        'headline': ['"Space Grotesk"', 'sans-serif'],
+        'title': ['"Geist"', 'sans-serif'],
+        'body': ['"Geist"', 'sans-serif'],
+        'label': ['"Geist"', 'sans-serif'],
+        'mono': ['"Space Mono"', 'monospace'],
+      },
+      fontSize: {
+        'display-lg': ['40px', { lineHeight: '48px', letterSpacing: '-0.5px', fontWeight: '700' }],
+        'display-lg-mobile': ['30px', { lineHeight: '36px', letterSpacing: '-0.25px', fontWeight: '700' }],
+        'headline-lg': ['28px', { lineHeight: '36px', letterSpacing: '-0.25px', fontWeight: '600' }],
+        'headline-md': ['22px', { lineHeight: '28px', letterSpacing: '0px', fontWeight: '600' }],
+        'title-lg': ['18px', { lineHeight: '26px', letterSpacing: '0px', fontWeight: '600' }],
+        'title-md': ['16px', { lineHeight: '24px', letterSpacing: '0px', fontWeight: '600' }],
+        'body-lg': ['16px', { lineHeight: '26px', letterSpacing: '0px', fontWeight: '400' }],
+        'body-md': ['14px', { lineHeight: '22px', letterSpacing: '0.1px', fontWeight: '400' }],
+        'label-lg': ['14px', { lineHeight: '20px', letterSpacing: '0.1px', fontWeight: '600' }],
+        'label-sm': ['12px', { lineHeight: '16px', letterSpacing: '0.3px', fontWeight: '500' }],
+        'mono-md': ['13px', { lineHeight: '20px', letterSpacing: '0px', fontWeight: '400' }],
+      },
+      transitionDuration: {
+        'state-change': '160ms',
+        'pov-switch': '280ms',
+        'card-enter': '320ms',
+      },
+      transitionDelay: {
+        'state-change': '0ms',
+        'pov-switch': '0ms',
+        'card-enter': '0ms',
+      },
+      transitionTimingFunction: {
+        'state-change': 'cubic-bezier(0.2, 0, 0, 1)',
+        'pov-switch': 'cubic-bezier(0.22, 1, 0.36, 1)',
+        'card-enter': 'cubic-bezier(0.16, 1, 0.3, 1)',
+      },
+    },
+  },
+};
+if (typeof module !== 'undefined') module.exports = globalThis.tailwind.config;
+</script>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&amp;family=Space+Grotesk:wght@500;600;700&amp;family=Space+Mono:wght@400;700&amp;display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=block" rel="stylesheet">
+  <style>
+    .material-symbols-outlined, .material-symbols-rounded, .material-symbols-sharp, .material-icons {
+      display: inline-block;
+      width: 1em;
+      height: 1em;
+      line-height: 1 !important;
+      box-sizing: content-box;
+      overflow: hidden;
+      white-space: nowrap;
+      direction: ltr;
+      vertical-align: middle;
+    }
+
+    @keyframes panelEnter {
+      0% { opacity: 0; transform: translateY(10px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    .animate-panel-enter {
+      animation: panelEnter 320ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .animate-panel-enter { animation: none; }
+      * { transition-duration: 0.01ms !important; }
+    }
+  </style>
+</head>
+<body class="bg-surface text-on-surface font-body antialiased selection:bg-primary selection:text-on-primary">
+
+  <div class="min-h-[1024px] flex flex-col lg:flex-row bg-surface text-on-surface" data-stitch-vh="min-h-[1024px]===min-h-screen">
+
+    <!-- Left Navigation Sidebar (Student Role-Scoped, Equipment active) -->
+    <aside class="w-full lg:w-[248px] lg:min-h-[1024px] shrink-0 bg-surface-container-low border-b lg:border-b-0 lg:border-r border-outline-variant p-gutter-lg flex flex-col justify-between gap-gutter-xl" data-stitch-vh="lg:min-h-[1024px]===lg:min-h-screen">
+      <div class="flex flex-col gap-gutter-xl">
+        <a href="../aetherlab-portal/AetherLabPortal.html?pov=student" class="flex items-center gap-gutter-sm px-gutter-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-lg">
+          <span class="inline-flex items-center justify-center w-9 h-9 rounded-md bg-tangerine-orange text-on-primary">
+            <span class="material-symbols-outlined text-[20px]" style="font-variation-settings: &#39;FILL&#39; 1;">science</span>
+          </span>
+          <span class="font-headline text-headline-md text-tangerine-orange tracking-tight" data-design-text-token="headline-md">lablink AI</span>
+        </a>
+
+        <nav aria-label="Student Portal Navigation" class="flex lg:flex-col gap-gutter-xs overflow-x-auto lg:overflow-visible pb-gutter-xs lg:pb-0">
+          <a href="../aetherlab-portal/AetherLabPortal.html?pov=student" class="nav-item flex items-center gap-gutter-md px-gutter-md py-gutter-sm rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container font-label text-label-lg whitespace-nowrap transition-colors duration-state-change ease-state-change">
+            <span class="material-symbols-outlined text-[20px]">dashboard</span>
+            <span data-design-text-token="label-lg">Overview</span>
+          </a>
+          <a href="#explorer-main" aria-current="page" class="nav-item flex items-center gap-gutter-md px-gutter-md py-gutter-sm rounded-full bg-surface-container-high text-on-surface font-label text-label-lg whitespace-nowrap transition-colors duration-state-change ease-state-change">
+            <span class="material-symbols-outlined text-[20px] text-tangerine-orange" style="font-variation-settings: &#39;FILL&#39; 1;">precision_manufacturing</span>
+            <span data-design-text-token="label-lg">Equipment</span>
+          </a>
+          <a href="../equipment-booking/EquipmentBooking.html" class="nav-item flex items-center gap-gutter-md px-gutter-md py-gutter-sm rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container font-label text-label-lg whitespace-nowrap transition-colors duration-state-change ease-state-change">
+            <span class="material-symbols-outlined text-[20px]">calendar_month</span>
+            <span data-design-text-token="label-lg">Smart Slots</span>
+          </a>
+          <a href="../project-access/ProjectAccess.html" class="nav-item flex items-center gap-gutter-md px-gutter-md py-gutter-sm rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container font-label text-label-lg whitespace-nowrap transition-colors duration-state-change ease-state-change">
+            <span class="material-symbols-outlined text-[20px]">folder_special</span>
+            <span data-design-text-token="label-lg">Project Access</span>
+          </a>
+        </nav>
+      </div>
+
+      <!-- Bottom Tangerine Lab Copilot Card -->
+      <div class="hidden lg:flex flex-col gap-gutter-md rounded-xl bg-tangerine-orange text-on-primary p-gutter-lg relative overflow-hidden">
+        <div class="flex items-center justify-between">
+          <span class="inline-flex items-center justify-center w-9 h-9 rounded-full bg-on-primary text-tangerine-orange">
+            <span class="material-symbols-outlined text-[18px]">auto_awesome</span>
+          </span>
+          <span class="font-mono text-label-sm px-gutter-sm py-gutter-xs rounded-full bg-on-primary text-warm-cream" data-design-text-token="label-sm">GenAI</span>
+        </div>
+        <div class="flex flex-col gap-gutter-xs">
+          <h2 class="font-headline text-headline-md text-on-primary leading-tight" data-design-text-token="headline-md">Lab Copilot</h2>
+          <p class="font-body text-body-md text-on-primary text-pretty" data-design-text-token="body-md">Match your project specs to idle GPU &amp; robotics bays.</p>
+        </div>
+        <button type="button" onclick="openCopilotModal()" data-component-id="button-copilot" data-component-type="button" data-component-variant="primary" class="inline-flex items-center justify-between w-full px-gutter-md py-gutter-sm rounded-full bg-on-primary text-warm-cream font-label text-label-lg transition-transform duration-state-change ease-state-change hover:-translate-y-0.5">
+          <span data-design-text-token="label-lg">Auto-Match</span>
+          <span class="material-symbols-outlined text-[16px]" aria-hidden="true">north_east</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Workspace Area -->
+    <div class="flex-1 flex flex-col min-w-0">
+
+      <!-- Top Header with Integrated POV Slider -->
+      <header class="sticky top-0 z-30 bg-surface/95 border-b border-outline-variant px-gutter-lg lg:px-gutter-xl py-gutter-md flex flex-wrap items-center justify-between gap-gutter-md">
+        <div class="relative flex-1 min-w-[220px] max-w-xs">
+          <span class="material-symbols-outlined text-[18px] text-on-surface-variant absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" aria-hidden="true">search</span>
+          <input id="explorer-search" type="search" placeholder="Search GPUs, dev kits, or bays..." aria-label="Search campus equipment" class="w-full pl-10 pr-gutter-md py-gutter-sm rounded-full bg-surface-container-low border border-outline-variant text-body-md text-on-surface placeholder:text-on-surface-variant focus:outline-none focus:border-primary focus-visible:ring-2 focus-visible:ring-primary">
+        </div>
+
+        <!-- TOP POV SLIDER (Student Active) -->
+        <div class="flex items-center gap-gutter-sm">
+          <span class="hidden xl:inline font-label text-label-sm text-on-surface-variant uppercase tracking-wider" data-design-text-token="label-sm">View as</span>
+          <div data-component-id="pov-slider" data-component-type="tabs" data-component-variant="with-icon" role="tablist" aria-label="Portal Perspective Switcher" class="relative grid grid-cols-3 p-gutter-xs rounded-full bg-surface-container-lowest border border-outline-variant">
+            <div aria-hidden="true" class="absolute top-1 bottom-1 left-1 w-[calc(33.333%-4px)] rounded-full bg-tangerine-orange transition-transform duration-pov-switch ease-pov-switch pointer-events-none" style="transform: translateX(0%);"></div>
+
+            <a href="../aetherlab-portal/AetherLabPortal.html?pov=student" role="tab" aria-selected="true" class="relative z-10 inline-flex items-center justify-center gap-gutter-xs px-gutter-md py-gutter-sm rounded-full font-label text-label-lg text-on-primary transition-colors duration-pov-switch ease-pov-switch whitespace-nowrap">
+              <span class="material-symbols-outlined text-[18px]" aria-hidden="true">school</span>
+              <span data-design-text-token="label-lg">Student</span>
+            </a>
+
+            <a href="../aetherlab-portal/AetherLabPortal.html?pov=teacher" role="tab" aria-selected="false" class="relative z-10 inline-flex items-center justify-center gap-gutter-xs px-gutter-md py-gutter-sm rounded-full font-label text-label-lg text-on-surface-variant hover:text-on-surface transition-colors duration-pov-switch ease-pov-switch whitespace-nowrap">
+              <span class="material-symbols-outlined text-[18px]" aria-hidden="true">analytics</span>
+              <span data-design-text-token="label-lg">Faculty</span>
+            </a>
+
+            <a href="../aetherlab-portal/AetherLabPortal.html?pov=admin" role="tab" aria-selected="false" class="relative z-10 inline-flex items-center justify-center gap-gutter-xs px-gutter-md py-gutter-sm rounded-full font-label text-label-lg text-on-surface-variant hover:text-on-surface transition-colors duration-pov-switch ease-pov-switch whitespace-nowrap">
+              <span class="material-symbols-outlined text-[18px]" aria-hidden="true">admin_panel_settings</span>
+              <span data-design-text-token="label-lg">Lab Assistant</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Active Student Profile Pill -->
+        <div class="flex items-center gap-gutter-sm">
+          <div class="hidden sm:flex items-center gap-gutter-xs px-gutter-md py-gutter-sm rounded-full bg-surface-container border border-outline-variant">
+            <span class="inline-block w-2 h-2 rounded-full bg-tangerine-orange"></span>
+            <span class="font-mono text-mono-md text-on-surface tabular-nums" data-design-text-token="mono-md">32 GPU hrs left</span>
+          </div>
+          <div class="flex items-center gap-gutter-sm pl-gutter-xs pr-gutter-md py-gutter-xs rounded-full bg-surface-container border border-outline-variant">
+            <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-slate-blue text-on-secondary font-headline text-label-lg">ML</span>
+            <div class="hidden md:flex flex-col">
+              <span class="font-label text-label-sm text-on-surface leading-none" data-design-text-token="label-sm">Maya Lin</span>
+              <span class="font-body text-label-sm text-on-surface-variant leading-tight" data-design-text-token="label-sm">CS &#39;26 · Student</span>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Main Workspace -->
+      <main id="explorer-main" class="flex-1 p-gutter-lg lg:p-gutter-xl pb-24 max-w-[1400px] w-full mx-auto flex flex-col gap-gutter-xl animate-panel-enter">
+
+        <!-- Hero Header Banner -->
+        <div class="rounded-xl bg-hero-surface border border-outline-variant p-gutter-lg lg:p-gutter-xl flex flex-wrap items-center justify-between gap-gutter-lg">
+          <div class="flex flex-col gap-gutter-xs max-w-prose">
+            <span class="font-mono text-label-sm text-tangerine-orange uppercase tracking-wider" data-design-text-token="label-sm">Cross-Department Catalog</span>
+            <h1 class="font-display text-display-lg-mobile lg:text-display-lg text-warm-cream text-balance" data-design-text-token="display-lg">
+              Equipment Explorer
+            </h1>
+            <p class="font-body text-body-lg text-warm-cream/90 text-pretty" data-design-text-token="body-lg">
+              Discover GPUs, robotics arms, FPGA rigs, and 3D scanners open to your courses and capstone projects across campus.
+            </p>
+          </div>
+          <button type="button" onclick="openCopilotModal()" class="inline-flex items-center gap-gutter-sm px-gutter-lg py-gutter-sm min-h-[44px] rounded-full bg-tangerine-orange text-on-primary font-label text-label-lg transition-transform duration-state-change ease-state-change hover:-translate-y-0.5">
+            <span class="material-symbols-outlined text-[18px]" style="font-variation-settings: &#39;FILL&#39; 1;">auto_awesome</span>
+            <span data-design-text-token="label-lg">Match with Copilot</span>
+          </button>
+        </div>
+
+        <!-- Category Filter Bar -->
+        <div class="flex flex-wrap items-center justify-between gap-gutter-md">
+          <div class="flex flex-wrap items-center gap-gutter-xs" role="group" aria-label="Filter equipment categories">
+            <button type="button" onclick="filterGear(&#39;all&#39;, this)" class="gear-filter px-gutter-md py-gutter-sm rounded-full bg-tangerine-orange text-on-primary font-label text-label-lg">All Gear (6)</button>
+            <button type="button" onclick="filterGear(&#39;compute&#39;, this)" class="gear-filter px-gutter-md py-gutter-sm rounded-full bg-surface-container text-on-surface-variant border border-outline-variant font-label text-label-lg">Compute</button>
+            <button type="button" onclick="filterGear(&#39;robotics&#39;, this)" class="gear-filter px-gutter-md py-gutter-sm rounded-full bg-surface-container text-on-surface-variant border border-outline-variant font-label text-label-lg">Robotics</button>
+            <button type="button" onclick="filterGear(&#39;sensors&#39;, this)" class="gear-filter px-gutter-md py-gutter-sm rounded-full bg-surface-container text-on-surface-variant border border-outline-variant font-label text-label-lg">3D &amp; Sensors</button>
+            <button type="button" onclick="filterGear(&#39;available&#39;, this)" class="gear-filter px-gutter-md py-gutter-sm rounded-full bg-surface-container text-on-surface-variant border border-outline-variant font-label text-label-lg">Available Now</button>
+          </div>
+          <span id="gear-count-label" class="font-mono text-mono-md text-on-surface-variant tabular-nums">Showing 6 stations</span>
+        </div>
+
+        <!-- 2-Column Equipment Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-gutter-lg" id="gear-grid">
+
+          <!-- Card 1 -->
+          <article data-category="compute available" data-search="nvidia h100 tensor core cs ai lab bay 02 80gb" class="gear-card rounded-xl bg-surface-container border border-outline-variant p-gutter-lg flex flex-col justify-between gap-gutter-lg transition-transform duration-state-change ease-state-change hover:-translate-y-0.5">
+            <div class="flex items-start justify-between gap-gutter-md">
+              <div class="flex items-start gap-gutter-md">
+                <span class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-tangerine-orange text-on-primary shrink-0">
+                  <span class="material-symbols-outlined text-[24px]">memory</span>
+                </span>
+                <div class="flex flex-col gap-gutter-xs">
+                  <h2 class="font-title text-title-lg text-on-surface" data-design-text-token="title-lg">NVIDIA H100 Tensor Core</h2>
+                  <p class="font-body text-body-md text-on-surface-variant">CS AI Lab · Bay 02 · 80GB HBM3 Workstation</p>
+                </div>
+              </div>
+              <span class="shrink-0 px-gutter-sm py-gutter-xs rounded-full bg-secondary-container text-on-secondary-container font-label text-label-sm">Available Now</span>
+            </div>
+            <div class="flex items-center justify-between pt-gutter-sm border-t border-outline-variant">
+              <span class="font-mono text-mono-md text-on-surface-variant">Safety: CS-492 Cleared</span>
+              <a href="../equipment-booking/EquipmentBooking.html" class="px-gutter-md py-gutter-sm rounded-full bg-warm-cream text-on-tertiary font-label text-label-lg">Book Slot</a>
+            </div>
+          </article>
+
+          <!-- Card 2 -->
+          <article data-category="robotics available" data-search="franka emika panda arm mech robotics bay 05" class="gear-card rounded-xl bg-surface-container border border-outline-variant p-gutter-lg flex flex-col justify-between gap-gutter-lg transition-transform duration-state-change ease-state-change hover:-translate-y-0.5">
+            <div class="flex items-start justify-between gap-gutter-md">
+              <div class="flex items-start gap-gutter-md">
+                <span class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-slate-blue text-on-secondary shrink-0">
+                  <span class="material-symbols-outlined text-[24px]">precision_manufacturing</span>
+                </span>
+                <div class="flex flex-col gap-gutter-xs">
+                  <h2 class="font-title text-title-lg text-on-surface" data-design-text-token="title-lg">Franka Emika Panda Arm</h2>
+                  <p class="font-body text-body-md text-on-surface-variant">Mech &amp; Robotics · Bay 05 · 7-DoF Force-Torque</p>
+                </div>
+              </div>
+              <span class="shrink-0 px-gutter-sm py-gutter-xs rounded-full bg-secondary-container text-on-secondary-container font-label text-label-sm">Available Now</span>
+            </div>
+            <div class="flex items-center justify-between pt-gutter-sm border-t border-outline-variant">
+              <span class="font-mono text-mono-md text-on-surface-variant">Cross-Dept Open</span>
+              <a href="../equipment-booking/EquipmentBooking.html" class="px-gutter-md py-gutter-sm rounded-full bg-warm-cream text-on-tertiary font-label text-label-lg">Book Slot</a>
+            </div>
+          </article>
+
+          <!-- Card 3 -->
+          <article data-category="compute" data-search="jetson orin nano dev kit ece dept 40 tops" class="gear-card rounded-xl bg-surface-container border border-outline-variant p-gutter-lg flex flex-col justify-between gap-gutter-lg transition-transform duration-state-change ease-state-change hover:-translate-y-0.5">
+            <div class="flex items-start justify-between gap-gutter-md">
+              <div class="flex items-start gap-gutter-md">
+                <span class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-warm-cream text-on-tertiary shrink-0">
+                  <span class="material-symbols-outlined text-[24px]">developer_board</span>
+                </span>
+                <div class="flex flex-col gap-gutter-xs">
+                  <h2 class="font-title text-title-lg text-on-surface" data-design-text-token="title-lg">Jetson Orin Nano Dev Kit</h2>
+                  <p class="font-body text-body-md text-on-surface-variant">ECE Dept · Edge AI Kit · 40 TOPS · Checkout</p>
+                </div>
+              </div>
+              <span class="shrink-0 px-gutter-sm py-gutter-xs rounded-full bg-primary-container text-on-primary-container font-label text-label-sm">Conflict 14:00</span>
+            </div>
+            <div class="flex items-center justify-between pt-gutter-sm border-t border-outline-variant">
+              <span class="font-mono text-mono-md text-on-surface-variant">Unit #04 Idle in Reserve</span>
+              <button type="button" onclick="openCopilotModal()" class="px-gutter-md py-gutter-sm rounded-full bg-tangerine-orange text-on-primary font-label text-label-lg">Resolve Slot</button>
+            </div>
+          </article>
+
+          <!-- Card 4 -->
+          <article data-category="sensors available" data-search="leica blk360 3d scanner spatial lab bay 08" class="gear-card rounded-xl bg-surface-container border border-outline-variant p-gutter-lg flex flex-col justify-between gap-gutter-lg transition-transform duration-state-change ease-state-change hover:-translate-y-0.5">
+            <div class="flex items-start justify-between gap-gutter-md">
+              <div class="flex items-start gap-gutter-md">
+                <span class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-secondary-container text-on-secondary-container shrink-0">
+                  <span class="material-symbols-outlined text-[24px]">view_in_ar</span>
+                </span>
+                <div class="flex flex-col gap-gutter-xs">
+                  <h2 class="font-title text-title-lg text-on-surface" data-design-text-token="title-lg">Leica BLK360 3D Scanner</h2>
+                  <p class="font-body text-body-md text-on-surface-variant">Spatial Lab · Bay 08 · Point-cloud &amp; NeRF</p>
+                </div>
+              </div>
+              <span class="shrink-0 px-gutter-sm py-gutter-xs rounded-full bg-secondary-container text-on-secondary-container font-label text-label-sm">Available Now</span>
+            </div>
+            <div class="flex items-center justify-between pt-gutter-sm border-t border-outline-variant">
+              <span class="font-mono text-mono-md text-on-surface-variant">96% Battery · 412GB Free</span>
+              <a href="../equipment-booking/EquipmentBooking.html" class="px-gutter-md py-gutter-sm rounded-full bg-warm-cream text-on-tertiary font-label text-label-lg">Book Slot</a>
+            </div>
+          </article>
+
+          <!-- Card 5 -->
+          <article data-category="compute available" data-search="xilinx alveo u280 fpga ece lab bay 09" class="gear-card rounded-xl bg-surface-container border border-outline-variant p-gutter-lg flex flex-col justify-between gap-gutter-lg transition-transform duration-state-change ease-state-change hover:-translate-y-0.5">
+            <div class="flex items-start justify-between gap-gutter-md">
+              <div class="flex items-start gap-gutter-md">
+                <span class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-tangerine-orange text-on-primary shrink-0">
+                  <span class="material-symbols-outlined text-[24px]">dns</span>
+                </span>
+                <div class="flex flex-col gap-gutter-xs">
+                  <h2 class="font-title text-title-lg text-on-surface" data-design-text-token="title-lg">Xilinx Alveo U280 FPGA</h2>
+                  <p class="font-body text-body-md text-on-surface-variant">ECE Compute · Bay 09 · Hardware Accelerator</p>
+                </div>
+              </div>
+              <span class="shrink-0 px-gutter-sm py-gutter-xs rounded-full bg-secondary-container text-on-secondary-container font-label text-label-sm">Available Now</span>
+            </div>
+            <div class="flex items-center justify-between pt-gutter-sm border-t border-outline-variant">
+              <span class="font-mono text-mono-md text-on-surface-variant">Requires Project Grant</span>
+              <a href="../project-access/ProjectAccess.html" class="px-gutter-md py-gutter-sm rounded-full bg-slate-blue text-on-secondary font-label text-label-lg">Request Access</a>
+            </div>
+          </article>
+
+          <!-- Card 6 -->
+          <article data-category="robotics" data-search="formlabs form 4 sla fabrication bay 07" class="gear-card rounded-xl bg-surface-container border border-outline-variant p-gutter-lg flex flex-col justify-between gap-gutter-lg transition-transform duration-state-change ease-state-change hover:-translate-y-0.5">
+            <div class="flex items-start justify-between gap-gutter-md">
+              <div class="flex items-start gap-gutter-md">
+                <span class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-surface-container-highest text-on-surface shrink-0">
+                  <span class="material-symbols-outlined text-[24px]">layers</span>
+                </span>
+                <div class="flex flex-col gap-gutter-xs">
+                  <h2 class="font-title text-title-lg text-on-surface" data-design-text-token="title-lg">Formlabs Form 4 SLA</h2>
+                  <p class="font-body text-body-md text-on-surface-variant">Fabrication Lab · Bay 07 · Rapid Prototyping</p>
+                </div>
+              </div>
+              <span class="shrink-0 px-gutter-sm py-gutter-xs rounded-full bg-surface-container-high text-on-surface-variant font-label text-label-sm">Refill Due</span>
+            </div>
+            <div class="flex items-center justify-between pt-gutter-sm border-t border-outline-variant">
+              <span class="font-mono text-mono-md text-on-surface-variant">Est. Ready: 16:30</span>
+              <button type="button" onclick="showToast(&#39;Added to Bay 07 availability alert list.&#39;)" class="px-gutter-md py-gutter-sm rounded-full bg-surface-container-high text-on-surface font-label text-label-lg">Notify Me</button>
+            </div>
+          </article>
+
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- Big Orange Lab Copilot Popup Modal -->
+  <div id="copilot-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-surface-container-lowest/85 p-gutter-lg" role="dialog" aria-modal="true" aria-labelledby="copilot-modal-title">
+    <div class="w-full max-w-2xl rounded-xl bg-tangerine-orange text-on-primary p-gutter-xl flex flex-col gap-gutter-lg animate-panel-enter">
+      <div class="flex items-start justify-between gap-gutter-md">
+        <div class="flex items-center gap-gutter-md">
+          <span class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-on-primary text-tangerine-orange shrink-0">
+            <span class="material-symbols-outlined text-[24px]" style="font-variation-settings: &#39;FILL&#39; 1;">auto_awesome</span>
+          </span>
+          <div>
+            <span class="font-mono text-label-sm text-on-primary uppercase tracking-wider" data-design-text-token="label-sm">GENAI LAB COPILOT · STUDENT</span>
+            <h2 id="copilot-modal-title" class="font-display text-headline-lg text-on-primary leading-tight" data-design-text-token="headline-lg">Smart Hardware Match</h2>
+          </div>
+        </div>
+        <button type="button" onclick="closeCopilotModal()" aria-label="Close Lab Copilot dialog" class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-on-primary text-warm-cream hover:opacity-90">
+          <span class="material-symbols-outlined text-[20px]">close</span>
+        </button>
+      </div>
+
+      <div class="flex flex-col gap-gutter-sm">
+        <div class="rounded-lg bg-on-primary text-warm-cream p-gutter-md flex flex-col sm:flex-row sm:items-center justify-between gap-gutter-md">
+          <div class="flex flex-col gap-gutter-xs">
+            <span class="font-title text-title-md text-warm-cream">NVIDIA H100 Node · Mirror Bay 03</span>
+            <span class="font-body text-body-md text-warm-cream/80">14:00 – 16:00 Today · 98% Fair Match · Zero conflict</span>
+          </div>
+          <button type="button" onclick="closeCopilotModal(); showToast(&#39;Smart slot locked: NVIDIA H100 · Mirror Bay 03.&#39;);" class="shrink-0 px-gutter-md py-gutter-sm rounded-full bg-tangerine-orange text-on-primary font-label text-label-sm">Lock Slot</button>
+        </div>
+        <div class="rounded-lg bg-on-primary text-warm-cream p-gutter-md flex flex-col sm:flex-row sm:items-center justify-between gap-gutter-md">
+          <div class="flex flex-col gap-gutter-xs">
+            <span class="font-title text-title-md text-warm-cream">Jetson Orin Nano · ECE Reserve #04</span>
+            <span class="font-body text-body-md text-warm-cream/80">24h Checkout · Resolves 14:00 peak overlap</span>
+          </div>
+          <button type="button" onclick="closeCopilotModal(); showToast(&#39;Jetson Orin Reserve #04 confirmed for 24h checkout.&#39;);" class="shrink-0 px-gutter-md py-gutter-sm rounded-full bg-tangerine-orange text-on-primary font-label text-label-sm">Reserve Kit</button>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-between pt-gutter-sm border-t border-on-primary/20">
+        <span class="font-mono text-mono-md text-on-primary">Ranked by deadline urgency &amp; bay availability</span>
+        <button type="button" onclick="closeCopilotModal()" class="px-gutter-md py-gutter-xs rounded-full bg-on-primary text-warm-cream font-label text-label-sm">Done</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Feedback Toast -->
+  <div id="toast" role="status" aria-live="polite" class="fixed bottom-6 right-6 z-50 hidden items-center gap-gutter-sm px-gutter-lg py-gutter-md rounded-full bg-warm-cream text-on-tertiary font-label text-label-lg">
+    <span class="material-symbols-outlined text-[18px] text-tangerine-orange" style="font-variation-settings: &#39;FILL&#39; 1;">check_circle</span>
+    <span id="toast-message">Action confirmed</span>
+  </div>
+
+  <script>
+    function filterGear(cat, btn) {
+      document.querySelectorAll('.gear-filter').forEach((b) => {
+        const active = b === btn;
+        b.className = active
+          ? 'gear-filter px-gutter-md py-gutter-sm rounded-full bg-tangerine-orange text-on-primary font-label text-label-lg'
+          : 'gear-filter px-gutter-md py-gutter-sm rounded-full bg-surface-container text-on-surface-variant border border-outline-variant font-label text-label-lg';
+      });
+      let visible = 0;
+      document.querySelectorAll('.gear-card').forEach((card) => {
+        const match = cat === 'all' || (card.dataset.category || '').includes(cat);
+        card.classList.toggle('hidden', !match);
+        if (match) visible++;
+      });
+      document.getElementById('gear-count-label').textContent = `Showing ${visible} stations`;
+    }
+
+    const searchEl = document.getElementById('explorer-search');
+    if (searchEl) {
+      searchEl.addEventListener('input', (e) => {
+        const q = e.target.value.trim().toLowerCase();
+        let visible = 0;
+        document.querySelectorAll('.gear-card').forEach((card) => {
+          const text = card.dataset.search || '';
+          const match = q.length === 0 || text.includes(q);
+          card.classList.toggle('hidden', !match);
+          if (match) visible++;
+        });
+        document.getElementById('gear-count-label').textContent = `Showing ${visible} stations`;
+      });
+    }
+
+    function openCopilotModal() {
+      const modal = document.getElementById('copilot-modal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function closeCopilotModal() {
+      const modal = document.getElementById('copilot-modal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    let toastTimer;
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      document.getElementById('toast-message').textContent = msg;
+      toast.classList.remove('hidden');
+      toast.classList.add('flex');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        toast.classList.add('hidden');
+        toast.classList.remove('flex');
+      }, 2800);
+    }
+  </script>
+
+
+</body></html>

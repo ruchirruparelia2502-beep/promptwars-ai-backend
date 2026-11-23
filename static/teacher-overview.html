@@ -1,0 +1,289 @@
+<!DOCTYPE html><html lang="en"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LabLink AI — Teacher Overview</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script id="tailwind-config">/** @type {import('tailwindcss').Config} */
+globalThis.tailwind = globalThis.tailwind || {};
+globalThis.tailwind.config = {
+  darkMode: 'class',
+  theme: {
+    extend: {
+      colors: {
+        'tangerine-orange': '#f3701e',
+        'slate-blue': '#4b607f',
+        'warm-cream': '#e8d8c9',
+        'hero-surface': '#3B2318',
+        'on-hero-surface': '#E8D8C9',
+        'primary': '#F3701E',
+        'on-primary': '#18120E',
+        'primary-container': '#552000',
+        'on-primary-container': '#FFDBCB',
+        'secondary': '#4B607F',
+        'on-secondary': '#F5F8FC',
+        'secondary-container': '#24344B',
+        'on-secondary-container': '#D4E3FF',
+        'tertiary': '#E8D8C9',
+        'on-tertiary': '#1C1B1B',
+        'background': '#141414',
+        'on-background': '#E8D8C9',
+        'surface': '#141414',
+        'surface-container-lowest': '#0E0E0E',
+        'surface-container-low': '#1B1A1A',
+        'surface-container': '#222121',
+        'surface-container-high': '#2B2A2A',
+        'surface-container-highest': '#363535',
+        'on-surface': '#E8D8C9',
+        'on-surface-variant': '#B8ABA0',
+        'outline': '#5E5650',
+        'outline-variant': '#36322F',
+        'success': '#4ADE80',
+        'on-success': '#052E16',
+        'warning': '#FBBF24',
+        'on-warning': '#451A03',
+        'error': '#F87171',
+        'on-error': '#450A0A',
+      },
+      borderRadius: {
+        'sm': '6px',
+        'DEFAULT': '10px',
+        'md': '12px',
+        'lg': '16px',
+        'xl': '24px',
+        'full': '9999px',
+      },
+      spacing: {
+        'gutter-xs': '4px',
+        'gutter-sm': '8px',
+        'gutter-md': '16px',
+        'gutter-lg': '24px',
+        'gutter-xl': '32px',
+        'section': '40px',
+        'page-margin': '28px',
+      },
+      fontFamily: {
+        'display': ['"Space Grotesk"', 'sans-serif'],
+        'headline': ['"Space Grotesk"', 'sans-serif'],
+        'title': ['"Geist"', 'sans-serif'],
+        'body': ['"Geist"', 'sans-serif'],
+        'label': ['"Geist"', 'sans-serif'],
+        'mono': ['"Space Mono"', 'monospace'],
+      },
+      fontSize: {
+        'display-lg': ['40px', { lineHeight: '48px', letterSpacing: '-0.5px', fontWeight: '700' }],
+        'display-lg-mobile': ['30px', { lineHeight: '36px', letterSpacing: '-0.25px', fontWeight: '700' }],
+        'headline-lg': ['28px', { lineHeight: '36px', letterSpacing: '-0.25px', fontWeight: '600' }],
+        'headline-md': ['22px', { lineHeight: '28px', letterSpacing: '0px', fontWeight: '600' }],
+        'title-lg': ['18px', { lineHeight: '26px', letterSpacing: '0px', fontWeight: '600' }],
+        'title-md': ['16px', { lineHeight: '24px', letterSpacing: '0px', fontWeight: '600' }],
+        'body-lg': ['16px', { lineHeight: '26px', letterSpacing: '0px', fontWeight: '400' }],
+        'body-md': ['14px', { lineHeight: '22px', letterSpacing: '0.1px', fontWeight: '400' }],
+        'label-lg': ['14px', { lineHeight: '20px', letterSpacing: '0.1px', fontWeight: '600' }],
+        'label-sm': ['12px', { lineHeight: '16px', letterSpacing: '0.3px', fontWeight: '500' }],
+        'mono-md': ['13px', { lineHeight: '20px', letterSpacing: '0px', fontWeight: '400' }],
+      },
+      transitionDuration: {
+        'state-change': '160ms',
+        'pov-switch': '280ms',
+        'card-enter': '320ms',
+      },
+      transitionDelay: {
+        'state-change': '0ms',
+        'pov-switch': '0ms',
+        'card-enter': '0ms',
+      },
+      transitionTimingFunction: {
+        'state-change': 'cubic-bezier(0.2, 0, 0, 1)',
+        'pov-switch': 'cubic-bezier(0.22, 1, 0.36, 1)',
+        'card-enter': 'cubic-bezier(0.16, 1, 0.3, 1)',
+      },
+    },
+  },
+};
+if (typeof module !== 'undefined') module.exports = globalThis.tailwind.config;
+</script>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&amp;family=Space+Grotesk:wght@500;600;700&amp;family=Space+Mono:wght@400;700&amp;display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=block" rel="stylesheet">
+  <style>
+    .material-symbols-outlined, .material-symbols-rounded, .material-symbols-sharp, .material-icons {
+      display: inline-block; width: 1em; height: 1em; line-height: 1 !important;
+      box-sizing: content-box; overflow: hidden; white-space: nowrap; direction: ltr; vertical-align: middle;
+    }
+    @keyframes panelEnter { 0% { opacity: 0; transform: translateY(10px); } 100% { opacity: 1; transform: translateY(0); } }
+    .animate-panel-enter { animation: panelEnter 320ms cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+  </style>
+</head>
+<body class="bg-surface text-on-surface font-body antialiased selection:bg-primary selection:text-on-primary">
+
+  <div class="min-h-[1024px] flex flex-col lg:flex-row bg-surface text-on-surface" data-stitch-vh="min-h-[1024px]===min-h-screen">
+    <!-- Left Navigation Sidebar -->
+    <aside class="w-full lg:w-[248px] lg:min-h-[1024px] shrink-0 bg-surface-container-low border-b lg:border-b-0 lg:border-r border-outline-variant p-gutter-lg flex flex-col justify-between gap-gutter-xl" data-stitch-vh="lg:min-h-[1024px]===lg:min-h-screen">
+      <div class="flex flex-col gap-gutter-xl">
+        <a href="../aetherlab-portal/AetherLabPortal.html" class="flex items-center gap-gutter-sm px-gutter-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-lg">
+          <span class="inline-flex items-center justify-center w-9 h-9 rounded-md bg-tangerine-orange text-on-primary">
+            <span class="material-symbols-outlined text-[20px]" style="font-variation-settings: &#39;FILL&#39; 1;">science</span>
+          </span>
+          <span class="font-headline text-headline-md text-tangerine-orange tracking-tight" data-design-text-token="headline-md">lablink AI</span>
+        </a>
+
+        <nav aria-label="Lab Portal Navigation" class="flex lg:flex-col gap-gutter-xs overflow-x-auto lg:overflow-visible pb-gutter-xs lg:pb-0">
+          <a href="#teacher-workspace" aria-current="page" class="nav-item flex items-center gap-gutter-md px-gutter-md py-gutter-sm rounded-full bg-surface-container-high text-on-surface font-label text-label-lg whitespace-nowrap">
+            <span class="material-symbols-outlined text-[20px] text-tangerine-orange" style="font-variation-settings: &#39;FILL&#39; 1;">dashboard</span>
+            <span data-design-text-token="label-lg">Overview</span>
+          </a>
+          <a href="../faculty-analytics/FacultyAnalytics.html" class="nav-item flex items-center gap-gutter-md px-gutter-md py-gutter-sm rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container font-label text-label-lg whitespace-nowrap">
+            <span class="material-symbols-outlined text-[20px]">monitoring</span>
+            <span data-design-text-token="label-lg">Analytics</span>
+          </a>
+          <a href="../project-access/ProjectAccess.html" class="nav-item flex items-center gap-gutter-md px-gutter-md py-gutter-sm rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container font-label text-label-lg whitespace-nowrap">
+            <span class="material-symbols-outlined text-[20px]">folder_special</span>
+            <span data-design-text-token="label-lg">Project Access</span>
+          </a>
+          <a href="../equipment-booking/EquipmentBooking.html" class="nav-item flex items-center gap-gutter-md px-gutter-md py-gutter-sm rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container font-label text-label-lg whitespace-nowrap">
+            <span class="material-symbols-outlined text-[20px]">calendar_month</span>
+            <span data-design-text-token="label-lg">Smart Slots</span>
+          </a>
+        </nav>
+      </div>
+
+      <div class="hidden lg:flex flex-col gap-gutter-md rounded-xl bg-tangerine-orange text-on-primary p-gutter-lg">
+        <div class="flex items-center justify-between">
+          <span class="inline-flex items-center justify-center w-9 h-9 rounded-full bg-on-primary text-tangerine-orange">
+            <span class="material-symbols-outlined text-[18px]">auto_awesome</span>
+          </span>
+          <span class="font-mono text-label-sm px-gutter-sm py-gutter-xs rounded-full bg-on-primary text-warm-cream">GenAI</span>
+        </div>
+        <div>
+          <h2 class="font-headline text-headline-md text-on-primary leading-tight" data-design-text-token="headline-md">Cohort Sync</h2>
+          <p class="font-body text-body-md text-on-primary mt-gutter-xs" data-design-text-token="body-md">Auto-prioritize student slots before Friday demos.</p>
+        </div>
+        <a href="../faculty-analytics/FacultyAnalytics.html" class="inline-flex items-center justify-between w-full px-gutter-md py-gutter-sm rounded-full bg-on-primary text-warm-cream font-label text-label-lg">
+          <span data-design-text-token="label-lg">Review Queue</span>
+          <span class="material-symbols-outlined text-[16px]" aria-hidden="true">north_east</span>
+        </a>
+      </div>
+    </aside>
+
+    <!-- Main Workspace -->
+    <div class="flex-1 flex flex-col min-w-0">
+      <header class="sticky top-0 z-30 bg-surface/95 border-b border-outline-variant px-gutter-lg lg:px-gutter-xl py-gutter-md flex flex-wrap items-center justify-between gap-gutter-md">
+        <div class="relative flex-1 min-w-[220px] max-w-xs">
+          <span class="material-symbols-outlined text-[18px] text-on-surface-variant absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" aria-hidden="true">search</span>
+          <input type="search" placeholder="Search student teams or courses..." aria-label="Search cohorts" class="w-full pl-10 pr-gutter-md py-gutter-sm rounded-full bg-surface-container-low border border-outline-variant text-body-md text-on-surface placeholder:text-on-surface-variant focus:outline-none focus:border-primary focus-visible:ring-2 focus-visible:ring-primary">
+        </div>
+
+        <div class="flex items-center gap-gutter-xs px-gutter-md py-gutter-xs rounded-full bg-slate-blue text-on-secondary">
+          <span class="material-symbols-outlined text-[18px]" aria-hidden="true">co_present</span>
+          <span class="font-label text-label-lg" data-design-text-token="label-lg">Teacher Cohort View</span>
+        </div>
+
+        <div class="flex items-center gap-gutter-sm">
+          <div class="hidden sm:flex items-center gap-gutter-xs px-gutter-md py-gutter-sm rounded-full bg-surface-container border border-outline-variant">
+            <span class="inline-block w-2 h-2 rounded-full bg-tangerine-orange"></span>
+            <span class="font-mono text-mono-md text-on-surface tabular-nums">3 Courses</span>
+          </div>
+          <div class="flex items-center gap-gutter-sm pl-gutter-xs pr-gutter-md py-gutter-xs rounded-full bg-surface-container border border-outline-variant">
+            <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-warm-cream text-on-tertiary font-headline text-label-lg">NC</span>
+            <div class="hidden md:flex flex-col">
+              <span class="font-label text-label-sm text-on-surface leading-none">Prof. Nadia Chen</span>
+              <span class="font-body text-label-sm text-on-surface-variant leading-tight">Course Instructor</span>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Teacher-Specific Course & Cohort Layout -->
+      <main id="teacher-workspace" class="flex-1 p-gutter-lg lg:p-gutter-xl pb-24 max-w-[1400px] w-full mx-auto flex flex-col gap-gutter-xl animate-panel-enter">
+
+        <!-- Course Cohort Selector + Urgent Deadline Alert -->
+        <section class="flex flex-col gap-gutter-lg">
+          <div class="flex flex-wrap items-center justify-between gap-gutter-md">
+            <div>
+              <h1 class="font-display text-display-lg-mobile lg:text-display-lg text-on-surface text-balance" data-design-text-token="display-lg">
+                Course Lab Readiness &amp; Teams
+              </h1>
+              <p class="font-body text-body-lg text-on-surface-variant text-pretty" data-design-text-token="body-lg">
+                Track student lab milestones, resolve team hardware bottlenecks, and sign off capstone access.
+              </p>
+            </div>
+            <div class="flex flex-wrap items-center gap-gutter-xs">
+              <button type="button" onclick="selectCourse(&#39;CS-492&#39;, this)" class="course-pill px-gutter-md py-gutter-sm rounded-full bg-tangerine-orange text-on-primary font-label text-label-lg">CS-492 Vision</button>
+              <button type="button" onclick="selectCourse(&#39;EE-310&#39;, this)" class="course-pill px-gutter-md py-gutter-sm rounded-full bg-surface-container text-on-surface-variant border border-outline-variant font-label text-label-lg">EE-310 Robotics</button>
+              <button type="button" onclick="selectCourse(&#39;DS-204&#39;, this)" class="course-pill px-gutter-md py-gutter-sm rounded-full bg-surface-container text-on-surface-variant border border-outline-variant font-label text-label-lg">DS-204 Multimodal</button>
+            </div>
+          </div>
+
+          <!-- 3-Column Cohort Summary Strip -->
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-gutter-lg">
+            <article class="rounded-xl bg-surface-container border border-outline-variant p-gutter-lg flex flex-col gap-gutter-xs">
+              <span class="font-mono text-label-sm text-on-surface-variant">LAB COMPLETION</span>
+              <span id="cohort-completion" class="font-display text-headline-lg text-warm-cream tabular-nums">88%</span>
+              <span class="font-body text-body-md text-on-surface-variant">14 of 16 teams checked in this week</span>
+            </article>
+            <article class="rounded-xl bg-tangerine-orange text-on-primary p-gutter-lg flex flex-col gap-gutter-xs">
+              <span class="font-mono text-label-sm text-on-primary">DEADLINE PRIORITY</span>
+              <span class="font-display text-headline-lg text-on-primary tabular-nums">Due Friday</span>
+              <span class="font-body text-body-md text-on-primary">3 teams need H100 priority boost</span>
+            </article>
+            <article class="rounded-xl bg-slate-blue text-on-secondary p-gutter-lg flex flex-col gap-gutter-xs">
+              <span class="font-mono text-label-sm text-on-secondary">SAFETY CLEARANCE</span>
+              <span class="font-display text-headline-lg text-on-secondary tabular-nums">42 / 44</span>
+              <span class="font-body text-body-md text-on-secondary">Students certified for Bay 02 &amp; 05</span>
+            </article>
+          </div>
+        </section>
+
+        <!-- Student Team Allocation Table / Cards -->
+        <section class="rounded-xl bg-surface-container-low border border-outline-variant p-gutter-lg flex flex-col gap-gutter-lg">
+          <div class="flex flex-wrap items-center justify-between gap-gutter-md">
+            <div>
+              <h2 class="font-headline text-headline-md text-on-surface" data-design-text-token="headline-md">Active Student Teams</h2>
+              <p class="font-body text-body-md text-on-surface-variant" data-design-text-token="body-md">Live equipment assignments and pending faculty approvals.</p>
+            </div>
+            <a href="../faculty-analytics/FacultyAnalytics.html" class="px-gutter-md py-gutter-sm rounded-full bg-warm-cream text-on-tertiary font-label text-label-lg">Full Analytics →</a>
+          </div>
+
+          <div class="flex flex-col gap-gutter-md">
+            <article class="rounded-lg bg-surface-container p-gutter-lg border border-outline-variant flex flex-col sm:flex-row sm:items-center justify-between gap-gutter-md">
+              <div class="flex flex-col gap-gutter-xs">
+                <div class="flex items-center gap-gutter-sm">
+                  <h3 class="font-title text-title-md text-on-surface">Team Alpha · Maya Lin &amp; Leo Wu</h3>
+                  <span class="px-gutter-sm py-gutter-xs rounded-full bg-secondary-container text-on-secondary-container font-label text-label-sm">On Track</span>
+                </div>
+                <p class="font-body text-body-md text-on-surface-variant">Assigned: H100 Bay 02 · 28 / 48 GPU hrs used</p>
+              </div>
+              <button type="button" onclick="this.textContent=&#39;Priority Boosted&#39;; this.className=&#39;shrink-0 px-gutter-md py-gutter-sm rounded-full bg-secondary-container text-on-secondary-container font-label text-label-sm&#39;" class="shrink-0 px-gutter-md py-gutter-sm rounded-full bg-tangerine-orange text-on-primary font-label text-label-sm">Boost Fri Priority</button>
+            </article>
+
+            <article class="rounded-lg bg-surface-container p-gutter-lg border border-outline-variant flex flex-col sm:flex-row sm:items-center justify-between gap-gutter-md">
+              <div class="flex flex-col gap-gutter-xs">
+                <div class="flex items-center gap-gutter-sm">
+                  <h3 class="font-title text-title-md text-on-surface">Team Rover · Kian Patel &amp; Samira Noor</h3>
+                  <span class="px-gutter-sm py-gutter-xs rounded-full bg-primary-container text-on-primary-container font-label text-label-sm">Needs Sign-off</span>
+                </div>
+                <p class="font-body text-body-md text-on-surface-variant">Requested: Jetson Orin Kit (ECE Dept) · 24h Checkout</p>
+              </div>
+              <button type="button" onclick="this.textContent=&#39;Approved&#39;; this.className=&#39;shrink-0 px-gutter-md py-gutter-sm rounded-full bg-secondary-container text-on-secondary-container font-label text-label-sm&#39;" class="shrink-0 px-gutter-md py-gutter-sm rounded-full bg-warm-cream text-on-tertiary font-label text-label-sm">Approve Kit</button>
+            </article>
+          </div>
+        </section>
+
+      </main>
+    </div>
+  </div>
+
+  <script>
+    function selectCourse(code, btn) {
+      document.querySelectorAll('.course-pill').forEach((p) => {
+        const active = p === btn;
+        p.className = active
+          ? 'course-pill px-gutter-md py-gutter-sm rounded-full bg-tangerine-orange text-on-primary font-label text-label-lg'
+          : 'course-pill px-gutter-md py-gutter-sm rounded-full bg-surface-container text-on-surface-variant border border-outline-variant font-label text-label-lg';
+      });
+      const map = { 'CS-492': '88%', 'EE-310': '79%', 'DS-204': '94%' };
+      document.getElementById('cohort-completion').textContent = map[code] || '88%';
+    }
+  </script>
+
+
+</body></html>

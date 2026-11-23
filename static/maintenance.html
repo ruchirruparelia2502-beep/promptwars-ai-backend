@@ -1,0 +1,380 @@
+<!DOCTYPE html><html lang="en"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LabLink AI — Maintenance</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script id="tailwind-config">/** @type {import('tailwindcss').Config} */
+globalThis.tailwind = globalThis.tailwind || {};
+globalThis.tailwind.config = {
+  darkMode: 'class',
+  theme: {
+    extend: {
+      colors: {
+        'tangerine-orange': '#f3701e',
+        'slate-blue': '#4b607f',
+        'warm-cream': '#e8d8c9',
+        'hero-surface': '#3B2318',
+        'on-hero-surface': '#E8D8C9',
+        'primary': '#F3701E',
+        'on-primary': '#18120E',
+        'primary-container': '#552000',
+        'on-primary-container': '#FFDBCB',
+        'secondary': '#4B607F',
+        'on-secondary': '#F5F8FC',
+        'secondary-container': '#24344B',
+        'on-secondary-container': '#D4E3FF',
+        'tertiary': '#E8D8C9',
+        'on-tertiary': '#1C1B1B',
+        'background': '#141414',
+        'on-background': '#E8D8C9',
+        'surface': '#141414',
+        'surface-container-lowest': '#0E0E0E',
+        'surface-container-low': '#1B1A1A',
+        'surface-container': '#222121',
+        'surface-container-high': '#2B2A2A',
+        'surface-container-highest': '#363535',
+        'on-surface': '#E8D8C9',
+        'on-surface-variant': '#B8ABA0',
+        'outline': '#5E5650',
+        'outline-variant': '#36322F',
+        'success': '#4ADE80',
+        'on-success': '#052E16',
+        'warning': '#FBBF24',
+        'on-warning': '#451A03',
+        'error': '#F87171',
+        'on-error': '#450A0A',
+      },
+      borderRadius: {
+        'sm': '6px',
+        'DEFAULT': '10px',
+        'md': '12px',
+        'lg': '16px',
+        'xl': '24px',
+        'full': '9999px',
+      },
+      spacing: {
+        'gutter-xs': '4px',
+        'gutter-sm': '8px',
+        'gutter-md': '16px',
+        'gutter-lg': '24px',
+        'gutter-xl': '32px',
+        'section': '40px',
+        'page-margin': '28px',
+      },
+      fontFamily: {
+        'display': ['"Space Grotesk"', 'sans-serif'],
+        'headline': ['"Space Grotesk"', 'sans-serif'],
+        'title': ['"Geist"', 'sans-serif'],
+        'body': ['"Geist"', 'sans-serif'],
+        'label': ['"Geist"', 'sans-serif'],
+        'mono': ['"Space Mono"', 'monospace'],
+      },
+      fontSize: {
+        'display-lg': ['40px', { lineHeight: '48px', letterSpacing: '-0.5px', fontWeight: '700' }],
+        'display-lg-mobile': ['30px', { lineHeight: '36px', letterSpacing: '-0.25px', fontWeight: '700' }],
+        'headline-lg': ['28px', { lineHeight: '36px', letterSpacing: '-0.25px', fontWeight: '600' }],
+        'headline-md': ['22px', { lineHeight: '28px', letterSpacing: '0px', fontWeight: '600' }],
+        'title-lg': ['18px', { lineHeight: '26px', letterSpacing: '0px', fontWeight: '600' }],
+        'title-md': ['16px', { lineHeight: '24px', letterSpacing: '0px', fontWeight: '600' }],
+        'body-lg': ['16px', { lineHeight: '26px', letterSpacing: '0px', fontWeight: '400' }],
+        'body-md': ['14px', { lineHeight: '22px', letterSpacing: '0.1px', fontWeight: '400' }],
+        'label-lg': ['14px', { lineHeight: '20px', letterSpacing: '0.1px', fontWeight: '600' }],
+        'label-sm': ['12px', { lineHeight: '16px', letterSpacing: '0.3px', fontWeight: '500' }],
+        'mono-md': ['13px', { lineHeight: '20px', letterSpacing: '0px', fontWeight: '400' }],
+      },
+      transitionDuration: {
+        'state-change': '160ms',
+        'pov-switch': '280ms',
+        'card-enter': '320ms',
+      },
+      transitionDelay: {
+        'state-change': '0ms',
+        'pov-switch': '0ms',
+        'card-enter': '0ms',
+      },
+      transitionTimingFunction: {
+        'state-change': 'cubic-bezier(0.2, 0, 0, 1)',
+        'pov-switch': 'cubic-bezier(0.22, 1, 0.36, 1)',
+        'card-enter': 'cubic-bezier(0.16, 1, 0.3, 1)',
+      },
+    },
+  },
+};
+if (typeof module !== 'undefined') module.exports = globalThis.tailwind.config;
+</script>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&amp;family=Space+Grotesk:wght@500;600;700&amp;family=Space+Mono:wght@400;700&amp;display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=block" rel="stylesheet">
+  <style>
+    .material-symbols-outlined, .material-symbols-rounded, .material-symbols-sharp, .material-icons {
+      display: inline-block;
+      width: 1em;
+      height: 1em;
+      line-height: 1 !important;
+      box-sizing: content-box;
+      overflow: hidden;
+      white-space: nowrap;
+      direction: ltr;
+      vertical-align: middle;
+    }
+
+    @keyframes panelEnter {
+      0% { opacity: 0; transform: translateY(10px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    .animate-panel-enter {
+      animation: panelEnter 320ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .animate-panel-enter { animation: none; }
+      * { transition-duration: 0.01ms !important; }
+    }
+  </style>
+</head>
+<body class="bg-surface text-on-surface font-body antialiased selection:bg-primary selection:text-on-primary">
+
+  <div class="min-h-[1024px] flex flex-col lg:flex-row bg-surface text-on-surface" data-stitch-vh="min-h-[1024px]===min-h-screen">
+
+    <!-- Left Navigation Sidebar (Lab Assistant Role-Scoped, Maintenance active) -->
+    <aside class="w-full lg:w-[248px] lg:min-h-[1024px] shrink-0 bg-surface-container-low border-b lg:border-b-0 lg:border-r border-outline-variant p-gutter-lg flex flex-col justify-between gap-gutter-xl" data-stitch-vh="lg:min-h-[1024px]===lg:min-h-screen">
+      <div class="flex flex-col gap-gutter-xl">
+        <a href="../aetherlab-portal/AetherLabPortal.html?pov=admin" class="flex items-center gap-gutter-sm px-gutter-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-lg">
+          <span class="inline-flex items-center justify-center w-9 h-9 rounded-md bg-tangerine-orange text-on-primary">
+            <span class="material-symbols-outlined text-[20px]" style="font-variation-settings: &#39;FILL&#39; 1;">science</span>
+          </span>
+          <span class="font-headline text-headline-md text-tangerine-orange tracking-tight" data-design-text-token="headline-md">lablink AI</span>
+        </a>
+
+        <nav aria-label="Lab Assistant Navigation" class="flex lg:flex-col gap-gutter-xs overflow-x-auto lg:overflow-visible pb-gutter-xs lg:pb-0">
+          <a href="../aetherlab-portal/AetherLabPortal.html?pov=admin" class="nav-item flex items-center gap-gutter-md px-gutter-md py-gutter-sm rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container font-label text-label-lg whitespace-nowrap transition-colors duration-state-change ease-state-change">
+            <span class="material-symbols-outlined text-[20px]">dashboard</span>
+            <span data-design-text-token="label-lg">Overview</span>
+          </a>
+          <a href="../bay-telemetry/BayTelemetry.html" class="nav-item flex items-center gap-gutter-md px-gutter-md py-gutter-sm rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container font-label text-label-lg whitespace-nowrap transition-colors duration-state-change ease-state-change">
+            <span class="material-symbols-outlined text-[20px]">sensors</span>
+            <span data-design-text-token="label-lg">Bay Telemetry</span>
+          </a>
+          <a href="#maintenance-main" aria-current="page" class="nav-item flex items-center gap-gutter-md px-gutter-md py-gutter-sm rounded-full bg-surface-container-high text-on-surface font-label text-label-lg whitespace-nowrap transition-colors duration-state-change ease-state-change">
+            <span class="material-symbols-outlined text-[20px] text-tangerine-orange" style="font-variation-settings: &#39;FILL&#39; 1;">build</span>
+            <span data-design-text-token="label-lg">Maintenance</span>
+          </a>
+          <a href="../sharing-rules/SharingRules.html" class="nav-item flex items-center gap-gutter-md px-gutter-md py-gutter-sm rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container font-label text-label-lg whitespace-nowrap transition-colors duration-state-change ease-state-change">
+            <span class="material-symbols-outlined text-[20px]">tune</span>
+            <span data-design-text-token="label-lg">Sharing Rules</span>
+          </a>
+        </nav>
+      </div>
+
+      <!-- Bottom Tangerine Card -->
+      <div class="hidden lg:flex flex-col gap-gutter-md rounded-xl bg-tangerine-orange text-on-primary p-gutter-lg relative overflow-hidden">
+        <div class="flex items-center justify-between">
+          <span class="inline-flex items-center justify-center w-9 h-9 rounded-full bg-on-primary text-tangerine-orange">
+            <span class="material-symbols-outlined text-[18px]">build</span>
+          </span>
+          <span class="font-mono text-label-sm px-gutter-sm py-gutter-xs rounded-full bg-on-primary text-warm-cream" data-design-text-token="label-sm">Ops</span>
+        </div>
+        <div class="flex flex-col gap-gutter-xs">
+          <h2 class="font-headline text-headline-md text-on-primary leading-tight" data-design-text-token="headline-md">Bay Diagnostics</h2>
+          <p class="font-body text-body-md text-on-primary text-pretty" data-design-text-token="body-md">Log calibration sign-offs and restore paused bays.</p>
+        </div>
+        <button type="button" onclick="showToast(&#39;Shift handoff checklist exported for evening lab assistant.&#39;)" data-component-id="button-copilot" data-component-type="button" data-component-variant="primary" class="inline-flex items-center justify-between w-full px-gutter-md py-gutter-sm rounded-full bg-on-primary text-warm-cream font-label text-label-lg transition-transform duration-state-change ease-state-change hover:-translate-y-0.5">
+          <span data-design-text-token="label-lg">Export Log</span>
+          <span class="material-symbols-outlined text-[16px]" aria-hidden="true">north_east</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Workspace Area -->
+    <div class="flex-1 flex flex-col min-w-0">
+
+      <!-- Top Header with Integrated POV Slider -->
+      <header class="sticky top-0 z-30 bg-surface/95 border-b border-outline-variant px-gutter-lg lg:px-gutter-xl py-gutter-md flex flex-wrap items-center justify-between gap-gutter-md">
+        <div class="relative flex-1 min-w-[220px] max-w-xs">
+          <span class="material-symbols-outlined text-[18px] text-on-surface-variant absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" aria-hidden="true">search</span>
+          <input id="maint-search" type="search" placeholder="Search tickets, bays, or parts..." aria-label="Search maintenance queue" class="w-full pl-10 pr-gutter-md py-gutter-sm rounded-full bg-surface-container-low border border-outline-variant text-body-md text-on-surface placeholder:text-on-surface-variant focus:outline-none focus:border-primary focus-visible:ring-2 focus-visible:ring-primary">
+        </div>
+
+        <!-- TOP POV SLIDER (Lab Assistant Active) -->
+        <div class="flex items-center gap-gutter-sm">
+          <span class="hidden xl:inline font-label text-label-sm text-on-surface-variant uppercase tracking-wider" data-design-text-token="label-sm">View as</span>
+          <div data-component-id="pov-slider" data-component-type="tabs" data-component-variant="with-icon" role="tablist" aria-label="Portal Perspective Switcher" class="relative grid grid-cols-3 p-gutter-xs rounded-full bg-surface-container-lowest border border-outline-variant">
+            <div aria-hidden="true" class="absolute top-1 bottom-1 left-1 w-[calc(33.333%-4px)] rounded-full bg-tangerine-orange transition-transform duration-pov-switch ease-pov-switch pointer-events-none" style="transform: translateX(200%);"></div>
+
+            <a href="../aetherlab-portal/AetherLabPortal.html?pov=student" role="tab" aria-selected="false" class="relative z-10 inline-flex items-center justify-center gap-gutter-xs px-gutter-md py-gutter-sm rounded-full font-label text-label-lg text-on-surface-variant hover:text-on-surface transition-colors duration-pov-switch ease-pov-switch whitespace-nowrap">
+              <span class="material-symbols-outlined text-[18px]" aria-hidden="true">school</span>
+              <span data-design-text-token="label-lg">Student</span>
+            </a>
+
+            <a href="../aetherlab-portal/AetherLabPortal.html?pov=teacher" role="tab" aria-selected="false" class="relative z-10 inline-flex items-center justify-center gap-gutter-xs px-gutter-md py-gutter-sm rounded-full font-label text-label-lg text-on-surface-variant hover:text-on-surface transition-colors duration-pov-switch ease-pov-switch whitespace-nowrap">
+              <span class="material-symbols-outlined text-[18px]" aria-hidden="true">analytics</span>
+              <span data-design-text-token="label-lg">Faculty</span>
+            </a>
+
+            <a href="../aetherlab-portal/AetherLabPortal.html?pov=admin" role="tab" aria-selected="true" class="relative z-10 inline-flex items-center justify-center gap-gutter-xs px-gutter-md py-gutter-sm rounded-full font-label text-label-lg text-on-primary transition-colors duration-pov-switch ease-pov-switch whitespace-nowrap">
+              <span class="material-symbols-outlined text-[18px]" aria-hidden="true">admin_panel_settings</span>
+              <span data-design-text-token="label-lg">Lab Assistant</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Active Lab Assistant Profile Pill -->
+        <div class="flex items-center gap-gutter-sm">
+          <div class="hidden sm:flex items-center gap-gutter-xs px-gutter-md py-gutter-sm rounded-full bg-surface-container border border-outline-variant">
+            <span class="inline-block w-2 h-2 rounded-full bg-tangerine-orange"></span>
+            <span id="maint-open-pill" class="font-mono text-mono-md text-on-surface tabular-nums" data-design-text-token="mono-md">2 Open Tasks</span>
+          </div>
+          <div class="flex items-center gap-gutter-sm pl-gutter-xs pr-gutter-md py-gutter-xs rounded-full bg-surface-container border border-outline-variant">
+            <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-slate-blue text-on-secondary font-headline text-label-lg">DP</span>
+            <div class="hidden md:flex flex-col">
+              <span class="font-label text-label-sm text-on-surface leading-none" data-design-text-token="label-sm">Devon Park</span>
+              <span class="font-body text-label-sm text-on-surface-variant leading-tight" data-design-text-token="label-sm">Lab Assistant</span>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Main Workspace -->
+      <main id="maintenance-main" class="flex-1 p-gutter-lg lg:p-gutter-xl pb-24 max-w-[1400px] w-full mx-auto flex flex-col gap-gutter-xl animate-panel-enter">
+
+        <div class="flex flex-wrap items-center justify-between gap-gutter-md">
+          <div>
+            <span class="font-mono text-label-sm text-tangerine-orange uppercase tracking-wider" data-design-text-token="label-sm">Scheduled Service &amp; Calibration</span>
+            <h1 class="font-display text-display-lg-mobile lg:text-display-lg text-on-surface text-balance mt-gutter-xs" data-design-text-token="display-lg">
+              Maintenance Queue
+            </h1>
+            <p class="font-body text-body-lg text-on-surface-variant text-pretty max-w-prose" data-design-text-token="body-lg">
+              Complete consumable refills, robotic arm calibrations, and thermal checks before student evening slots begin.
+            </p>
+          </div>
+          <a href="../bay-telemetry/BayTelemetry.html" class="inline-flex items-center gap-gutter-sm px-gutter-lg py-gutter-sm min-h-[44px] rounded-full bg-surface-container text-on-surface border border-outline-variant font-label text-label-lg hover:bg-surface-container-high">
+            <span>Inspect Sensors</span>
+            <span class="material-symbols-outlined text-[18px]" aria-hidden="true">north_east</span>
+          </a>
+        </div>
+
+        <!-- 3-Column Maintenance Summary -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-gutter-lg">
+          <article class="rounded-xl bg-tangerine-orange text-on-primary p-gutter-lg flex flex-col gap-gutter-xs">
+            <span class="font-mono text-label-sm text-on-primary">OPEN TICKETS</span>
+            <span id="maint-open-stat" class="font-display text-headline-lg text-on-primary tabular-nums">2 Tasks</span>
+            <span class="font-body text-body-md text-on-primary">1 urgent refill, 1 scheduled cal</span>
+          </article>
+          <article class="rounded-xl bg-warm-cream text-on-tertiary p-gutter-lg flex flex-col gap-gutter-xs">
+            <span class="font-mono text-label-sm text-on-tertiary">NEXT WINDOW</span>
+            <span class="font-display text-headline-lg text-on-tertiary tabular-nums">17:00</span>
+            <span class="font-body text-body-md text-on-tertiary">Bay 05 30-min calibration block</span>
+          </article>
+          <article class="rounded-xl bg-slate-blue text-on-secondary p-gutter-lg flex flex-col gap-gutter-xs">
+            <span class="font-mono text-label-sm text-on-secondary">COMPLETED TODAY</span>
+            <span class="font-display text-headline-lg text-on-secondary tabular-nums">4 Checks</span>
+            <span class="font-body text-body-md text-on-secondary">Zero unplanned bay downtime</span>
+          </article>
+        </div>
+
+        <!-- Maintenance Task List -->
+        <div class="flex flex-col gap-gutter-md" id="maint-list">
+
+          <article data-search="bay 07 formlabs resin refill" class="maint-card rounded-xl bg-surface-container border border-outline-variant p-gutter-lg flex flex-col sm:flex-row sm:items-center justify-between gap-gutter-md">
+            <div class="flex items-start gap-gutter-md">
+              <span class="inline-flex items-center justify-center w-11 h-11 rounded-full bg-tangerine-orange text-on-primary shrink-0">
+                <span class="material-symbols-outlined text-[22px]">opacity</span>
+              </span>
+              <div class="flex flex-col gap-gutter-xs">
+                <div class="flex flex-wrap items-center gap-gutter-sm">
+                  <h2 class="font-title text-title-lg text-on-surface" data-design-text-token="title-lg">Bay 07 · Formlabs Resin Cartridge Refill</h2>
+                  <span id="maint-badge-1" class="px-gutter-sm py-gutter-xs rounded-full bg-primary-container text-on-primary-container font-label text-label-sm">Due Now</span>
+                </div>
+                <p class="font-body text-body-md text-on-surface-variant">Cartridge at 8% · Swap with Tough 2000 V2 lot #44B and unlock Bay 07.</p>
+              </div>
+            </div>
+            <button type="button" onclick="completeTask(1, this)" class="shrink-0 px-gutter-md py-gutter-sm rounded-full bg-tangerine-orange text-on-primary font-label text-label-lg">Mark Complete</button>
+          </article>
+
+          <article data-search="bay 05 franka arm calibration" class="maint-card rounded-xl bg-surface-container border border-outline-variant p-gutter-lg flex flex-col sm:flex-row sm:items-center justify-between gap-gutter-md">
+            <div class="flex items-start gap-gutter-md">
+              <span class="inline-flex items-center justify-center w-11 h-11 rounded-full bg-slate-blue text-on-secondary shrink-0">
+                <span class="material-symbols-outlined text-[22px]">precision_manufacturing</span>
+              </span>
+              <div class="flex flex-col gap-gutter-xs">
+                <div class="flex flex-wrap items-center gap-gutter-sm">
+                  <h2 class="font-title text-title-lg text-on-surface" data-design-text-token="title-lg">Bay 05 · Franka Arm Joint Calibration</h2>
+                  <span id="maint-badge-2" class="px-gutter-sm py-gutter-xs rounded-full bg-primary-container text-on-primary-container font-label text-label-sm">17:00 Window</span>
+                </div>
+                <p class="font-body text-body-md text-on-surface-variant">Run 7-DoF zero-torque verification prior to DS-204 evening lab.</p>
+              </div>
+            </div>
+            <button type="button" onclick="completeTask(2, this)" class="shrink-0 px-gutter-md py-gutter-sm rounded-full bg-warm-cream text-on-tertiary font-label text-label-lg">Mark Complete</button>
+          </article>
+
+          <article data-search="bay 02 h100 thermal sweep" class="maint-card rounded-xl bg-surface-container border border-outline-variant p-gutter-lg flex flex-col sm:flex-row sm:items-center justify-between gap-gutter-md">
+            <div class="flex items-start gap-gutter-md">
+              <span class="inline-flex items-center justify-center w-11 h-11 rounded-full bg-secondary-container text-on-secondary-container shrink-0">
+                <span class="material-symbols-outlined text-[22px]">verified</span>
+              </span>
+              <div class="flex flex-col gap-gutter-xs">
+                <div class="flex flex-wrap items-center gap-gutter-sm">
+                  <h2 class="font-title text-title-lg text-on-surface" data-design-text-token="title-lg">Bay 02 · H100 Dust Filter &amp; Thermal Sweep</h2>
+                  <span class="px-gutter-sm py-gutter-xs rounded-full bg-secondary-container text-on-secondary-container font-label text-label-sm">Passed</span>
+                </div>
+                <p class="font-body text-body-md text-on-surface-variant">Completed at 09:15 by Devon Park · Idle temp 34°C, load temp 62°C.</p>
+              </div>
+            </div>
+            <span class="shrink-0 font-mono text-mono-md text-on-surface-variant">Signed Off</span>
+          </article>
+
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- Feedback Toast -->
+  <div id="toast" role="status" aria-live="polite" class="fixed bottom-6 right-6 z-50 hidden items-center gap-gutter-sm px-gutter-lg py-gutter-md rounded-full bg-warm-cream text-on-tertiary font-label text-label-lg">
+    <span class="material-symbols-outlined text-[18px] text-tangerine-orange" style="font-variation-settings: &#39;FILL&#39; 1;">check_circle</span>
+    <span id="toast-message">Action confirmed</span>
+  </div>
+
+  <script>
+    let openTasks = 2;
+
+    function completeTask(id, btn) {
+      const badge = document.getElementById(`maint-badge-${id}`);
+      if (badge && badge.textContent !== 'Completed') {
+        badge.textContent = 'Completed';
+        badge.className = 'px-gutter-sm py-gutter-xs rounded-full bg-secondary-container text-on-secondary-container font-label text-label-sm';
+        btn.textContent = 'Signed Off';
+        btn.className = 'shrink-0 px-gutter-md py-gutter-sm rounded-full bg-secondary-container text-on-secondary-container font-label text-label-sm';
+        openTasks = Math.max(0, openTasks - 1);
+        document.getElementById('maint-open-pill').textContent = `${openTasks} Open Tasks`;
+        document.getElementById('maint-open-stat').textContent = `${openTasks} Tasks`;
+        showToast(`Maintenance task #${id} signed off & bay cleared.`);
+      }
+    }
+
+    const searchEl = document.getElementById('maint-search');
+    if (searchEl) {
+      searchEl.addEventListener('input', (e) => {
+        const q = e.target.value.trim().toLowerCase();
+        document.querySelectorAll('.maint-card').forEach((card) => {
+          const text = card.dataset.search || '';
+          card.classList.toggle('hidden', q.length > 0 && !text.includes(q));
+        });
+      });
+    }
+
+    let toastTimer;
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      document.getElementById('toast-message').textContent = msg;
+      toast.classList.remove('hidden');
+      toast.classList.add('flex');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        toast.classList.add('hidden');
+        toast.classList.remove('flex');
+      }, 2800);
+    }
+  </script>
+
+
+</body></html>

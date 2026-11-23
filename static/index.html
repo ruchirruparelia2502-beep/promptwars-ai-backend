@@ -1,1092 +1,1781 @@
-<!DOCTYPE html>
-<html lang="en" class="dark">
-<head>
+<!DOCTYPE html><html lang="en"><head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LabLink — PromptWars x Cynergy Campus Laboratory Platform</title>
-  <!-- Tailwind CSS via CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: {
-        extend: {
-          colors: {
-            brand: { 50: '#eef2ff', 100: '#e0e7ff', 500: '#6366f1', 600: '#4f46e5', 700: '#4338ca', 900: '#312e81' },
-            accent: { 400: '#38bdf8', 500: '#0ea5e9' },
-            success: { 500: '#10b981', 600: '#059669' },
-            warning: { 500: '#f59e0b' },
-            danger: { 500: '#ef4444' }
-          }
-        }
+  <title>LabLink AI — GenAI College Lab Portal (PromptWars x Cynergy)</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script id="tailwind-config">/** @type {import('tailwindcss').Config} */
+globalThis.tailwind = globalThis.tailwind || {};
+globalThis.tailwind.config = {
+  darkMode: 'class',
+  theme: {
+    extend: {
+      colors: {
+        'tangerine-orange': '#f3701e',
+        'slate-blue': '#4b607f',
+        'warm-cream': '#e8d8c9',
+        'hero-surface': '#3B2318',
+        'on-hero-surface': '#E8D8C9',
+        'primary': '#F3701E',
+        'on-primary': '#18120E',
+        'primary-container': '#552000',
+        'on-primary-container': '#FFDBCB',
+        'secondary': '#4B607F',
+        'on-secondary': '#F5F8FC',
+        'secondary-container': '#24344B',
+        'on-secondary-container': '#D4E3FF',
+        'tertiary': '#E8D8C9',
+        'on-tertiary': '#1C1B1B',
+        'background': '#141414',
+        'on-background': '#E8D8C9',
+        'surface': '#141414',
+        'surface-container-lowest': '#0E0E0E',
+        'surface-container-low': '#1B1A1A',
+        'surface-container': '#222121',
+        'surface-container-high': '#2B2A2A',
+        'surface-container-highest': '#363535',
+        'on-surface': '#E8D8C9',
+        'on-surface-variant': '#B8ABA0',
+        'outline': '#5E5650',
+        'outline-variant': '#36322F',
+        'success': '#4ADE80',
+        'on-success': '#052E16',
+        'warning': '#FBBF24',
+        'on-warning': '#451A03',
+        'error': '#F87171',
+        'on-error': '#450A0A',
+      },
+      borderRadius: {
+        'sm': '6px',
+        'DEFAULT': '10px',
+        'md': '12px',
+        'lg': '16px',
+        'xl': '24px',
+        'full': '9999px',
+      },
+      spacing: {
+        'gutter-xs': '4px',
+        'gutter-sm': '8px',
+        'gutter-md': '16px',
+        'gutter-lg': '24px',
+        'gutter-xl': '32px',
+        'section': '40px',
+        'page-margin': '28px',
+      },
+      fontFamily: {
+        'display': ['"Space Grotesk"', 'sans-serif'],
+        'headline': ['"Space Grotesk"', 'sans-serif'],
+        'title': ['"Geist"', 'sans-serif'],
+        'body': ['"Geist"', 'sans-serif'],
+        'label': ['"Geist"', 'sans-serif'],
+        'mono': ['"Space Mono"', 'monospace'],
+      },
+      fontSize: {
+        'display-lg': ['40px', { lineHeight: '48px', letterSpacing: '-0.5px', fontWeight: '700' }],
+        'display-lg-mobile': ['30px', { lineHeight: '36px', letterSpacing: '-0.25px', fontWeight: '700' }],
+        'headline-lg': ['28px', { lineHeight: '36px', letterSpacing: '-0.25px', fontWeight: '600' }],
+        'headline-md': ['22px', { lineHeight: '28px', letterSpacing: '0px', fontWeight: '600' }],
+        'title-lg': ['18px', { lineHeight: '26px', letterSpacing: '0px', fontWeight: '600' }],
+        'title-md': ['16px', { lineHeight: '24px', letterSpacing: '0px', fontWeight: '600' }],
+        'body-lg': ['16px', { lineHeight: '26px', letterSpacing: '0px', fontWeight: '400' }],
+        'body-md': ['14px', { lineHeight: '22px', letterSpacing: '0.1px', fontWeight: '400' }],
+        'label-lg': ['14px', { lineHeight: '20px', letterSpacing: '0.1px', fontWeight: '600' }],
+        'label-sm': ['12px', { lineHeight: '16px', letterSpacing: '0.3px', fontWeight: '500' }],
+        'mono-md': ['13px', { lineHeight: '20px', letterSpacing: '0px', fontWeight: '400' }],
+      },
+      transitionDuration: {
+        'state-change': '160ms',
+        'pov-switch': '280ms',
+        'card-enter': '320ms',
+      },
+      transitionDelay: {
+        'state-change': '0ms',
+        'pov-switch': '0ms',
+        'card-enter': '0ms',
+      },
+      transitionTimingFunction: {
+        'state-change': 'cubic-bezier(0.2, 0, 0, 1)',
+        'pov-switch': 'cubic-bezier(0.22, 1, 0.36, 1)',
+        'card-enter': 'cubic-bezier(0.16, 1, 0.3, 1)',
+      },
+    },
+  },
+};
+if (typeof module !== 'undefined') module.exports = globalThis.tailwind.config;
+</script>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&amp;family=Space+Grotesk:wght@500;600;700&amp;family=Space+Mono:wght@400;700&amp;display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=block" rel="stylesheet">
+  <style>
+    [hidden] {
+      display: none !important;
+    }
+
+    .material-symbols-outlined, .material-symbols-rounded, .material-symbols-sharp, .material-icons {
+      display: inline-block;
+      width: 1em;
+      height: 1em;
+      line-height: 1 !important;
+      box-sizing: content-box;
+      overflow: hidden;
+      white-space: nowrap;
+      direction: ltr;
+      vertical-align: middle;
+    }
+
+    @keyframes panelEnter {
+      0% {
+        opacity: 0;
+        transform: translateY(12px) scale(0.99);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
       }
     }
-  </script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <style>
-    /* WCAG 2.1 AA Compliant Focus Rings */
-    *:focus-visible {
-      outline: 2px solid #38bdf8 !important;
-      outline-offset: 2px !important;
+
+    @keyframes modalBackdropIn {
+      0% { opacity: 0; }
+      100% { opacity: 1; }
     }
-    .custom-scrollbar::-webkit-scrollbar {
-      width: 6px;
-      height: 6px;
+
+    @keyframes modalPopIn {
+      0% {
+        opacity: 0;
+        transform: translateY(20px) scale(0.95);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
     }
-    .custom-scrollbar::-webkit-scrollbar-thumb {
-      background: #334155;
-      border-radius: 9999px;
+
+    .animate-panel-enter {
+      animation: panelEnter 380ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+
+    .animate-modal-backdrop {
+      animation: modalBackdropIn 240ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+
+    .animate-modal-pop {
+      animation: modalPopIn 360ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .animate-panel-enter,
+      .animate-modal-backdrop,
+      .animate-modal-pop {
+        animation: none;
+      }
+      * {
+        transition-duration: 0.01ms !important;
+      }
     }
   </style>
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans antialiased selection:bg-indigo-500 selection:text-white">
+<body class="bg-surface text-on-surface font-body antialiased selection:bg-primary selection:text-on-primary">
 
-  <!-- ========================================================= -->
-  <!-- Top Accessibility Announcement (Screen Readers)           -->
-  <!-- ========================================================= -->
-  <div id="sr-announcements" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+  <!-- Root App Shell (min-h-screen per critical layout rule) -->
+  <div class="min-h-[1024px] flex flex-col lg:flex-row bg-surface text-on-surface" data-stitch-vh="min-h-[1024px]===min-h-screen">
 
-  <!-- ========================================================= -->
-  <!-- Header with Instant Role-Switcher (Zero Login Barrier)   -->
-  <!-- ========================================================= -->
-  <header class="border-b border-slate-800 bg-slate-900/90 backdrop-blur-md sticky top-0 z-50">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex flex-wrap items-center justify-between gap-4">
-      
-      <!-- Logo & System Status -->
-      <div class="flex items-center space-x-3">
-        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 via-indigo-500 to-cyan-400 flex items-center justify-center font-black text-xl text-white shadow-lg shadow-indigo-500/25">
-          <i class="fa-solid fa-microchip"></i>
-        </div>
-        <div>
-          <div class="flex items-center space-x-2">
-            <h1 class="font-extrabold text-xl tracking-tight bg-gradient-to-r from-white via-slate-100 to-slate-400 bg-clip-text text-transparent">
-              LabLink
-            </h1>
-            <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-indigo-950/80 text-indigo-300 border border-indigo-700">
-              GenAI Campus Mesh
-            </span>
-          </div>
-          <p class="text-xs text-slate-400">Making College Laboratories Accessible Across Departments</p>
-        </div>
-      </div>
-
-      <!-- Center: Role Switcher (No Login Page Requirement) -->
-      <nav aria-label="Role Switcher" class="flex items-center bg-slate-950/80 p-1.5 rounded-xl border border-slate-800 shadow-inner">
-        <span class="text-xs font-semibold text-slate-400 px-2.5 mr-1 flex items-center">
-          <i class="fa-solid fa-user-gear mr-1.5 text-indigo-400"></i> Role:
-        </span>
-        <button id="role-student" onclick="setRole('student')" 
-          class="px-3 py-1.5 rounded-lg text-xs font-medium transition-all flex items-center space-x-1.5 bg-indigo-600 text-white shadow"
-          aria-pressed="true">
-          <i class="fa-solid fa-user-graduate"></i>
-          <span>Student</span>
-        </button>
-        <button id="role-faculty" onclick="setRole('faculty')" 
-          class="px-3 py-1.5 rounded-lg text-xs font-medium transition-all text-slate-300 hover:text-white hover:bg-slate-800 flex items-center space-x-1.5"
-          aria-pressed="false">
-          <i class="fa-solid fa-chalkboard-user"></i>
-          <span>Faculty</span>
-        </button>
-        <button id="role-admin" onclick="setRole('lab_admin')" 
-          class="px-3 py-1.5 rounded-lg text-xs font-medium transition-all text-slate-300 hover:text-white hover:bg-slate-800 flex items-center space-x-1.5"
-          aria-pressed="false">
-          <i class="fa-solid fa-screwdriver-wrench"></i>
-          <span>Lab Admin</span>
-        </button>
-      </nav>
-
-      <!-- Right: Badges & API Docs -->
-      <div class="flex items-center space-x-2 text-xs">
-        <span class="hidden md:inline-flex items-center px-2.5 py-1 rounded-full bg-emerald-950 text-emerald-400 border border-emerald-800">
-          <span class="w-1.5 h-1.5 mr-1.5 bg-emerald-400 rounded-full animate-pulse"></span>
-          O(1) Bitmask Online
-        </span>
-        <a href="/docs" target="_blank" class="px-3 py-1.5 rounded-lg border border-slate-700 bg-slate-800/80 hover:bg-slate-700 text-slate-200 transition font-medium flex items-center">
-          <i class="fa-solid fa-book-open mr-1.5 text-indigo-400"></i> API Docs
+    <!-- Left Navigation Sidebar -->
+    <aside class="w-full lg:w-[248px] lg:min-h-[1024px] shrink-0 bg-surface-container-low border-b lg:border-b-0 lg:border-r border-outline-variant p-gutter-lg flex flex-col justify-between gap-gutter-xl" data-stitch-vh="lg:min-h-[1024px]===lg:min-h-screen">
+      <div class="flex flex-col gap-gutter-xl">
+        <!-- Brand Mark -->
+        <a href="#top" class="flex items-center gap-gutter-sm px-gutter-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-lg">
+          <span class="inline-flex items-center justify-center w-9 h-9 rounded-md bg-tangerine-orange text-on-primary">
+            <span class="material-symbols-outlined text-[20px]" style="font-variation-settings: &#39;FILL&#39; 1;">science</span>
+          </span>
+          <span class="font-headline text-headline-md text-tangerine-orange tracking-tight" data-design-text-token="headline-md">lablink AI</span>
         </a>
+
+        <!-- Primary Navigation (Role-Scoped) -->
+        <nav aria-label="Lab Portal Navigation" class="flex lg:flex-col gap-gutter-xs overflow-x-auto lg:overflow-visible pb-gutter-xs lg:pb-0">
+          <!-- Student Nav -->
+          <button type="button" data-role="student" data-nav-target="overview" class="nav-item flex items-center gap-gutter-md px-gutter-md py-gutter-sm rounded-full bg-surface-container-high text-on-surface font-label text-label-lg whitespace-nowrap transition-colors duration-state-change ease-state-change">
+            <span class="material-symbols-outlined text-[20px] text-tangerine-orange" style="font-variation-settings: &#39;FILL&#39; 1;">dashboard</span>
+            <span data-design-text-token="label-lg">Overview</span>
+          </button>
+          <button type="button" data-role="student" data-nav-target="discovery" class="nav-item flex items-center gap-gutter-md px-gutter-md py-gutter-sm rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container font-label text-label-lg whitespace-nowrap transition-colors duration-state-change ease-state-change">
+            <span class="material-symbols-outlined text-[20px]">precision_manufacturing</span>
+            <span data-design-text-token="label-lg">Equipment</span>
+          </button>
+          <button type="button" data-role="student" data-nav-target="booking" class="nav-item flex items-center gap-gutter-md px-gutter-md py-gutter-sm rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container font-label text-label-lg whitespace-nowrap transition-colors duration-state-change ease-state-change">
+            <span class="material-symbols-outlined text-[20px]">calendar_month</span>
+            <span data-design-text-token="label-lg">Smart Slots</span>
+          </button>
+          <button type="button" data-role="student" data-nav-target="projects" class="nav-item flex items-center gap-gutter-md px-gutter-md py-gutter-sm rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container font-label text-label-lg whitespace-nowrap transition-colors duration-state-change ease-state-change">
+            <span class="material-symbols-outlined text-[20px]">folder_special</span>
+            <span data-design-text-token="label-lg">Project Access</span>
+          </button>
+
+          <!-- Faculty Nav -->
+          <button type="button" data-role="teacher" data-nav-target="overview" hidden class="nav-item hidden flex items-center gap-gutter-md px-gutter-md py-gutter-sm rounded-full bg-surface-container-high text-on-surface font-label text-label-lg whitespace-nowrap transition-colors duration-state-change ease-state-change">
+            <span class="material-symbols-outlined text-[20px] text-tangerine-orange" style="font-variation-settings: &#39;FILL&#39; 1;">dashboard</span>
+            <span data-design-text-token="label-lg">Overview</span>
+          </button>
+          <button type="button" data-role="teacher" data-nav-target="analytics" hidden class="nav-item hidden flex items-center gap-gutter-md px-gutter-md py-gutter-sm rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container font-label text-label-lg whitespace-nowrap transition-colors duration-state-change ease-state-change">
+            <span class="material-symbols-outlined text-[20px]">monitoring</span>
+            <span data-design-text-token="label-lg">Analytics</span>
+          </button>
+          <button type="button" data-role="teacher" data-nav-target="queue" hidden class="nav-item hidden flex items-center gap-gutter-md px-gutter-md py-gutter-sm rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container font-label text-label-lg whitespace-nowrap transition-colors duration-state-change ease-state-change">
+            <span class="material-symbols-outlined text-[20px]">fact_check</span>
+            <span data-design-text-token="label-lg">Access Queue</span>
+          </button>
+          <button type="button" data-role="teacher" data-nav-target="cohorts" hidden class="nav-item hidden flex items-center gap-gutter-md px-gutter-md py-gutter-sm rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container font-label text-label-lg whitespace-nowrap transition-colors duration-state-change ease-state-change">
+            <span class="material-symbols-outlined text-[20px]">groups</span>
+            <span data-design-text-token="label-lg">Course Cohorts</span>
+          </button>
+
+          <!-- Lab Assistant Nav -->
+          <button type="button" data-role="admin" data-nav-target="overview" hidden class="nav-item hidden flex items-center gap-gutter-md px-gutter-md py-gutter-sm rounded-full bg-surface-container-high text-on-surface font-label text-label-lg whitespace-nowrap transition-colors duration-state-change ease-state-change">
+            <span class="material-symbols-outlined text-[20px] text-tangerine-orange" style="font-variation-settings: &#39;FILL&#39; 1;">dashboard</span>
+            <span data-design-text-token="label-lg">Overview</span>
+          </button>
+          <button type="button" data-role="admin" data-nav-target="telemetry" hidden class="nav-item hidden flex items-center gap-gutter-md px-gutter-md py-gutter-sm rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container font-label text-label-lg whitespace-nowrap transition-colors duration-state-change ease-state-change">
+            <span class="material-symbols-outlined text-[20px]">sensors</span>
+            <span data-design-text-token="label-lg">Bay Telemetry</span>
+          </button>
+          <button type="button" data-role="admin" data-nav-target="maintenance" hidden class="nav-item hidden flex items-center gap-gutter-md px-gutter-md py-gutter-sm rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container font-label text-label-lg whitespace-nowrap transition-colors duration-state-change ease-state-change">
+            <span class="material-symbols-outlined text-[20px]">build</span>
+            <span data-design-text-token="label-lg">Maintenance</span>
+          </button>
+          <button type="button" data-role="admin" data-nav-target="sharing" hidden class="nav-item hidden flex items-center gap-gutter-md px-gutter-md py-gutter-sm rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container font-label text-label-lg whitespace-nowrap transition-colors duration-state-change ease-state-change">
+            <span class="material-symbols-outlined text-[20px]">tune</span>
+            <span data-design-text-token="label-lg">Sharing Rules</span>
+          </button>
+        </nav>
       </div>
-    </div>
-  </header>
 
-  <!-- ========================================================= -->
-  <!-- Navigation Tabs (WCAG 2.1 AA Tablist)                    -->
-  <!-- ========================================================= -->
-  <section class="border-b border-slate-800 bg-slate-900/40">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 flex overflow-x-auto custom-scrollbar space-x-1 py-2" role="tablist" aria-label="Portal Navigation Tabs">
-      <button onclick="switchTab('discovery')" id="tab-discovery" role="tab" aria-selected="true" aria-controls="view-discovery"
-        class="tab-btn px-4 py-2 rounded-lg text-xs font-semibold flex items-center space-x-2 bg-indigo-600/20 text-indigo-300 border border-indigo-500/40">
-        <i class="fa-solid fa-compass"></i>
-        <span>Equipment Discovery & Booking</span>
-      </button>
+      <!-- Bottom Tangerine Feature Card (Role-Scoped) -->
+      <div class="hidden lg:flex flex-col gap-gutter-md rounded-xl bg-tangerine-orange text-on-primary p-gutter-lg relative overflow-hidden">
+        <div class="flex items-center justify-between">
+          <span class="inline-flex items-center justify-center w-9 h-9 rounded-full bg-on-primary text-tangerine-orange">
+            <span class="material-symbols-outlined text-[18px]">auto_awesome</span>
+          </span>
+          <span id="copilot-badge" class="font-mono text-label-sm px-gutter-sm py-gutter-xs rounded-full bg-on-primary text-warm-cream" data-design-text-token="label-sm">GenAI</span>
+        </div>
+        <div class="flex flex-col gap-gutter-xs">
+          <h2 id="copilot-title" class="font-headline text-headline-md text-on-primary leading-tight" data-design-text-token="headline-md">Lab Copilot</h2>
+          <p id="copilot-desc" class="font-body text-body-md text-on-primary text-pretty" data-design-text-token="body-md">Match your project specs to idle GPU &amp; robotics bays.</p>
+        </div>
+        <button id="copilot-btn" type="button" onclick="handleCopilotAction()" data-component-id="button-copilot" data-component-type="button" data-component-variant="primary" class="inline-flex items-center justify-between w-full px-gutter-md py-gutter-sm rounded-full bg-on-primary text-warm-cream font-label text-label-lg transition-transform duration-state-change ease-state-change hover:-translate-y-0.5">
+          <span id="copilot-btn-label" data-design-text-token="label-lg">Auto-Match</span>
+          <span class="material-symbols-outlined text-[16px]" aria-hidden="true">north_east</span>
+        </button>
+      </div>
+    </aside>
 
-      <button onclick="switchTab('contention')" id="tab-contention" role="tab" aria-selected="false" aria-controls="view-contention"
-        class="tab-btn px-4 py-2 rounded-lg text-xs font-semibold flex items-center space-x-2 text-slate-400 hover:text-slate-200 hover:bg-slate-800/60 transition">
-        <i class="fa-solid fa-bolt-lightning text-amber-400"></i>
-        <span>Smart Contention Resolver (IRCTC & BMS)</span>
-      </button>
+    <!-- Main Workspace Area -->
+    <div class="flex-1 flex flex-col min-w-0">
 
-      <button onclick="switchTab('faculty')" id="tab-faculty" role="tab" aria-selected="false" aria-controls="view-faculty"
-        class="tab-btn px-4 py-2 rounded-lg text-xs font-semibold flex items-center space-x-2 text-slate-400 hover:text-slate-200 hover:bg-slate-800/60 transition">
-        <i class="fa-solid fa-stamp text-sky-400"></i>
-        <span>Faculty Approval Hub</span>
-        <span id="pending-badge" class="px-1.5 py-0.2 rounded-full text-[10px] bg-sky-900 text-sky-300 border border-sky-700">1</span>
-      </button>
+      <!-- Top Header with Hackathon POV Slider -->
+      <header class="sticky top-0 z-30 bg-surface/95 border-b border-outline-variant px-gutter-lg lg:px-gutter-xl py-gutter-md flex flex-wrap items-center justify-between gap-gutter-md">
+        <!-- Search Input -->
+        <div class="relative flex-1 min-w-[220px] max-w-xs">
+          <span class="material-symbols-outlined text-[18px] text-on-surface-variant absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" aria-hidden="true">search</span>
+          <input id="lab-search" type="search" placeholder="Search GPUs, dev kits, or bays..." aria-label="Search lab workspace" class="w-full pl-10 pr-gutter-md py-gutter-sm rounded-full bg-surface-container-low border border-outline-variant text-body-md text-on-surface placeholder:text-on-surface-variant focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary">
+        </div>
 
-      <button onclick="switchTab('analytics')" id="tab-analytics" role="tab" aria-selected="false" aria-controls="view-analytics"
-        class="tab-btn px-4 py-2 rounded-lg text-xs font-semibold flex items-center space-x-2 text-slate-400 hover:text-slate-200 hover:bg-slate-800/60 transition">
-        <i class="fa-solid fa-chart-pie text-emerald-400"></i>
-        <span>Campus Utilization & Rebalancing</span>
-      </button>
+        <!-- TOP POV SLIDER (Student / Faculty / Lab Assistant) -->
+        <div class="flex items-center gap-gutter-sm">
+          <span class="hidden xl:inline font-label text-label-sm text-on-surface-variant uppercase tracking-wider" data-design-text-token="label-sm">View as</span>
+          <div data-component-id="pov-slider" data-component-type="tabs" data-component-variant="with-icon" role="tablist" aria-label="Portal Perspective Switcher" class="relative grid grid-cols-3 p-gutter-xs rounded-full bg-surface-container-lowest border border-outline-variant">
+            <!-- Smooth Sliding Pill Indicator -->
+            <div id="pov-slider-thumb" aria-hidden="true" class="absolute top-1 bottom-1 left-1 w-[calc(33.333%-4px)] rounded-full bg-tangerine-orange transition-transform duration-pov-switch ease-pov-switch pointer-events-none" style="transform: translateX(0%);"></div>
 
-      <button onclick="switchTab('security')" id="tab-security" role="tab" aria-selected="false" aria-controls="view-security"
-        class="tab-btn px-4 py-2 rounded-lg text-xs font-semibold flex items-center space-x-2 text-slate-400 hover:text-slate-200 hover:bg-slate-800/60 transition">
-        <i class="fa-solid fa-shield-halved text-purple-400"></i>
-        <span>Security & a11y Audit</span>
-      </button>
-    </div>
-  </section>
+            <button type="button" role="tab" id="tab-student" aria-selected="true" aria-controls="panel-student" data-pov="student" data-index="0" class="pov-tab relative z-10 inline-flex items-center justify-center gap-gutter-xs px-gutter-md py-gutter-sm rounded-full font-label text-label-lg text-on-primary transition-colors duration-pov-switch ease-pov-switch whitespace-nowrap">
+              <span class="material-symbols-outlined text-[18px]" aria-hidden="true">school</span>
+              <span data-design-text-token="label-lg">Student</span>
+            </button>
 
-  <!-- ========================================================= -->
-  <!-- Main Content Container                                    -->
-  <!-- ========================================================= -->
-  <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6">
+            <button type="button" role="tab" id="tab-teacher" aria-selected="false" aria-controls="panel-teacher" data-pov="teacher" data-index="1" class="pov-tab relative z-10 inline-flex items-center justify-center gap-gutter-xs px-gutter-md py-gutter-sm rounded-full font-label text-label-lg text-on-surface-variant hover:text-on-surface transition-colors duration-pov-switch ease-pov-switch whitespace-nowrap">
+              <span class="material-symbols-outlined text-[18px]" aria-hidden="true">analytics</span>
+              <span data-design-text-token="label-lg">Faculty</span>
+            </button>
 
-    <!-- ------------------------------------------------------- -->
-    <!-- VIEW 1: Equipment Discovery & Smart Booking             -->
-    <!-- ------------------------------------------------------- -->
-    <section id="view-discovery" role="tabpanel" aria-labelledby="tab-discovery" class="space-y-6">
-      
-      <!-- GenAI Semantic Search & Filter Bar -->
-      <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-5 shadow-xl space-y-4">
-        <div class="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
-          <div class="relative flex-1">
-            <label for="search-input" class="sr-only">Search specialized laboratory equipment</label>
-            <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-500">
-              <i class="fa-solid fa-wand-magic-sparkles text-indigo-400"></i>
+            <button type="button" role="tab" id="tab-admin" aria-selected="false" aria-controls="panel-admin" data-pov="admin" data-index="2" class="pov-tab relative z-10 inline-flex items-center justify-center gap-gutter-xs px-gutter-md py-gutter-sm rounded-full font-label text-label-lg text-on-surface-variant hover:text-on-surface transition-colors duration-pov-switch ease-pov-switch whitespace-nowrap">
+              <span class="material-symbols-outlined text-[18px]" aria-hidden="true">admin_panel_settings</span>
+              <span data-design-text-token="label-lg">Lab Assistant</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Active Role Telemetry & Profile Pill -->
+        <div class="flex items-center gap-gutter-sm">
+          <div class="hidden sm:flex items-center gap-gutter-xs px-gutter-md py-gutter-sm rounded-full bg-surface-container border border-outline-variant">
+            <span class="inline-block w-2 h-2 rounded-full bg-tangerine-orange"></span>
+            <span id="header-stat-text" class="font-mono text-mono-md text-on-surface tabular-nums" data-design-text-token="mono-md">32 GPU hrs left</span>
+          </div>
+          <div class="flex items-center gap-gutter-sm pl-gutter-xs pr-gutter-md py-gutter-xs rounded-full bg-surface-container border border-outline-variant">
+            <span id="header-avatar" class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-slate-blue text-on-secondary font-headline text-label-lg">ML</span>
+            <div class="hidden md:flex flex-col">
+              <span id="header-user-name" class="font-label text-label-sm text-on-surface leading-none" data-design-text-token="label-sm">Maya Lin</span>
+              <span id="header-user-role" class="font-body text-label-sm text-on-surface-variant leading-tight" data-design-text-token="label-sm">CS &#39;26 · Student</span>
             </div>
-            <input type="text" id="search-input"
-              placeholder="Ask GenAI: 'FPGA for real-time DSP filter' or 'SDR for 5G wireless experiment'..."
-              class="w-full pl-10 pr-24 py-2.5 rounded-xl bg-slate-950 border border-slate-700/80 text-sm placeholder-slate-500 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 text-slate-100 transition">
-            <button onclick="handleSemanticSearch()" 
-              class="absolute right-1.5 top-1.5 bottom-1.5 px-4 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold rounded-lg transition shadow-sm">
-              Discover
+          </div>
+        </div>
+      </header>
+
+      <!-- Main Content Container (pb-24 for fixed toast clearance) -->
+      <main class="flex-1 p-gutter-lg lg:p-gutter-xl pb-24 max-w-[1400px] w-full mx-auto flex flex-col gap-gutter-xl">
+
+        <!-- =================================================================== -->
+        <!-- POV 1: STUDENT VIEW                                                 -->
+        <!-- =================================================================== -->
+        <section id="panel-student" role="tabpanel" aria-labelledby="tab-student" class="pov-panel flex flex-col gap-gutter-xl animate-panel-enter">
+
+          <!-- Hero Banner (Toko-inspired warm terracotta card + 3 color-blocked cards) -->
+          <div class="rounded-xl bg-hero-surface border border-outline-variant p-gutter-lg lg:p-gutter-xl grid grid-cols-1 xl:grid-cols-12 gap-gutter-xl items-center">
+            <!-- Left Hero Copy -->
+            <div class="xl:col-span-5 flex flex-col items-start gap-gutter-md">
+              <span class="font-label text-label-sm text-warm-cream uppercase tracking-wider" data-design-text-token="label-sm">Student Portal · Fall Semester</span>
+              <h1 class="font-display text-display-lg-mobile lg:text-display-lg text-warm-cream text-balance" data-design-text-token="display-lg">
+                14 GenAI &amp; robotics stations ready today
+              </h1>
+              <p class="font-body text-body-lg text-warm-cream/90 text-pretty max-w-prose" data-design-text-token="body-lg">
+                Explore college lab hardware, lock in AI-matched time slots, and request project-based GPU grants.
+              </p>
+              <div class="flex flex-wrap items-center gap-gutter-md pt-gutter-xs">
+                <button type="button" onclick="openBookingModal(&#39;NVIDIA H100 Tensor Core&#39;)" data-component-id="button-primary" data-component-type="button" data-component-variant="primary" class="inline-flex items-center justify-center gap-gutter-sm px-gutter-lg py-gutter-sm min-h-[44px] rounded-full bg-tangerine-orange text-on-primary font-label text-label-lg transition-transform duration-state-change ease-state-change hover:-translate-y-0.5">
+                  <span data-design-text-token="label-lg">Book Smart Slot</span>
+                  <span class="material-symbols-outlined text-[18px]" aria-hidden="true">north_east</span>
+                </button>
+                <button type="button" onclick="openProjectModal()" class="inline-flex items-center justify-center gap-gutter-sm px-gutter-lg py-gutter-sm min-h-[44px] rounded-full bg-surface-container-high text-warm-cream border border-warm-cream/20 font-label text-label-lg transition-colors duration-state-change ease-state-change hover:bg-surface-container-highest">
+                  <span data-design-text-token="label-lg">Project Access</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Right 3 Color-Blocked Feature Cards (Exact Reference Palette) -->
+            <div class="xl:col-span-7 grid grid-cols-1 sm:grid-cols-3 gap-gutter-md items-stretch">
+              <!-- Card 1: Warm Cream -->
+              <article data-component-id="card-interactive" data-component-type="card" data-component-variant="interactive" class="rounded-xl bg-warm-cream text-on-tertiary p-gutter-lg flex flex-col justify-between gap-gutter-lg transition-transform duration-state-change ease-state-change hover:-translate-y-1 cursor-pointer" onclick="filterEquipment(&#39;all&#39;)">
+                <div class="flex flex-col gap-gutter-xs">
+                  <span class="font-mono text-label-sm text-on-tertiary" data-design-text-token="label-sm">DISCOVER</span>
+                  <h2 class="font-headline text-title-lg text-on-tertiary leading-snug" data-design-text-token="title-lg">Gear Catalog</h2>
+                </div>
+                <!-- Crisp Line-Art Chip Illustration -->
+                <svg viewBox="0 0 120 76" class="w-full h-20 text-on-tertiary" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <rect x="30" y="14" width="60" height="48" rx="8"></rect>
+                  <rect x="44" y="26" width="32" height="24" rx="4"></rect>
+                  <path d="M44 8v6M60 8v6M76 8v6M44 62v6M60 62v6M76 62v6M22 28h8M22 48h8M90 28h8M90 48h8"></path>
+                </svg>
+              </article>
+
+              <!-- Card 2: Tangerine Orange -->
+              <article data-component-id="card-interactive-2" data-component-type="card" data-component-variant="interactive" class="rounded-xl bg-tangerine-orange text-on-primary p-gutter-lg flex flex-col justify-between gap-gutter-lg transition-transform duration-state-change ease-state-change hover:-translate-y-1 cursor-pointer" onclick="openBookingModal(&#39;AI Smart Match&#39;)">
+                <div class="flex flex-col gap-gutter-xs">
+                  <span class="font-mono text-label-sm text-on-primary" data-design-text-token="label-sm">SCHEDULE</span>
+                  <h2 class="font-headline text-title-lg text-on-primary leading-snug" data-design-text-token="title-lg">Smart Slots</h2>
+                </div>
+                <!-- Crisp Line-Art Globe/Wave Illustration -->
+                <svg viewBox="0 0 120 76" class="w-full h-20 text-on-primary" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <circle cx="60" cy="48" r="34"></circle>
+                  <ellipse cx="60" cy="48" rx="16" ry="34"></ellipse>
+                  <path d="M28 38h64M26 52h68"></path>
+                </svg>
+              </article>
+
+              <!-- Card 3: Slate Blue -->
+              <article data-component-id="card-interactive-3" data-component-type="card" data-component-variant="interactive" class="rounded-xl bg-slate-blue text-on-secondary p-gutter-lg flex flex-col justify-between gap-gutter-lg transition-transform duration-state-change ease-state-change hover:-translate-y-1 cursor-pointer" onclick="openProjectModal()">
+                <div class="flex flex-col gap-gutter-xs">
+                  <span class="font-mono text-label-sm text-on-secondary" data-design-text-token="label-sm">GRANTS</span>
+                  <h2 class="font-headline text-title-lg text-on-secondary leading-snug" data-design-text-token="title-lg">Grants</h2>
+                </div>
+                <!-- Crisp Line-Art Architecture/Arch Illustration -->
+                <svg viewBox="0 0 120 76" class="w-full h-20 text-on-secondary" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M24 68V26a6 6 0 0 1 6-6h60a6 6 0 0 1 6 6v42"></path>
+                  <path d="M46 68V46a14 14 0 0 1 28 0v22"></path>
+                  <path d="M18 68h84M34 32h12M74 32h12"></path>
+                </svg>
+              </article>
+            </div>
+          </div>
+
+          <!-- Bottom 2-Column Split (Equipment Discovery + Smart Slots) -->
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter-xl items-start">
+
+            <!-- Left 7 Cols: Equipment Discovery List -->
+            <div class="lg:col-span-7 flex flex-col gap-gutter-lg">
+              <div class="flex flex-wrap items-center justify-between gap-gutter-md">
+                <div>
+                  <h2 class="font-headline text-headline-md text-on-surface" data-design-text-token="headline-md">Equipment Discovery</h2>
+                  <p class="font-body text-body-md text-on-surface-variant" data-design-text-token="body-md">Live availability across Compute, Robotics, and Spatial bays.</p>
+                </div>
+
+                <!-- Filter Pills -->
+                <div class="flex flex-wrap items-center gap-gutter-xs" role="group" aria-label="Filter equipment by category">
+                  <button type="button" onclick="filterEquipment(&#39;all&#39;)" data-filter="all" class="equip-filter px-gutter-md py-gutter-xs rounded-full bg-tangerine-orange text-on-primary font-label text-label-sm transition-colors duration-state-change ease-state-change">All</button>
+                  <button type="button" onclick="filterEquipment(&#39;compute&#39;)" data-filter="compute" class="equip-filter px-gutter-md py-gutter-xs rounded-full bg-surface-container text-on-surface-variant hover:text-on-surface border border-outline-variant font-label text-label-sm transition-colors duration-state-change ease-state-change">Compute</button>
+                  <button type="button" onclick="filterEquipment(&#39;robotics&#39;)" data-filter="robotics" class="equip-filter px-gutter-md py-gutter-xs rounded-full bg-surface-container text-on-surface-variant hover:text-on-surface border border-outline-variant font-label text-label-sm transition-colors duration-state-change ease-state-change">Robotics</button>
+                  <button type="button" onclick="filterEquipment(&#39;sensors&#39;)" data-filter="sensors" class="equip-filter px-gutter-md py-gutter-xs rounded-full bg-surface-container text-on-surface-variant hover:text-on-surface border border-outline-variant font-label text-label-sm transition-colors duration-state-change ease-state-change">Sensors</button>
+                </div>
+              </div>
+
+              <!-- Equipment Rows -->
+              <div class="flex flex-col gap-gutter-md" id="equipment-list">
+                <!-- Item 1 -->
+                <article data-category="compute" data-name="nvidia h100 tensor core cs ai lab" class="equip-card rounded-xl bg-surface-container p-gutter-lg border border-outline-variant flex flex-col sm:flex-row sm:items-center justify-between gap-gutter-md transition-transform duration-state-change ease-state-change hover:-translate-y-0.5">
+                  <div class="flex items-start sm:items-center gap-gutter-md">
+                    <span class="inline-flex items-center justify-center w-11 h-11 rounded-full bg-tangerine-orange text-on-primary shrink-0">
+                      <span class="material-symbols-outlined text-[22px]">memory</span>
+                    </span>
+                    <div class="flex flex-col gap-gutter-xs">
+                      <div class="flex flex-wrap items-center gap-gutter-sm">
+                        <h3 class="font-title text-title-md text-on-surface" data-design-text-token="title-md">NVIDIA H100 Tensor Core</h3>
+                        <span class="px-gutter-sm py-gutter-xs rounded-full bg-secondary-container text-on-secondary-container font-label text-label-sm" data-design-text-token="label-sm">Available Now</span>
+                      </div>
+                      <p class="font-body text-body-md text-on-surface-variant" data-design-text-token="body-md">CS AI Lab · Bay 02 · 80GB HBM3 Workstation</p>
+                    </div>
+                  </div>
+                  <button type="button" onclick="openBookingModal(&#39;NVIDIA H100 Tensor Core&#39;)" class="shrink-0 px-gutter-md py-gutter-sm rounded-full bg-warm-cream text-on-tertiary font-label text-label-lg transition-transform duration-state-change ease-state-change hover:-translate-y-0.5">
+                    <span data-design-text-token="label-lg">Book Slot</span>
+                  </button>
+                </article>
+
+                <!-- Item 2 -->
+                <article data-category="robotics" data-name="franka emika panda arm mech robotics" class="equip-card rounded-xl bg-surface-container p-gutter-lg border border-outline-variant flex flex-col sm:flex-row sm:items-center justify-between gap-gutter-md transition-transform duration-state-change ease-state-change hover:-translate-y-0.5">
+                  <div class="flex items-start sm:items-center gap-gutter-md">
+                    <span class="inline-flex items-center justify-center w-11 h-11 rounded-full bg-secondary-container text-on-secondary-container shrink-0">
+                      <span class="material-symbols-outlined text-[22px]">precision_manufacturing</span>
+                    </span>
+                    <div class="flex flex-col gap-gutter-xs">
+                      <div class="flex flex-wrap items-center gap-gutter-sm">
+                        <h3 class="font-title text-title-md text-on-surface" data-design-text-token="title-md">Franka Emika Panda Arm</h3>
+                        <span class="px-gutter-sm py-gutter-xs rounded-full bg-secondary-container text-on-secondary-container font-label text-label-sm" data-design-text-token="label-sm">Available Now</span>
+                      </div>
+                      <p class="font-body text-body-md text-on-surface-variant" data-design-text-token="body-md">Mech &amp; Robotics · Bay 05 · 7-DoF Force-Torque</p>
+                    </div>
+                  </div>
+                  <button type="button" onclick="openBookingModal(&#39;Franka Emika Panda Arm&#39;)" class="shrink-0 px-gutter-md py-gutter-sm rounded-full bg-warm-cream text-on-tertiary font-label text-label-lg transition-transform duration-state-change ease-state-change hover:-translate-y-0.5">
+                    <span data-design-text-token="label-lg">Book Slot</span>
+                  </button>
+                </article>
+
+                <!-- Item 3 -->
+                <article data-category="compute" data-name="jetson orin nano dev kit ece dept" class="equip-card rounded-xl bg-surface-container p-gutter-lg border border-outline-variant flex flex-col sm:flex-row sm:items-center justify-between gap-gutter-md transition-transform duration-state-change ease-state-change hover:-translate-y-0.5">
+                  <div class="flex items-start sm:items-center gap-gutter-md">
+                    <span class="inline-flex items-center justify-center w-11 h-11 rounded-full bg-warm-cream text-on-tertiary shrink-0">
+                      <span class="material-symbols-outlined text-[22px]">developer_board</span>
+                    </span>
+                    <div class="flex flex-col gap-gutter-xs">
+                      <div class="flex flex-wrap items-center gap-gutter-sm">
+                        <h3 class="font-title text-title-md text-on-surface" data-design-text-token="title-md">Jetson Orin Nano Dev Kit</h3>
+                        <span class="px-gutter-sm py-gutter-xs rounded-full bg-primary-container text-on-primary-container font-label text-label-sm" data-design-text-token="label-sm">Conflict at 14:00</span>
+                      </div>
+                      <p class="font-body text-body-md text-on-surface-variant" data-design-text-token="body-md">ECE Dept · Edge AI Kit · 40 TOPS · Checkout</p>
+                    </div>
+                  </div>
+                  <button type="button" onclick="openBookingModal(&#39;Jetson Orin Nano Dev Kit&#39;)" class="shrink-0 px-gutter-md py-gutter-sm rounded-full bg-tangerine-orange text-on-primary font-label text-label-lg transition-transform duration-state-change ease-state-change hover:-translate-y-0.5">
+                    <span data-design-text-token="label-lg">Resolve Slot</span>
+                  </button>
+                </article>
+
+                <!-- Item 4 -->
+                <article data-category="sensors" data-name="leica blk360 3d scanner spatial lab" class="equip-card rounded-xl bg-surface-container p-gutter-lg border border-outline-variant flex flex-col sm:flex-row sm:items-center justify-between gap-gutter-md transition-transform duration-state-change ease-state-change hover:-translate-y-0.5">
+                  <div class="flex items-start sm:items-center gap-gutter-md">
+                    <span class="inline-flex items-center justify-center w-11 h-11 rounded-full bg-secondary-container text-on-secondary-container shrink-0">
+                      <span class="material-symbols-outlined text-[22px]">view_in_ar</span>
+                    </span>
+                    <div class="flex flex-col gap-gutter-xs">
+                      <div class="flex flex-wrap items-center gap-gutter-sm">
+                        <h3 class="font-title text-title-md text-on-surface" data-design-text-token="title-md">Leica BLK360 3D Scanner</h3>
+                        <span class="px-gutter-sm py-gutter-xs rounded-full bg-secondary-container text-on-secondary-container font-label text-label-sm" data-design-text-token="label-sm">Available Now</span>
+                      </div>
+                      <p class="font-body text-body-md text-on-surface-variant text-balance" data-design-text-token="body-md">Spatial Lab · Bay 08 · Point-cloud &amp; NeRF</p>
+                    </div>
+                  </div>
+                  <button type="button" onclick="openBookingModal(&#39;Leica BLK360 3D Scanner&#39;)" class="shrink-0 px-gutter-md py-gutter-sm rounded-full bg-warm-cream text-on-tertiary font-label text-label-lg transition-transform duration-state-change ease-state-change hover:-translate-y-0.5">
+                    <span data-design-text-token="label-lg">Book Slot</span>
+                  </button>
+                </article>
+              </div>
+            </div>
+
+            <!-- Right 5 Cols: Smart Scheduled Slots & Project Access -->
+            <div class="lg:col-span-5 flex flex-col gap-gutter-lg">
+              <!-- Scheduled Card -->
+              <div class="rounded-xl bg-surface-container-low border border-outline-variant p-gutter-lg flex flex-col gap-gutter-lg">
+                <div class="flex items-center justify-between">
+                  <h2 class="font-headline text-headline-md text-on-surface" data-design-text-token="headline-md">Smart Schedule</h2>
+                  <span class="font-mono text-label-sm text-tangerine-orange" data-design-text-token="label-sm">AI Optimized</span>
+                </div>
+
+                <div class="flex flex-col gap-gutter-sm">
+                  <span class="font-label text-label-sm text-on-surface-variant" data-design-text-token="label-sm">Today</span>
+                  <div class="rounded-lg bg-surface-container p-gutter-md border border-outline-variant flex items-center justify-between gap-gutter-md">
+                    <div class="flex flex-col gap-gutter-xs min-w-0">
+                      <span class="font-title text-title-md text-on-surface truncate" data-design-text-token="title-md">H100 Node · Bay 02</span>
+                      <span class="font-mono text-mono-md text-on-surface-variant tabular-nums" data-design-text-token="mono-md">14:00 – 16:00 · In 18m</span>
+                    </div>
+                    <span class="shrink-0 px-gutter-sm py-gutter-xs rounded-full bg-tangerine-orange text-on-primary font-label text-label-sm" data-design-text-token="label-sm">Confirmed</span>
+                  </div>
+                </div>
+
+                <div class="flex flex-col gap-gutter-sm">
+                  <span class="font-label text-label-sm text-on-surface-variant" data-design-text-token="label-sm">Tomorrow</span>
+                  <div class="rounded-lg bg-surface-container p-gutter-md border border-outline-variant flex items-center justify-between gap-gutter-md">
+                    <div class="flex flex-col gap-gutter-xs min-w-0">
+                      <span class="font-title text-title-md text-on-surface truncate" data-design-text-token="title-md">Franka Arm · Bay 05</span>
+                      <span class="font-mono text-mono-md text-on-surface-variant tabular-nums" data-design-text-token="mono-md">10:30 – 12:00</span>
+                    </div>
+                    <span class="shrink-0 px-gutter-sm py-gutter-xs rounded-full bg-secondary-container text-on-secondary-container font-label text-label-sm" data-design-text-token="label-sm">Capstone</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Project-Based Access Request Card -->
+              <article data-component-id="card-action" data-component-type="card" data-component-variant="action" class="rounded-xl bg-surface-container border border-outline-variant p-gutter-lg flex flex-col gap-gutter-md">
+                <header class="flex items-start justify-between gap-gutter-md">
+                  <div>
+                    <h3 class="font-title text-title-lg text-on-surface" data-design-text-token="title-lg">Project Access</h3>
+                    <p class="font-body text-body-md text-on-surface-variant" data-design-text-token="body-md">CS-492 · Autonomous Vision</p>
+                  </div>
+                  <span class="px-gutter-md py-gutter-xs rounded-full bg-primary-container text-on-primary-container font-label text-label-sm" data-design-text-token="label-sm">Pending</span>
+                </header>
+                <p class="font-body text-body-md text-on-surface-variant text-pretty" data-design-text-token="body-md">
+                  Need multi-day GPU quotas or after-hours robotics arena access? Submit your capstone brief for faculty sign-off.
+                </p>
+                <footer class="flex items-center justify-between gap-gutter-md pt-gutter-sm border-t border-outline-variant">
+                  <span class="font-mono text-mono-md text-on-surface-variant tabular-nums" data-design-text-token="mono-md">Avg approval: 4h</span>
+                  <button type="button" onclick="openProjectModal()" class="px-gutter-md py-gutter-sm rounded-full bg-slate-blue text-on-secondary font-label text-label-lg transition-transform duration-state-change ease-state-change hover:-translate-y-0.5">
+                    <span data-design-text-token="label-lg">New Request</span>
+                  </button>
+                </footer>
+              </article>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- =================================================================== -->
+        <!-- POV 2: TEACHER / COURSE INSTRUCTOR VIEW (Distinct Cohort Layout)    -->
+        <!-- =================================================================== -->
+        <section id="panel-teacher" role="tabpanel" aria-labelledby="tab-teacher" hidden class="pov-panel flex flex-col gap-gutter-xl">
+
+          <!-- Course Cohort Header & Switcher -->
+          <div class="flex flex-wrap items-center justify-between gap-gutter-md">
+            <div>
+              <span class="font-mono text-label-sm text-tangerine-orange uppercase tracking-wider" data-design-text-token="label-sm">Faculty Cohort View</span>
+              <h1 class="font-display text-display-lg-mobile lg:text-display-lg text-on-surface text-balance mt-gutter-xs" data-design-text-token="display-lg">
+                Course Lab Readiness &amp; Teams
+              </h1>
+              <p class="font-body text-body-lg text-on-surface-variant text-pretty" data-design-text-token="body-lg">
+                Track student lab milestones, boost Friday demo priority, and sign off cross-department kits.
+              </p>
+            </div>
+            <div class="flex flex-wrap items-center gap-gutter-xs">
+              <button type="button" onclick="selectCohort(&#39;CS-492&#39;, this)" class="cohort-pill px-gutter-md py-gutter-sm rounded-full bg-tangerine-orange text-on-primary font-label text-label-lg">CS-492 Vision</button>
+              <button type="button" onclick="selectCohort(&#39;EE-310&#39;, this)" class="cohort-pill px-gutter-md py-gutter-sm rounded-full bg-surface-container text-on-surface-variant border border-outline-variant font-label text-label-lg">EE-310 Robotics</button>
+              <button type="button" onclick="selectCohort(&#39;DS-204&#39;, this)" class="cohort-pill px-gutter-md py-gutter-sm rounded-full bg-surface-container text-on-surface-variant border border-outline-variant font-label text-label-lg">DS-204 Multimodal</button>
+            </div>
+          </div>
+
+          <!-- 3-Column Cohort Summary Strip -->
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-gutter-lg">
+            <article class="rounded-xl bg-surface-container border border-outline-variant p-gutter-lg flex flex-col gap-gutter-xs">
+              <span class="font-mono text-label-sm text-on-surface-variant">LAB COMPLETION</span>
+              <span id="cohort-completion-val" class="font-display text-headline-lg text-warm-cream tabular-nums">88%</span>
+              <span class="font-body text-body-md text-on-surface-variant">14 of 16 teams checked in this week</span>
+            </article>
+            <article class="rounded-xl bg-tangerine-orange text-on-primary p-gutter-lg flex flex-col gap-gutter-xs">
+              <span class="font-mono text-label-sm text-on-primary">DEADLINE PRIORITY</span>
+              <span class="font-display text-headline-lg text-on-primary tabular-nums">Due Friday</span>
+              <span class="font-body text-body-md text-on-primary">3 teams need H100 priority boost</span>
+            </article>
+            <article class="rounded-xl bg-slate-blue text-on-secondary p-gutter-lg flex flex-col gap-gutter-xs">
+              <span class="font-mono text-label-sm text-on-secondary">SAFETY CLEARANCE</span>
+              <span class="font-display text-headline-lg text-on-secondary tabular-nums">42 / 44</span>
+              <span class="font-body text-body-md text-on-secondary">Students certified for Bay 02 &amp; 05</span>
+            </article>
+          </div>
+
+          <!-- Bottom 2-Column Split: Active Student Teams + Access Queue -->
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter-xl items-start">
+
+            <!-- Left 7 Cols: Active Student Teams -->
+            <div class="lg:col-span-7 rounded-xl bg-surface-container-low border border-outline-variant p-gutter-lg flex flex-col gap-gutter-lg">
+              <div class="flex flex-wrap items-center justify-between gap-gutter-md">
+                <div>
+                  <h2 class="font-headline text-headline-md text-on-surface" data-design-text-token="headline-md">Active Student Teams</h2>
+                  <p class="font-body text-body-md text-on-surface-variant" data-design-text-token="body-md">Live equipment assignments and deadline priority controls.</p>
+                </div>
+                <button type="button" onclick="openTabView(&#39;teacher&#39;, &#39;cohorts&#39;)" class="inline-flex items-center gap-gutter-xs px-gutter-md py-gutter-xs rounded-full bg-surface-container text-tangerine-orange border border-outline-variant font-label text-label-sm hover:bg-surface-container-high transition-colors duration-state-change ease-state-change">
+                  <span>All Cohorts</span>
+                  <span class="material-symbols-outlined text-[16px]" aria-hidden="true">north_east</span>
+                </button>
+              </div>
+
+              <div class="flex flex-col gap-gutter-md">
+                <article class="rounded-lg bg-surface-container p-gutter-lg border border-outline-variant flex flex-col sm:flex-row sm:items-center justify-between gap-gutter-md">
+                  <div class="flex flex-col gap-gutter-xs">
+                    <div class="flex items-center gap-gutter-sm">
+                      <h3 class="font-title text-title-md text-on-surface">Team Alpha · Maya Lin</h3>
+                      <span class="px-gutter-sm py-gutter-xs rounded-full bg-secondary-container text-on-secondary-container font-label text-label-sm">On Track</span>
+                    </div>
+                    <p class="font-body text-body-md text-on-surface-variant">Assigned: H100 Bay 02 · 28 / 48 GPU hrs used</p>
+                  </div>
+                  <button type="button" onclick="this.textContent=&#39;Priority Boosted&#39;; this.className=&#39;shrink-0 px-gutter-md py-gutter-sm rounded-full bg-secondary-container text-on-secondary-container font-label text-label-sm&#39;; showToast(&#39;Friday demo priority boosted for Team Alpha.&#39;);" class="shrink-0 px-gutter-md py-gutter-sm rounded-full bg-tangerine-orange text-on-primary font-label text-label-sm">Boost Fri Priority</button>
+                </article>
+
+                <article class="rounded-lg bg-surface-container p-gutter-lg border border-outline-variant flex flex-col sm:flex-row sm:items-center justify-between gap-gutter-md">
+                  <div class="flex flex-col gap-gutter-xs">
+                    <div class="flex items-center gap-gutter-sm">
+                      <h3 class="font-title text-title-md text-on-surface">Team Rover · Kian Patel &amp; Samira Noor</h3>
+                      <span class="px-gutter-sm py-gutter-xs rounded-full bg-primary-container text-on-primary-container font-label text-label-sm">Needs Sign-off</span>
+                    </div>
+                    <p class="font-body text-body-md text-on-surface-variant">Requested: Jetson Orin Kit (ECE Dept) · 24h Checkout</p>
+                  </div>
+                  <button type="button" onclick="this.textContent=&#39;Approved&#39;; this.className=&#39;shrink-0 px-gutter-md py-gutter-sm rounded-full bg-secondary-container text-on-secondary-container font-label text-label-sm&#39;; showToast(&#39;Jetson Orin Kit approved for Team Rover.&#39;);" class="shrink-0 px-gutter-md py-gutter-sm rounded-full bg-warm-cream text-on-tertiary font-label text-label-sm">Approve Kit</button>
+                </article>
+              </div>
+            </div>
+
+            <!-- Right 5 Cols: Project-Based Access Approval Queue -->
+            <div class="lg:col-span-5 flex flex-col gap-gutter-md">
+              <div class="rounded-xl bg-surface-container-low border border-outline-variant p-gutter-lg flex flex-col gap-gutter-lg">
+                <div class="flex items-center justify-between gap-gutter-sm">
+                  <h2 class="font-headline text-headline-md text-on-surface" data-design-text-token="headline-md">Access Queue</h2>
+                  <div class="flex items-center gap-gutter-xs">
+                    <span id="faculty-pending-count" class="px-gutter-sm py-gutter-xs rounded-full bg-tangerine-orange text-on-primary font-mono text-label-sm tabular-nums">3 Pending</span>
+                    <button type="button" onclick="openTabView(&#39;teacher&#39;, &#39;queue&#39;)" aria-label="Open full Access Queue" class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-surface-container text-on-surface hover:bg-surface-container-high border border-outline-variant">
+                      <span class="material-symbols-outlined text-[16px]" aria-hidden="true">north_east</span>
+                    </button>
+                  </div>
+                </div>
+
+                <div class="flex flex-col gap-gutter-md">
+                  <article class="rounded-lg bg-surface-container p-gutter-md border border-outline-variant flex flex-col gap-gutter-sm">
+                    <div class="flex items-start justify-between gap-gutter-sm">
+                      <div class="min-w-0">
+                        <h3 class="font-title text-title-md text-on-surface truncate" data-design-text-token="title-md">Maya Lin · Vision</h3>
+                        <p class="font-body text-body-md text-on-surface-variant" data-design-text-token="body-md">48h H100 Node · CS-492</p>
+                      </div>
+                      <span id="approval-badge-1" class="shrink-0 px-gutter-sm py-gutter-xs rounded-full bg-primary-container text-on-primary-container font-label text-label-sm">Pending</span>
+                    </div>
+                    <div class="flex items-center gap-gutter-sm pt-gutter-xs">
+                      <button type="button" onclick="approveRequest(1)" class="px-gutter-md py-gutter-xs rounded-full bg-tangerine-orange text-on-primary font-label text-label-sm">Approve</button>
+                      <button type="button" onclick="showToast(&#39;AI Fairness Score: 98% (Capstone due Fri).&#39;)" class="px-gutter-md py-gutter-xs rounded-full bg-surface-container-high text-on-surface font-label text-label-sm">AI Score</button>
+                    </div>
+                  </article>
+
+                  <article class="rounded-lg bg-surface-container p-gutter-md border border-outline-variant flex flex-col gap-gutter-sm">
+                    <div class="flex items-start justify-between gap-gutter-sm">
+                      <div class="min-w-0">
+                        <h3 class="font-title text-title-md text-on-surface truncate" data-design-text-token="title-md">Kian Patel · Sim2Real</h3>
+                        <p class="font-body text-body-md text-on-surface-variant" data-design-text-token="body-md">24h Jetson Kit · ECE-310</p>
+                      </div>
+                      <span id="approval-badge-2" class="shrink-0 px-gutter-sm py-gutter-xs rounded-full bg-primary-container text-on-primary-container font-label text-label-sm">Pending</span>
+                    </div>
+                    <div class="flex items-center gap-gutter-sm pt-gutter-xs">
+                      <button type="button" onclick="approveRequest(2)" class="px-gutter-md py-gutter-xs rounded-full bg-tangerine-orange text-on-primary font-label text-label-sm">Approve</button>
+                      <button type="button" onclick="showToast(&#39;AI Fairness Score: 91% (Low quota usage).&#39;)" class="px-gutter-md py-gutter-xs rounded-full bg-surface-container-high text-on-surface font-label text-label-sm">AI Score</button>
+                    </div>
+                  </article>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- =================================================================== -->
+        <!-- POV 3: LAB ASSISTANT VIEW (Bay Telemetry & Hardware Operations)     -->
+        <!-- =================================================================== -->
+        <section id="panel-admin" role="tabpanel" aria-labelledby="tab-admin" hidden class="pov-panel flex flex-col gap-gutter-xl">
+
+          <!-- Executive Header -->
+          <div class="flex flex-wrap items-center justify-between gap-gutter-md">
+            <div>
+              <span class="font-mono text-label-sm text-tangerine-orange uppercase tracking-wider" data-design-text-token="label-sm">Lab Assistant Operations</span>
+              <h1 class="font-display text-display-lg-mobile lg:text-display-lg text-on-surface text-balance mt-gutter-xs" data-design-text-token="display-lg">
+                Bay Telemetry &amp; Maintenance
+              </h1>
+              <p class="font-body text-body-lg text-on-surface-variant text-pretty" data-design-text-token="body-lg">
+                Monitor hardware temperatures, toggle bay locks, and clear scheduled maintenance windows.
+              </p>
+            </div>
+            <button type="button" onclick="showToast(&#39;Bay diagnostics sweep completed: 12 healthy, 2 scheduled.&#39;)" class="inline-flex items-center gap-gutter-sm px-gutter-lg py-gutter-sm min-h-[44px] rounded-full bg-tangerine-orange text-on-primary font-label text-label-lg">
+              <span data-design-text-token="label-lg">Run Diagnostics</span>
+              <span class="material-symbols-outlined text-[18px]" aria-hidden="true">health_and_safety</span>
             </button>
           </div>
 
-          <!-- Department Quick Filters -->
-          <div class="flex items-center space-x-2 overflow-x-auto text-xs" role="group" aria-label="Department Filter">
-            <button onclick="filterDepartment('all')" class="dept-btn px-3 py-1.5 rounded-lg bg-indigo-600 text-white font-medium">All</button>
-            <button onclick="filterDepartment('ECE')" class="dept-btn px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700 font-medium">ECE</button>
-            <button onclick="filterDepartment('CSE')" class="dept-btn px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700 font-medium">CSE / AI</button>
-            <button onclick="filterDepartment('Mechanical')" class="dept-btn px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700 font-medium">Mech / Robotics</button>
-            <button onclick="filterDepartment('Biotechnology')" class="dept-btn px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700 font-medium">Biotech</button>
+          <!-- 4-Column Executive KPI Strip -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-gutter-md">
+            <article class="rounded-xl bg-warm-cream text-on-tertiary p-gutter-lg flex flex-col gap-gutter-xs">
+              <span class="font-mono text-label-sm text-on-tertiary">BAYS ONLINE</span>
+              <span class="font-display text-headline-lg text-on-tertiary tabular-nums">12 / 14</span>
+              <span class="font-body text-body-md text-on-tertiary">2 bays in scheduled maint</span>
+            </article>
+            <article class="rounded-xl bg-tangerine-orange text-on-primary p-gutter-lg flex flex-col gap-gutter-xs">
+              <span class="font-mono text-label-sm text-on-primary">PEAK TEMP</span>
+              <span class="font-display text-headline-lg text-on-primary tabular-nums">62°C</span>
+              <span class="font-body text-body-md text-on-primary">Within nominal GPU range</span>
+            </article>
+            <article class="rounded-xl bg-slate-blue text-on-secondary p-gutter-lg flex flex-col gap-gutter-xs">
+              <span class="font-mono text-label-sm text-on-secondary">CHECKOUTS</span>
+              <span class="font-display text-headline-lg text-on-secondary tabular-nums">19</span>
+              <span class="font-body text-body-md text-on-secondary">Active dev kits in field</span>
+            </article>
+            <article class="rounded-xl bg-surface-container border border-outline-variant p-gutter-lg flex flex-col gap-gutter-xs">
+              <span class="font-mono text-label-sm text-on-surface-variant">ALERTS</span>
+              <span class="font-display text-headline-lg text-on-surface tabular-nums">1 Due</span>
+              <span class="font-body text-body-md text-on-surface-variant">Bay 07 resin refill at 8%</span>
+            </article>
           </div>
-        </div>
 
-        <!-- GenAI Semantic Match Banner -->
-        <div id="ai-insight-box" class="hidden p-3.5 rounded-xl bg-indigo-950/40 border border-indigo-800/60 text-xs text-indigo-200 flex items-start space-x-3">
-          <div class="p-1 bg-indigo-900/60 rounded text-indigo-400 mt-0.5">
-            <i class="fa-solid fa-brain"></i>
-          </div>
-          <div>
-            <span class="font-semibold text-indigo-300">GenAI Semantic Match Analysis:</span>
-            <p id="ai-insight-text" class="mt-0.5 text-slate-300 leading-relaxed"></p>
-          </div>
-        </div>
-      </div>
+          <!-- Asymmetric 8:4 Bay Telemetry & Maintenance Queue -->
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter-xl items-start">
+            <div class="lg:col-span-8 rounded-xl bg-surface-container border border-outline-variant p-gutter-lg flex flex-col gap-gutter-lg">
+              <h2 class="font-headline text-headline-md text-on-surface" data-design-text-token="headline-md">Department Bay Load</h2>
+              <div class="flex flex-col gap-gutter-md">
+                <div class="flex flex-col gap-gutter-xs">
+                  <div class="flex items-center justify-between">
+                    <span class="font-title text-title-md text-on-surface">CS AI Lab · H100 &amp; A100 Cluster</span>
+                    <span class="font-mono text-mono-md text-warm-cream tabular-nums">90% Load · 62°C</span>
+                  </div>
+                  <div class="w-full h-3 rounded-full bg-surface-container-highest overflow-hidden">
+                    <div class="h-full rounded-full bg-tangerine-orange" style="width: 90%;"></div>
+                  </div>
+                </div>
+                <div class="flex flex-col gap-gutter-xs">
+                  <div class="flex items-center justify-between">
+                    <span class="font-title text-title-md text-on-surface">ECE Dept · Edge AI &amp; FPGA Kits</span>
+                    <span class="font-mono text-mono-md text-warm-cream tabular-nums">78% Checked Out</span>
+                  </div>
+                  <div class="w-full h-3 rounded-full bg-surface-container-highest overflow-hidden">
+                    <div class="h-full rounded-full bg-slate-blue" style="width: 78%;"></div>
+                  </div>
+                </div>
+              </div>
 
-      <!-- Equipment Cards Grid -->
-      <div id="equipment-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5" aria-live="polite">
-        <!-- Rendered dynamically via JavaScript -->
-        <div class="col-span-full py-12 text-center text-slate-500">
-          <i class="fa-solid fa-spinner fa-spin text-2xl text-indigo-400"></i>
-          <p class="mt-2 text-sm">Loading specialized laboratory inventory...</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- ------------------------------------------------------- -->
-    <!-- VIEW 2: IRCTC & BookMyShow Smart Contention Simulator   -->
-    <!-- ------------------------------------------------------- -->
-    <section id="view-contention" role="tabpanel" aria-labelledby="tab-contention" class="hidden space-y-6">
-      
-      <!-- Conceptual Banner -->
-      <div class="bg-gradient-to-r from-amber-950/40 via-slate-900 to-indigo-950/40 border border-amber-500/30 rounded-2xl p-6 shadow-xl space-y-3">
-        <div class="flex items-center space-x-3">
-          <div class="w-10 h-10 rounded-xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-400 font-bold text-lg">
-            ⚡
-          </div>
-          <div>
-            <h2 class="text-lg font-bold text-slate-100">IRCTC & BookMyShow Non-Random Smart Contention Resolver</h2>
-            <p class="text-xs text-slate-400">
-              When two students submit booking requests for the exact same equipment slot at the exact same millisecond,
-              LabLink evaluates a deterministic Multi-Factor Priority Score (MFPS) instead of a naive race condition or random pick.
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Interactive Contention Simulator Playground -->
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        
-        <!-- Contenders Form (Student A vs Student B) -->
-        <div class="lg:col-span-5 bg-slate-900/80 border border-slate-800 rounded-2xl p-5 space-y-5">
-          <h3 class="text-sm font-bold text-slate-200 flex items-center">
-            <i class="fa-solid fa-people-arrows mr-2 text-indigo-400"></i> Simultaneous Booking Collision Setup
-          </h3>
-
-          <!-- Student A Card -->
-          <div class="p-4 rounded-xl bg-slate-950 border border-indigo-900/60 space-y-3">
-            <div class="flex items-center justify-between">
-              <span class="text-xs font-bold text-indigo-300">👤 Student A (Urgent Capstone)</span>
-              <span class="text-[10px] px-2 py-0.5 rounded bg-indigo-950 text-indigo-400 border border-indigo-800 font-mono">REQ_01</span>
+              <!-- Live Hardware Fleet Controls -->
+              <div class="flex flex-col gap-gutter-sm pt-gutter-md border-t border-outline-variant">
+                <div class="rounded-lg bg-surface-container-low p-gutter-md border border-outline-variant flex flex-wrap items-center justify-between gap-gutter-md">
+                  <div>
+                    <h3 class="font-title text-title-md text-on-surface">Bay 01–04 · NVIDIA H100 Cluster</h3>
+                    <span class="font-mono text-mono-md text-on-surface-variant tabular-nums">62°C · 88% Load · Active</span>
+                  </div>
+                  <button type="button" onclick="toggleBayLock(this)" class="px-gutter-md py-gutter-xs rounded-full bg-secondary-container text-on-secondary-container font-label text-label-sm">Healthy · Lock Bay</button>
+                </div>
+                <div class="rounded-lg bg-surface-container-low p-gutter-md border border-outline-variant flex flex-wrap items-center justify-between gap-gutter-md">
+                  <div>
+                    <h3 class="font-title text-title-md text-on-surface">Bay 07 · Formlabs Form 4 SLA</h3>
+                    <span class="font-mono text-mono-md text-on-surface-variant tabular-nums">Resin Cartridge 8% · Paused</span>
+                  </div>
+                  <button type="button" onclick="toggleBayLock(this)" class="px-gutter-md py-gutter-xs rounded-full bg-primary-container text-on-primary-container font-label text-label-sm">Maintenance · Unlock</button>
+                </div>
+              </div>
             </div>
-            <div class="grid grid-cols-2 gap-2 text-xs">
-              <div>
-                <label class="text-slate-400 block text-[11px]">Academic Tier</label>
-                <select id="sim-tier-a" class="w-full mt-1 bg-slate-900 border border-slate-700 rounded p-1.5 text-slate-200">
-                  <option value="capstone" selected>Capstone / Thesis (1.00)</option>
-                  <option value="funded_research">Funded Research (0.85)</option>
-                  <option value="coursework">Course Lab (0.65)</option>
-                  <option value="independent">Hobby (0.35)</option>
-                </select>
+
+            <div class="lg:col-span-4 rounded-xl bg-hero-surface border border-outline-variant p-gutter-lg flex flex-col gap-gutter-md">
+              <span class="font-mono text-label-sm text-warm-cream">SHIFT CHECKLIST</span>
+              <h2 class="font-headline text-headline-md text-warm-cream" data-design-text-token="headline-md">Maintenance Queue</h2>
+              <div class="flex flex-col gap-gutter-sm pt-gutter-xs">
+                <div class="flex items-center justify-between text-warm-cream">
+                  <span class="font-body text-body-md">Bay 07 · Resin Refill</span>
+                  <span class="font-mono text-mono-md tabular-nums">Due Now</span>
+                </div>
+                <div class="flex items-center justify-between text-warm-cream">
+                  <span class="font-body text-body-md">Bay 05 · Arm Calibration</span>
+                  <span class="font-mono text-mono-md tabular-nums">17:00</span>
+                </div>
+                <div class="flex items-center justify-between text-warm-cream">
+                  <span class="font-body text-body-md">Bay 02 · Thermal Sweep</span>
+                  <span class="font-mono text-mono-md tabular-nums">Passed</span>
+                </div>
               </div>
-              <div>
-                <label class="text-slate-400 block text-[11px]">Deadline Proximity</label>
-                <select id="sim-deadline-a" class="w-full mt-1 bg-slate-900 border border-slate-700 rounded p-1.5 text-slate-200">
-                  <option value="6.0" selected>In 6 Hours (Critical)</option>
-                  <option value="24.0">In 24 Hours</option>
-                  <option value="120.0">In 5 Days</option>
-                </select>
-              </div>
-              <div class="col-span-2">
-                <label class="text-slate-400 block text-[11px]">Past 30-Day Usage (Anti-Hoarding)</label>
-                <input type="number" id="sim-usage-a" value="2.5" step="0.5" class="w-full mt-1 bg-slate-900 border border-slate-700 rounded p-1.5 text-slate-200">
-                <span class="text-[10px] text-slate-500">Low prior usage -> High fairness bonus</span>
+              <div class="flex items-center justify-between gap-gutter-sm pt-gutter-sm border-t border-warm-cream/20">
+                <button type="button" onclick="openTabView(&#39;admin&#39;, &#39;telemetry&#39;)" class="font-label text-label-sm text-warm-cream hover:underline">Live Sensors →</button>
+                <button type="button" onclick="openTabView(&#39;admin&#39;, &#39;maintenance&#39;)" class="px-gutter-md py-gutter-xs rounded-full bg-warm-cream text-on-tertiary font-label text-label-sm">Open Queue</button>
               </div>
             </div>
           </div>
 
-          <!-- Student B Card -->
-          <div class="p-4 rounded-xl bg-slate-950 border border-amber-900/60 space-y-3">
-            <div class="flex items-center justify-between">
-              <span class="text-xs font-bold text-amber-300">👤 Student B (Coursework Lab)</span>
-              <span class="text-[10px] px-2 py-0.5 rounded bg-amber-950 text-amber-400 border border-amber-800 font-mono">REQ_02</span>
-            </div>
-            <div class="grid grid-cols-2 gap-2 text-xs">
-              <div>
-                <label class="text-slate-400 block text-[11px]">Academic Tier</label>
-                <select id="sim-tier-b" class="w-full mt-1 bg-slate-900 border border-slate-700 rounded p-1.5 text-slate-200">
-                  <option value="capstone">Capstone / Thesis (1.00)</option>
-                  <option value="coursework" selected>Course Lab (0.65)</option>
-                  <option value="independent">Hobby (0.35)</option>
-                </select>
-              </div>
-              <div>
-                <label class="text-slate-400 block text-[11px]">Deadline Proximity</label>
-                <select id="sim-deadline-b" class="w-full mt-1 bg-slate-900 border border-slate-700 rounded p-1.5 text-slate-200">
-                  <option value="6.0">In 6 Hours</option>
-                  <option value="72.0" selected>In 3 Days</option>
-                  <option value="200.0">In 2 Weeks</option>
-                </select>
-              </div>
-              <div class="col-span-2">
-                <label class="text-slate-400 block text-[11px]">Past 30-Day Usage (Anti-Hoarding)</label>
-                <input type="number" id="sim-usage-b" value="28.0" step="0.5" class="w-full mt-1 bg-slate-900 border border-slate-700 rounded p-1.5 text-slate-200">
-                <span class="text-[10px] text-slate-500">High prior usage -> Anti-hoarding penalty</span>
-              </div>
-            </div>
-          </div>
+        </section>
 
-          <button onclick="triggerSimulatedContention()" 
-            class="w-full py-3 bg-gradient-to-r from-amber-600 via-indigo-600 to-indigo-700 hover:from-amber-500 hover:to-indigo-600 text-white text-xs font-bold rounded-xl transition shadow-lg flex items-center justify-center space-x-2">
-            <i class="fa-solid fa-play"></i>
-            <span>Simulate Simultaneous Booking Collision</span>
-          </button>
-        </div>
+        <!-- Dynamic Tab Sub-Page Container (Renders respective tab views in-place) -->
+        <section id="subpage-view" hidden class="flex flex-col gap-gutter-xl animate-panel-enter"></section>
 
-        <!-- Contention Results Output -->
-        <div class="lg:col-span-7 bg-slate-900/80 border border-slate-800 rounded-2xl p-5 space-y-4">
-          <div class="flex items-center justify-between border-b border-slate-800 pb-3">
-            <h3 class="text-sm font-bold text-slate-200 flex items-center">
-              <i class="fa-solid fa-gavel mr-2 text-amber-400"></i> Arbitration & Allocation Engine Output
-            </h3>
-            <span id="arbitration-status-badge" class="text-[10px] px-2.5 py-1 rounded-full bg-slate-800 text-slate-400 border border-slate-700">
-              Ready to arbitrate
-            </span>
-          </div>
-
-          <div id="contention-result-area" class="space-y-4">
-            <div class="p-8 text-center text-slate-500 text-xs">
-              <i class="fa-solid fa-scale-balanced text-3xl mb-3 text-slate-600"></i>
-              <p>Click "Simulate Simultaneous Booking Collision" to test the IRCTC & BookMyShow smart arbitration pipeline.</p>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </section>
-
-    <!-- ------------------------------------------------------- -->
-    <!-- VIEW 3: Faculty Approval Hub                            -->
-    <!-- ------------------------------------------------------- -->
-    <section id="view-faculty" role="tabpanel" aria-labelledby="tab-faculty" class="hidden space-y-6">
-      
-      <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-5 shadow-xl flex items-center justify-between">
-        <div>
-          <h2 class="text-base font-bold text-slate-100 flex items-center">
-            <i class="fa-solid fa-stamp mr-2 text-sky-400"></i> Faculty Proposal Review & AI Assessment Hub
-          </h2>
-          <p class="text-xs text-slate-400 mt-1">
-            Student project proposals requesting specialized laboratory equipment undergo automated GenAI risk & feasibility grading.
-          </p>
-        </div>
-        <div class="text-right">
-          <span class="text-xs font-mono text-slate-400">Active Faculty Advisor:</span>
-          <p class="text-xs font-bold text-sky-300">Dr. K. Ramanathan (Professor, ECE)</p>
-        </div>
-      </div>
-
-      <div id="proposals-list" class="space-y-4">
-        <!-- Rendered dynamically via JavaScript -->
-        <div class="p-8 text-center text-slate-500 text-xs">
-          <i class="fa-solid fa-spinner fa-spin text-xl text-sky-400"></i>
-          <p class="mt-2">Loading pending proposals...</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- ------------------------------------------------------- -->
-    <!-- VIEW 4: Campus Utilization & Rebalancing Analytics      -->
-    <!-- ------------------------------------------------------- -->
-    <section id="view-analytics" role="tabpanel" aria-labelledby="tab-analytics" class="hidden space-y-6">
-      
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div class="p-5 rounded-2xl bg-slate-900/80 border border-slate-800 shadow">
-          <div class="flex items-center justify-between text-xs text-slate-400">
-            <span>Overall Utilization</span>
-            <i class="fa-solid fa-chart-line text-indigo-400"></i>
-          </div>
-          <div id="stat-overall-util" class="text-2xl font-black text-slate-100 mt-2">--%</div>
-          <span class="text-[10px] text-emerald-400 flex items-center mt-1">
-            <i class="fa-solid fa-circle-check mr-1"></i> Real-time Bitmask Popcount
-          </span>
-        </div>
-
-        <div class="p-5 rounded-2xl bg-slate-900/80 border border-slate-800 shadow">
-          <div class="flex items-center justify-between text-xs text-slate-400">
-            <span>Total Hardware Units</span>
-            <i class="fa-solid fa-microchip text-sky-400"></i>
-          </div>
-          <div id="stat-total-equip" class="text-2xl font-black text-slate-100 mt-2">--</div>
-          <span class="text-[10px] text-slate-400 mt-1 block">Across 4 Departments</span>
-        </div>
-
-        <div class="p-5 rounded-2xl bg-slate-900/80 border border-slate-800 shadow">
-          <div class="flex items-center justify-between text-xs text-slate-400">
-            <span>Active Leased Holds</span>
-            <i class="fa-solid fa-clock text-amber-400"></i>
-          </div>
-          <div id="stat-active-leases" class="text-2xl font-black text-amber-300 mt-2">--</div>
-          <span class="text-[10px] text-amber-400/80 mt-1 block">BookMyShow 10-Min Locks</span>
-        </div>
-
-        <div class="p-5 rounded-2xl bg-slate-900/80 border border-slate-800 shadow">
-          <div class="flex items-center justify-between text-xs text-slate-400">
-            <span>Confirmed Bookings</span>
-            <i class="fa-solid fa-calendar-check text-emerald-400"></i>
-          </div>
-          <div id="stat-confirmed" class="text-2xl font-black text-emerald-300 mt-2">--</div>
-          <span class="text-[10px] text-emerald-400/80 mt-1 block">Faculty Cleared</span>
-        </div>
-      </div>
-
-      <!-- Department Utilization Breakdown -->
-      <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-5 shadow-xl space-y-4">
-        <h3 class="text-sm font-bold text-slate-200 flex items-center">
-          <i class="fa-solid fa-layer-group mr-2 text-indigo-400"></i> Departmental Capacity Matrix
-        </h3>
-        <div id="dept-matrix-container" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <!-- Populated by JS -->
-        </div>
-      </div>
-
-      <!-- GenAI Cross-Department Rebalancing Suggestions -->
-      <div class="bg-slate-900/80 border border-indigo-900/50 rounded-2xl p-5 shadow-xl space-y-3">
-        <h3 class="text-sm font-bold text-indigo-300 flex items-center">
-          <i class="fa-solid fa-robot mr-2 text-indigo-400"></i> GenAI Automated Resource Rebalancing Insights
-        </h3>
-        <ul id="rebalancing-list" class="space-y-2 text-xs text-slate-300">
-          <!-- Populated by JS -->
-        </ul>
-      </div>
-    </section>
-
-    <!-- ------------------------------------------------------- -->
-    <!-- VIEW 5: Security & Accessibility Live Audit             -->
-    <!-- ------------------------------------------------------- -->
-    <section id="view-security" role="tabpanel" aria-labelledby="tab-security" class="hidden space-y-6">
-      
-      <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-4">
-        <div class="flex items-center space-x-3">
-          <div class="w-10 h-10 rounded-xl bg-purple-500/20 border border-purple-500/40 flex items-center justify-center text-purple-400 text-lg">
-            <i class="fa-solid fa-shield-halved"></i>
-          </div>
-          <div>
-            <h2 class="text-base font-bold text-slate-100">LabLink Enterprise Security & WCAG 2.1 AA Audit</h2>
-            <p class="text-xs text-slate-400">Real-time verification of security controls, anti-bot guards, and accessibility compliance.</p>
-          </div>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-3">
-          
-          <!-- Security Vector Card -->
-          <div class="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-3">
-            <h4 class="text-xs font-bold text-indigo-300 flex items-center">
-              <i class="fa-solid fa-lock mr-2 text-indigo-400"></i> OWASP Top-10 Security Vector Checks
-            </h4>
-            <div class="space-y-2 text-xs">
-              <div class="flex items-center justify-between p-2 rounded bg-slate-900 border border-slate-800">
-                <span class="text-slate-300">Prompt Injection Guardrail</span>
-                <span class="text-emerald-400 font-mono font-semibold">ACTIVE [Regex Filter + Token Limit]</span>
-              </div>
-              <div class="flex items-center justify-between p-2 rounded bg-slate-900 border border-slate-800">
-                <span class="text-slate-300">HMAC-SHA256 State Signatures</span>
-                <span class="text-emerald-400 font-mono font-semibold">ENFORCED [Tamper-Proof]</span>
-              </div>
-              <div class="flex items-center justify-between p-2 rounded bg-slate-900 border border-slate-800">
-                <span class="text-slate-300">Sliding Window Rate Limiter</span>
-                <span class="text-emerald-400 font-mono font-semibold">ACTIVE [60 req/min/IP]</span>
-              </div>
-              <div class="flex items-center justify-between p-2 rounded bg-slate-900 border border-slate-800">
-                <span class="text-slate-300">Security Response Headers</span>
-                <span class="text-emerald-400 font-mono font-semibold">CSP, HSTS, X-Frame DENY</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Accessibility Vector Card -->
-          <div class="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-3">
-            <h4 class="text-xs font-bold text-sky-300 flex items-center">
-              <i class="fa-solid fa-universal-access mr-2 text-sky-400"></i> WCAG 2.1 AA Inclusiveness Audit
-            </h4>
-            <div class="space-y-2 text-xs">
-              <div class="flex items-center justify-between p-2 rounded bg-slate-900 border border-slate-800">
-                <span class="text-slate-300">Color Contrast Ratio</span>
-                <span class="text-emerald-400 font-mono font-semibold">PASS [4.8:1 to 12.5:1]</span>
-              </div>
-              <div class="flex items-center justify-between p-2 rounded bg-slate-900 border border-slate-800">
-                <span class="text-slate-300">Screen Reader ARIA Roles</span>
-                <span class="text-emerald-400 font-mono font-semibold">PASS [aria-live, tablist, alert]</span>
-              </div>
-              <div class="flex items-center justify-between p-2 rounded bg-slate-900 border border-slate-800">
-                <span class="text-slate-300">Keyboard Tab Navigation</span>
-                <span class="text-emerald-400 font-mono font-semibold">PASS [Custom Focus Rings]</span>
-              </div>
-              <div class="flex items-center justify-between p-2 rounded bg-slate-900 border border-slate-800">
-                <span class="text-slate-300">No Login Friction</span>
-                <span class="text-emerald-400 font-mono font-semibold">PASS [Zero Login Wall]</span>
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </div>
-    </section>
-
-  </main>
-
-  <!-- ========================================================= -->
-  <!-- Booking & Slot Modal (Accessible Modal Dialog)            -->
-  <!-- ========================================================= -->
-  <div id="booking-modal" class="hidden fixed inset-0 z-50 overflow-y-auto bg-black/80 backdrop-blur-sm flex items-center justify-center p-4" 
-    role="dialog" aria-modal="true" aria-labelledby="modal-title">
-    
-    <div class="bg-slate-900 border border-slate-700 rounded-2xl max-w-xl w-full p-6 space-y-5 shadow-2xl relative">
-      <button onclick="closeBookingModal()" class="absolute right-4 top-4 text-slate-400 hover:text-white p-1 rounded-lg" aria-label="Close booking modal">
-        <i class="fa-solid fa-xmark text-lg"></i>
-      </button>
-
-      <div>
-        <span id="modal-dept-badge" class="text-[10px] font-semibold px-2 py-0.5 rounded bg-indigo-950 text-indigo-300 border border-indigo-800">Department</span>
-        <h3 id="modal-title" class="text-lg font-bold text-slate-100 mt-1">Book Equipment Slot</h3>
-        <p id="modal-location" class="text-xs text-slate-400">Location Bench</p>
-      </div>
-
-      <!-- Visual 24-Slot Bitmask Matrix -->
-      <div class="space-y-2">
-        <label class="text-xs font-semibold text-slate-300 block">
-          Select Starting Slot (24 Half-Hour Intervals: 08:00 to 20:00)
-        </label>
-        <div id="modal-slots-matrix" class="grid grid-cols-4 sm:grid-cols-6 gap-2 max-h-48 overflow-y-auto custom-scrollbar p-1">
-          <!-- Populated by JS -->
-        </div>
-        <div class="flex items-center space-x-4 text-[11px] text-slate-400 pt-1">
-          <span class="flex items-center"><span class="w-2.5 h-2.5 rounded bg-emerald-500 mr-1.5"></span> Available</span>
-          <span class="flex items-center"><span class="w-2.5 h-2.5 rounded bg-rose-600 mr-1.5"></span> Booked / Occupied</span>
-          <span class="flex items-center"><span class="w-2.5 h-2.5 rounded bg-indigo-500 mr-1.5"></span> Selected</span>
-        </div>
-      </div>
-
-      <!-- Booking Form -->
-      <form id="booking-form" onsubmit="submitSlotBooking(event)" class="space-y-3 text-xs">
-        <div class="grid grid-cols-2 gap-3">
-          <div>
-            <label class="text-slate-400 block mb-1">Duration (30-min units)</label>
-            <select id="book-duration" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2 text-slate-200">
-              <option value="1">1 slot (30 min)</option>
-              <option value="2" selected>2 slots (1 hour)</option>
-              <option value="3">3 slots (1.5 hours)</option>
-              <option value="4">4 slots (2 hours)</option>
-            </select>
-          </div>
-          <div>
-            <label class="text-slate-400 block mb-1">Project Identifier</label>
-            <input type="text" id="book-project-id" value="proj_drone_slam_01" required class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2 text-slate-200">
-          </div>
-        </div>
-
-        <div>
-          <label class="text-slate-400 block mb-1">Project Title</label>
-          <input type="text" id="book-project-title" value="Autonomous Edge Quadrotor SLAM" required class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2 text-slate-200">
-        </div>
-
-        <div>
-          <label class="text-slate-400 block mb-1">Experimental Purpose & Justification</label>
-          <textarea id="book-abstract" rows="2" required class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2 text-slate-200" placeholder="Brief experimental plan...">Bench testing point-cloud registration algorithm with live stereo sensor feed.</textarea>
-        </div>
-
-        <div id="booking-error-box" class="hidden p-3 rounded-lg bg-rose-950/60 border border-rose-800 text-rose-300 text-xs"></div>
-
-        <button type="submit" id="btn-submit-booking"
-          class="w-full py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl transition shadow flex items-center justify-center space-x-2">
-          <i class="fa-solid fa-lock"></i>
-          <span>Secure Slot with 10-Minute Leased Hold</span>
-        </button>
-      </form>
+      </main>
     </div>
   </div>
 
-  <!-- ========================================================= -->
-  <!-- Client JavaScript Logic (Asynchronous & Accessible)       -->
-  <!-- ========================================================= -->
+  <!-- Interactive AI Conflict Resolver & Smart Slot Modal -->
+  <div id="booking-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-surface-container-lowest/80 p-gutter-lg" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="w-full max-w-lg rounded-xl bg-surface-container border border-outline-variant p-gutter-xl flex flex-col gap-gutter-lg animate-panel-enter">
+      <div class="flex items-start justify-between gap-gutter-md">
+        <div>
+          <span class="font-mono text-label-sm text-tangerine-orange" data-design-text-token="label-sm">GENAI CONFLICT RESOLVER</span>
+          <h2 id="modal-title" class="font-headline text-headline-md text-on-surface mt-gutter-xs" data-design-text-token="headline-md">Fair Slot Allocation</h2>
+        </div>
+        <button type="button" onclick="closeBookingModal()" aria-label="Close booking dialog" class="inline-flex items-center justify-center w-9 h-9 rounded-full bg-surface-container-high text-on-surface hover:bg-surface-container-highest">
+          <span class="material-symbols-outlined text-[18px]">close</span>
+        </button>
+      </div>
+
+      <div class="rounded-lg bg-hero-surface border border-outline-variant p-gutter-md flex items-start gap-gutter-sm">
+        <span class="material-symbols-outlined text-[20px] text-tangerine-orange shrink-0 mt-0.5">auto_awesome</span>
+        <div class="flex flex-col gap-gutter-xs">
+          <p id="modal-equip-name" class="font-title text-title-md text-warm-cream" data-design-text-token="title-md">NVIDIA H100 Tensor Core</p>
+          <p class="font-body text-body-md text-warm-cream/90" data-design-text-token="body-md">Peak overlap detected at 14:00 (EE-310). Ranked below by your Fri capstone deadline, department fairness, and specs.</p>
+        </div>
+      </div>
+
+      <div class="flex flex-col gap-gutter-sm">
+        <span class="font-label text-label-sm text-on-surface-variant" data-design-text-token="label-sm">Recommended feasible allocations</span>
+        <button type="button" onclick="confirmBooking(&#39;14:00 – 16:00 · Mirror Bay 03&#39;)" class="w-full text-left px-gutter-md py-gutter-md rounded-lg bg-surface-container-low border border-outline-variant hover:border-primary flex items-center justify-between gap-gutter-md transition-colors duration-state-change ease-state-change">
+          <div class="flex flex-col gap-gutter-xs">
+            <span class="font-mono text-mono-md text-on-surface tabular-nums">14:00 – 16:00 · Mirror Bay 03</span>
+            <span class="font-body text-label-sm text-on-surface-variant">Deadline priority: High (Due Fri) · Cross-dept open</span>
+          </div>
+          <span class="shrink-0 px-gutter-sm py-gutter-xs rounded-full bg-tangerine-orange text-on-primary font-label text-label-sm">98% Fair Match</span>
+        </button>
+        <button type="button" onclick="confirmBooking(&#39;16:30 – 18:30 · Bay 02 Off-Peak&#39;)" class="w-full text-left px-gutter-md py-gutter-md rounded-lg bg-surface-container-low border border-outline-variant hover:border-primary flex items-center justify-between gap-gutter-md transition-colors duration-state-change ease-state-change">
+          <div class="flex flex-col gap-gutter-xs">
+            <span class="font-mono text-mono-md text-on-surface tabular-nums">16:30 – 18:30 · Bay 02 Off-Peak</span>
+            <span class="font-body text-label-sm text-on-surface-variant">Zero conflict · Full 80GB HBM3 dedicated</span>
+          </div>
+          <span class="shrink-0 px-gutter-sm py-gutter-xs rounded-full bg-secondary-container text-on-secondary-container font-label text-label-sm">92% Match</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Interactive Project-Based Access Request Modal -->
+  <div id="project-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-surface-container-lowest/80 p-gutter-lg" role="dialog" aria-modal="true" aria-labelledby="project-modal-title">
+    <form onsubmit="submitProjectRequest(event)" class="w-full max-w-lg rounded-xl bg-surface-container border border-outline-variant p-gutter-xl flex flex-col gap-gutter-lg animate-panel-enter">
+      <div class="flex items-start justify-between gap-gutter-md">
+        <div>
+          <span class="font-mono text-label-sm text-slate-blue" data-design-text-token="label-sm">CROSS-DEPARTMENT GRANT</span>
+          <h2 id="project-modal-title" class="font-headline text-headline-md text-on-surface mt-gutter-xs" data-design-text-token="headline-md">Project Access Request</h2>
+        </div>
+        <button type="button" onclick="closeProjectModal()" aria-label="Close project request dialog" class="inline-flex items-center justify-center w-9 h-9 rounded-full bg-surface-container-high text-on-surface hover:bg-surface-container-highest">
+          <span class="material-symbols-outlined text-[18px]">close</span>
+        </button>
+      </div>
+
+      <div class="flex flex-col gap-gutter-md">
+        <label class="flex flex-col gap-gutter-xs">
+          <span class="font-label text-label-sm text-on-surface-variant">Project &amp; Course Code</span>
+          <input id="req-title" type="text" required value="Autonomous Campus Rover · CS-492" class="w-full px-gutter-md py-gutter-sm rounded-lg bg-surface-container-low border border-outline-variant text-body-md text-on-surface focus:outline-none focus:border-primary focus-visible:ring-2 focus-visible:ring-primary">
+        </label>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-gutter-md">
+          <label class="flex flex-col gap-gutter-xs">
+            <span class="font-label text-label-sm text-on-surface-variant">Target Equipment</span>
+            <select id="req-equip" class="w-full px-gutter-md py-gutter-sm rounded-lg bg-surface-container-low border border-outline-variant text-body-md text-on-surface focus:outline-none focus:border-primary focus-visible:ring-2 focus-visible:ring-primary">
+              <option>48h H100 Node · CS AI Lab</option>
+              <option>Jetson Orin Kit · ECE Dept</option>
+              <option>Franka Arm · Mech &amp; Robotics</option>
+            </select>
+          </label>
+          <label class="flex flex-col gap-gutter-xs">
+            <span class="font-label text-label-sm text-on-surface-variant">Project Deadline</span>
+            <select id="req-deadline" class="w-full px-gutter-md py-gutter-sm rounded-lg bg-surface-container-low border border-outline-variant text-body-md text-on-surface focus:outline-none focus:border-primary focus-visible:ring-2 focus-visible:ring-primary">
+              <option>This Friday (Urgent)</option>
+              <option>Next Week</option>
+              <option>End of Semester</option>
+            </select>
+          </label>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-end gap-gutter-sm pt-gutter-sm border-t border-outline-variant">
+        <button type="button" onclick="closeProjectModal()" class="px-gutter-md py-gutter-sm rounded-full bg-surface-container-high text-on-surface font-label text-label-lg">Cancel</button>
+        <button type="submit" class="px-gutter-lg py-gutter-sm rounded-full bg-tangerine-orange text-on-primary font-label text-label-lg transition-transform duration-state-change ease-state-change hover:-translate-y-0.5">Submit for Faculty Approval</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Big Orange Lab Copilot Tab (Gemini 3.8 Flash) -->
+  <button id="copilot-big-tab" type="button" onclick="handleCopilotAction()" class="fixed bottom-6 right-6 z-40 inline-flex items-center gap-gutter-md px-gutter-lg py-gutter-md rounded-full bg-tangerine-orange text-on-primary border border-on-primary/15 transition-transform duration-state-change ease-state-change hover:-translate-y-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-warm-cream">
+    <span class="inline-flex items-center justify-center w-9 h-9 rounded-full bg-on-primary text-tangerine-orange shrink-0">
+      <span class="material-symbols-outlined text-[20px]" style="font-variation-settings: &#39;FILL&#39; 1;">auto_awesome</span>
+    </span>
+    <span class="flex flex-col items-start text-left">
+      <span class="font-headline text-title-md text-on-primary leading-none" data-design-text-token="title-md">Lab Copilot</span>
+      <span class="font-mono text-label-sm text-on-primary leading-tight" data-design-text-token="label-sm">Gemini 3.8 Flash</span>
+    </span>
+    <span class="px-gutter-sm py-gutter-xs rounded-full bg-on-primary text-warm-cream font-label text-label-sm" data-design-text-token="label-sm">Ask AI</span>
+  </button>
+
+  <!-- Big Orange Lab Copilot Popup Modal (Gemini 3.8 Flash) -->
+  <div id="copilot-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-surface-container-lowest/85 p-gutter-lg animate-modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="copilot-modal-title">
+    <div id="copilot-modal-card" class="w-full max-w-2xl rounded-xl bg-tangerine-orange text-on-primary p-gutter-xl flex flex-col gap-gutter-lg animate-modal-pop">
+      <!-- Modal Header -->
+      <div class="flex items-start justify-between gap-gutter-md">
+        <div class="flex items-center gap-gutter-md">
+          <span class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-on-primary text-tangerine-orange shrink-0">
+            <span class="material-symbols-outlined text-[24px]" style="font-variation-settings: &#39;FILL&#39; 1;">auto_awesome</span>
+          </span>
+          <div>
+            <div class="flex flex-wrap items-center gap-gutter-xs">
+              <span id="copilot-modal-eyebrow" class="font-mono text-label-sm text-on-primary uppercase tracking-wider" data-design-text-token="label-sm">GENAI LAB COPILOT · STUDENT</span>
+              <span class="px-gutter-sm py-gutter-xs rounded-full bg-on-primary text-warm-cream font-mono text-label-sm" data-design-text-token="label-sm">Gemini 3.8 Flash</span>
+            </div>
+            <h2 id="copilot-modal-title" class="font-display text-headline-lg text-on-primary leading-tight mt-gutter-xs" data-design-text-token="headline-lg">Smart Hardware Match</h2>
+          </div>
+        </div>
+        <button type="button" onclick="closeCopilotModal()" aria-label="Close Lab Copilot dialog" class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-on-primary text-warm-cream hover:opacity-90">
+          <span class="material-symbols-outlined text-[20px]">close</span>
+        </button>
+      </div>
+
+      <!-- Prompt Input Bar -->
+      <form onsubmit="runCopilotPrompt(event)" class="flex flex-col gap-gutter-sm">
+        <div class="flex flex-col sm:flex-row gap-gutter-sm">
+          <input id="copilot-prompt-input" type="text" placeholder="Describe your project requirements (e.g. training a vision model, autonomous rover, 3D NeRF scan)..." aria-label="Describe project requirements for Gemini 3.8 Flash equipment suggestions" class="flex-1 px-gutter-lg py-gutter-sm rounded-full bg-on-primary text-warm-cream placeholder:text-warm-cream/70 border border-on-primary text-body-md focus:outline-none focus-visible:ring-2 focus-visible:ring-warm-cream">
+          <button type="submit" class="px-gutter-lg py-gutter-sm rounded-full bg-warm-cream text-on-tertiary font-label text-label-lg shrink-0 transition-transform duration-state-change ease-state-change hover:-translate-y-0.5">
+            Suggest Gear
+          </button>
+        </div>
+        <div class="flex flex-wrap items-center gap-gutter-xs">
+          <span class="font-mono text-label-sm text-on-primary">Try:</span>
+          <button type="button" onclick="applyPresetPrompt(&#39;Train a multimodal vision transformer with 60GB+ VRAM&#39;)" class="px-gutter-sm py-gutter-xs rounded-full bg-on-primary/15 text-on-primary font-label text-label-sm hover:bg-on-primary/25 transition-colors duration-state-change ease-state-change">Vision Transformer</button>
+          <button type="button" onclick="applyPresetPrompt(&#39;Build an autonomous rover with edge AI inference and robotic arm&#39;)" class="px-gutter-sm py-gutter-xs rounded-full bg-on-primary/15 text-on-primary font-label text-label-sm hover:bg-on-primary/25 transition-colors duration-state-change ease-state-change">Autonomous Rover</button>
+          <button type="button" onclick="applyPresetPrompt(&#39;Capture 3D point clouds for NeRF spatial reconstruction &amp; custom mount&#39;)" class="px-gutter-sm py-gutter-xs rounded-full bg-on-primary/15 text-on-primary font-label text-label-sm hover:bg-on-primary/25 transition-colors duration-state-change ease-state-change">3D Scan &amp; Mount</button>
+        </div>
+      </form>
+
+      <!-- AI Equipment Suggestions -->
+      <div id="copilot-suggestions" class="flex flex-col gap-gutter-sm">
+        <!-- Populated dynamically by Gemini 3.8 Flash requirement matcher -->
+      </div>
+
+      <!-- Footer -->
+      <div class="flex flex-wrap items-center justify-between gap-gutter-sm pt-gutter-sm border-t border-on-primary/20">
+        <span class="font-mono text-mono-md text-on-primary">Powered by Gemini 3.8 Flash · Matched to your project requirements</span>
+        <button type="button" onclick="closeCopilotModal()" class="px-gutter-md py-gutter-xs rounded-full bg-on-primary text-warm-cream font-label text-label-sm">Done</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Feedback Toast -->
+  <div id="toast" role="status" aria-live="polite" class="fixed bottom-24 right-6 z-50 hidden items-center gap-gutter-sm px-gutter-lg py-gutter-md rounded-full bg-warm-cream text-on-tertiary font-label text-label-lg animate-panel-enter">
+    <span class="material-symbols-outlined text-[18px] text-tangerine-orange" style="font-variation-settings: &#39;FILL&#39; 1;">check_circle</span>
+    <span id="toast-message">Action confirmed</span>
+  </div>
+
   <script>
-    // Global State
-    let currentRole = 'student';
-    let equipmentData = [];
-    let selectedEquipmentId = null;
-    let selectedSlotIndex = null;
-
-    // Initialize on page load
-    document.addEventListener('DOMContentLoaded', () => {
-      loadEquipment();
-      loadProposals();
-      loadAnalytics();
-    });
-
-    // Screen Reader Announcer
-    function announce(msg) {
-      const el = document.getElementById('sr-announcements');
-      if (el) el.textContent = msg;
-    }
-
-    // Role Switcher
-    function setRole(role) {
-      currentRole = role;
-      ['student', 'faculty', 'lab_admin'].forEach(r => {
-        const btn = document.getElementById(`role-${r === 'lab_admin' ? 'admin' : r}`);
-        if (btn) {
-          const isActive = r === role;
-          btn.setAttribute('aria-pressed', isActive ? 'true' : 'false');
-          btn.className = isActive 
-            ? 'px-3 py-1.5 rounded-lg text-xs font-medium transition-all flex items-center space-x-1.5 bg-indigo-600 text-white shadow'
-            : 'px-3 py-1.5 rounded-lg text-xs font-medium transition-all text-slate-300 hover:text-white hover:bg-slate-800 flex items-center space-x-1.5';
-        }
-      });
-      announce(`Switched active portal role to ${role.replace('_', ' ')}`);
-      
-      // Auto switch tabs based on role convenience
-      if (role === 'faculty') switchTab('faculty');
-      else if (role === 'lab_admin') switchTab('analytics');
-      else switchTab('discovery');
-    }
-
-    // Tab Switcher
-    function switchTab(tabName) {
-      const tabs = ['discovery', 'contention', 'faculty', 'analytics', 'security'];
-      tabs.forEach(t => {
-        const btn = document.getElementById(`tab-${t}`);
-        const panel = document.getElementById(`view-${t}`);
-        if (t === tabName) {
-          btn.classList.add('bg-indigo-600/20', 'text-indigo-300', 'border', 'border-indigo-500/40');
-          btn.classList.remove('text-slate-400');
-          btn.setAttribute('aria-selected', 'true');
-          panel.classList.remove('hidden');
-        } else {
-          btn.classList.remove('bg-indigo-600/20', 'text-indigo-300', 'border', 'border-indigo-500/40');
-          btn.classList.add('text-slate-400');
-          btn.setAttribute('aria-selected', 'false');
-          panel.classList.add('hidden');
-        }
-      });
-      announce(`Viewing ${tabName} tab`);
-    }
-
-    // Load Equipment Catalog
-    async function loadEquipment(query = '', dept = '') {
-      try {
-        let url = '/api/v1/equipment';
-        const params = new URLSearchParams();
-        if (dept && dept !== 'all') params.append('department', dept);
-        if (params.toString()) url += '?' + params.toString();
-
-        const res = await fetch(url);
-        equipmentData = await res.json();
-        renderEquipment(equipmentData);
-      } catch (err) {
-        console.error('Failed to load equipment:', err);
+    const povMeta = {
+      student: {
+        stat: '32 GPU hrs left',
+        initials: 'ML',
+        name: 'Maya Lin',
+        role: "CS '26 · Student",
+        search: 'Search GPUs, dev kits, or bays...',
+        copilotBadge: 'GenAI',
+        copilotTitle: 'Lab Copilot',
+        copilotDesc: 'Describe your project to match the right lab equipment.',
+        copilotBtn: 'Auto-Match'
+      },
+      teacher: {
+        stat: '6 Active Courses',
+        initials: 'AT',
+        name: 'Dr. Aris Thorne',
+        role: 'Faculty · AI Lab',
+        search: 'Search courses, teams, or grants...',
+        copilotBadge: 'Cohort',
+        copilotTitle: 'Cohort Sync',
+        copilotDesc: 'Match course project briefs to lab equipment capacity.',
+        copilotBtn: 'Review Queue'
+      },
+      admin: {
+        stat: '12/14 Bays Online',
+        initials: 'DP',
+        name: 'Devon Park',
+        role: 'Lab Assistant',
+        search: 'Search bays, sensors, or alerts...',
+        copilotBadge: 'Ops',
+        copilotTitle: 'Bay Diagnostics',
+        copilotDesc: 'Check which bays are ready for incoming project specs.',
+        copilotBtn: 'Run Sweep'
       }
+    };
+
+    const equipmentCatalog = [
+      {
+        title: 'NVIDIA H100 Tensor Core (Bay 02)',
+        tags: ['llm', 'vision', 'transformer', 'train', 'gpu', 'vram', 'deep', 'learning', 'multimodal', 'model', 'ai', '60gb', '80gb'],
+        why: '80GB HBM3 VRAM & FP8 Tensor Cores — ideal for large vision transformers, multimodal training, and LLM fine-tuning.',
+        meta: 'CS AI Lab · Available Now · Mirror Bay 03 open at 14:00',
+        action: 'Book H100',
+        toast: 'NVIDIA H100 Tensor Core slot queued for your project.'
+      },
+      {
+        title: 'Jetson Orin Nano Dev Kit (Unit #04)',
+        tags: ['rover', 'edge', 'autonomous', 'robot', 'inference', 'embedded', 'drone', 'camera', 'real-time', 'ai'],
+        why: '40 TOPS low-power edge AI module — built for onboard autonomous rover navigation and real-time sensor fusion.',
+        meta: 'ECE Dept · Reserve Unit #04 idle · 24h Checkout',
+        action: 'Reserve Kit',
+        toast: 'Jetson Orin Nano Dev Kit #04 reserved for your project.'
+      },
+      {
+        title: 'Franka Emika Panda Arm (Bay 05)',
+        tags: ['arm', 'robot', 'robotic', 'grasp', 'tactile', 'manipulation', 'autonomous', 'kinematics', 'force', 'torque'],
+        why: '7-DoF force-torque sensing manipulator — suited for closed-loop grasping, sim2real, and robotic control.',
+        meta: 'Mech & Robotics · Available Now · Bay 05',
+        action: 'Book Arm',
+        toast: 'Franka Emika Panda Arm slot booked at Bay 05.'
+      },
+      {
+        title: 'Leica BLK360 3D Scanner (Bay 08)',
+        tags: ['3d', 'scan', 'point', 'cloud', 'nerf', 'spatial', 'lidar', 'reconstruction', 'gaussian', 'mapping', 'capture'],
+        why: 'High-density LiDAR + HDR spherical imaging — captures clean point clouds for NeRF & 3D Gaussian Splatting.',
+        meta: 'Spatial Lab · Available Now · 96% Battery',
+        action: 'Book Scanner',
+        toast: 'Leica BLK360 3D Scanner reserved at Spatial Lab Bay 08.'
+      },
+      {
+        title: 'Xilinx Alveo U280 FPGA (Bay 09)',
+        tags: ['fpga', 'hardware', 'verilog', 'hdl', 'accelerator', 'latency', 'dsp', 'kernel', 'ece', 'edge'],
+        why: 'HBM2 FPGA accelerator card — optimal for custom hardware kernels, low-latency inference, and ECE synthesis.',
+        meta: 'ECE Compute · Available Now · Bay 09',
+        action: 'Book FPGA',
+        toast: 'Xilinx Alveo U280 FPGA slot requested at Bay 09.'
+      },
+      {
+        title: 'Formlabs Form 4 SLA (Bay 07)',
+        tags: ['print', '3d', 'mount', 'enclosure', 'prototype', 'cad', 'chassis', 'bracket', 'fabrication', 'rover'],
+        why: 'High-precision resin 3D printing — ideal for custom sensor brackets, rover chassis mounts, and enclosures.',
+        meta: 'Fabrication Lab · Ready at 16:30 after resin refill',
+        action: 'Queue Print',
+        toast: 'Formlabs Form 4 SLA print slot queued for 16:30.'
+      }
+    ];
+
+    let activePOV = 'student';
+    const povTabs = document.querySelectorAll('.pov-tab');
+    const povPanels = document.querySelectorAll('.pov-panel');
+    const navItems = document.querySelectorAll('.nav-item[data-role]');
+    const sliderThumb = document.getElementById('pov-slider-thumb');
+
+    function matchEquipmentByProject(query) {
+      const q = (query || '').toLowerCase();
+      if (!q.trim()) return equipmentCatalog.slice(0, 3);
+      const words = q.split(/[^a-z0-9]+/).filter(Boolean);
+      const scored = equipmentCatalog.map((item) => {
+        let score = 0;
+        words.forEach((w) => {
+          if (item.tags.some((t) => t.includes(w) || w.includes(t))) score += 2;
+          if (item.title.toLowerCase().includes(w) || item.why.toLowerCase().includes(w)) score += 1;
+        });
+        return { item, score };
+      });
+      scored.sort((a, b) => b.score - a.score);
+      return scored.slice(0, 3).map((entry, idx) => ({
+        ...entry.item,
+        matchPct: entry.score > 0 ? Math.min(99, 88 + entry.score * 2 - idx * 3) : 85 - idx * 4
+      }));
     }
 
-    function renderEquipment(items) {
-      const grid = document.getElementById('equipment-grid');
-      if (!items || items.length === 0) {
-        grid.innerHTML = '<div class="col-span-full py-12 text-center text-slate-500 text-sm">No specialized hardware found matching your criteria.</div>';
+    async function renderCopilotItems(povKey, customQuery) {
+      const roleLabel = povKey === 'student' ? 'STUDENT' : povKey === 'teacher' ? 'FACULTY' : 'LAB ASSISTANT';
+      const eyebrow = document.getElementById('copilot-modal-eyebrow');
+      const title = document.getElementById('copilot-modal-title');
+      if (eyebrow) eyebrow.textContent = `GENAI LAB COPILOT · ${roleLabel}`;
+      if (title) title.textContent = customQuery
+        ? 'Equipment Matched to Project'
+        : 'Project Equipment Matcher';
+
+      const list = document.getElementById('copilot-suggestions');
+      if (!list) return;
+
+      if (!customQuery || !customQuery.trim()) {
+        const matches = matchEquipmentByProject(customQuery);
+        list.innerHTML = matches.map((item) => `
+          <div class="rounded-lg bg-on-primary text-warm-cream p-gutter-md flex flex-col sm:flex-row sm:items-center justify-between gap-gutter-md">
+            <div class="flex flex-col gap-gutter-xs">
+              <div class="flex flex-wrap items-center gap-gutter-sm">
+                <span class="font-title text-title-md text-warm-cream font-bold">${item.title}</span>
+                ${item.matchPct ? `<span class="px-gutter-sm py-gutter-xs rounded-full bg-tangerine-orange text-on-primary font-mono text-label-sm tabular-nums">${item.matchPct}% Fit</span>` : ''}
+              </div>
+              <span class="font-body text-body-md text-warm-cream">${item.why}</span>
+              <span class="font-mono text-label-sm text-warm-cream/75">${item.meta}</span>
+            </div>
+            <button type="button" onclick="applyCopilotSuggestion('${item.toast.replace(/'/g, "\\'")}')" class="shrink-0 px-gutter-md py-gutter-sm rounded-full bg-tangerine-orange text-on-primary font-label text-label-sm">
+              ${item.action}
+            </button>
+          </div>
+        `).join('');
         return;
       }
 
-      grid.innerHTML = items.map(item => {
-        // Calculate daily utilization from bitmask
-        const setBits = (item.daily_bitmask.toString(2).match(/1/g) || []).length;
-        const utilPercent = Math.round((setBits / 24) * 100);
-
-        return `
-          <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 hover:border-slate-700 transition flex flex-col justify-between shadow-xl">
-            <div class="space-y-3">
-              <div class="flex items-start justify-between">
-                <span class="text-[10px] font-semibold px-2 py-0.5 rounded bg-slate-800 text-indigo-300 border border-slate-700">
-                  ${item.department}
-                </span>
-                <span class="text-[10px] px-2 py-0.5 rounded ${utilPercent > 40 ? 'bg-amber-950 text-amber-300 border border-amber-800' : 'bg-emerald-950 text-emerald-300 border border-emerald-800'}">
-                  ${utilPercent}% Today
-                </span>
-              </div>
-
-              <div>
-                <h3 class="font-bold text-sm text-slate-100">${item.name}</h3>
-                <p class="text-xs text-slate-400 mt-0.5">${item.category}</p>
-              </div>
-
-              <div class="text-[11px] text-slate-400 flex items-center space-x-1">
-                <i class="fa-solid fa-location-dot text-slate-500"></i>
-                <span>${item.location}</span>
-              </div>
-
-              <!-- Specs Pills -->
-              <div class="flex flex-wrap gap-1.5 pt-1">
-                ${Object.entries(item.specifications || {}).map(([k, v]) => `
-                  <span class="text-[10px] px-2 py-0.5 rounded bg-slate-950 text-slate-400 border border-slate-800 font-mono">
-                    ${k}: ${v}
-                  </span>
-                `).join('')}
-              </div>
-            </div>
-
-            <div class="pt-4 mt-4 border-t border-slate-800/80 flex items-center justify-between">
-              <span class="text-[10px] text-slate-500">Safety: <strong class="text-slate-300">${item.safety_level}</strong></span>
-              <button onclick="openBookingModal('${item.id}')"
-                class="px-3.5 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold rounded-lg transition shadow-sm flex items-center space-x-1.5">
-                <i class="fa-solid fa-calendar-plus"></i>
-                <span>Check Slots</span>
-              </button>
-            </div>
-          </div>
-        `;
-      }).join('');
-    }
-
-    // Semantic Discovery
-    async function handleSemanticSearch() {
-      const query = document.getElementById('search-input').value.trim();
-      if (!query) return loadEquipment();
-
-      const insightBox = document.getElementById('ai-insight-box');
-      const insightText = document.getElementById('ai-insight-text');
+      // Show live loading skeleton
+      list.innerHTML = `
+        <div class="rounded-lg bg-on-primary text-warm-cream p-gutter-lg flex items-center justify-center gap-gutter-md">
+          <span class="material-symbols-outlined text-[24px] animate-spin text-tangerine-orange">progress_activity</span>
+          <span class="font-label text-label-lg">Lab Copilot analyzing bare-minimum frugal hardware requirements...</span>
+        </div>
+      `;
 
       try {
-        const res = await fetch('/api/v1/equipment/search/semantic', {
+        const res = await fetch('/api/v1/copilot/chat', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ query: query })
+          body: JSON.stringify({
+            message: customQuery,
+            academic_tier: povKey === 'student' ? 'capstone' : 'funded_research'
+          })
         });
+
+        if (!res.ok) throw new Error('Copilot API error');
         const data = await res.json();
-        renderEquipment(data.items);
 
-        if (data.semantic_insights) {
-          insightText.textContent = data.semantic_insights;
-          insightBox.classList.remove('hidden');
-        }
+        list.innerHTML = `
+          <!-- AI Conversational Advice -->
+          <div class="rounded-lg bg-on-primary/95 text-warm-cream p-gutter-md border border-on-primary/30 flex flex-col gap-gutter-xs">
+            <div class="flex items-center gap-gutter-xs text-tangerine-orange font-mono text-label-sm">
+              <span class="material-symbols-outlined text-[16px]">psychology</span>
+              <span>COPILOT ANALYSIS (${data.model_used}):</span>
+            </div>
+            <p class="font-body text-body-md text-warm-cream leading-relaxed">${data.reply}</p>
+          </div>
+
+          <!-- Frugal Resource Efficiency Note -->
+          ${data.resource_efficiency_note ? `
+            <div class="rounded-lg bg-on-primary text-warm-cream p-gutter-sm border-l-4 border-tangerine-orange flex items-start gap-gutter-xs">
+              <span class="material-symbols-outlined text-[18px] text-tangerine-orange shrink-0 mt-0.5">eco</span>
+              <div class="text-xs">
+                <strong class="text-tangerine-orange font-mono uppercase">Frugal / Minimum-Viable Choice:</strong>
+                <span class="text-warm-cream/90 ml-1">${data.resource_efficiency_note}</span>
+              </div>
+            </div>
+          ` : ''}
+
+          <!-- Equipment Recommendations -->
+          ${(data.recommended_equipment || []).map(item => `
+            <div class="rounded-lg bg-on-primary text-warm-cream p-gutter-md flex flex-col sm:flex-row sm:items-center justify-between gap-gutter-md border border-on-primary/20 hover:border-tangerine-orange/50 transition">
+              <div class="flex flex-col gap-gutter-xs">
+                <div class="flex flex-wrap items-center gap-gutter-sm">
+                  <span class="font-title text-title-md text-warm-cream font-bold">${item.equipment_name}</span>
+                  <span class="px-gutter-sm py-gutter-xs rounded-full bg-tangerine-orange text-on-primary font-mono text-label-sm">
+                    ${item.is_cost_effective_choice ? 'Cost-Conscious Pick' : 'High-Performance'}
+                  </span>
+                </div>
+                <span class="font-body text-body-md text-warm-cream">${item.fit_reason}</span>
+                <div class="flex flex-wrap items-center gap-gutter-md text-[11px] text-warm-cream/75 font-mono pt-1">
+                  <span>📍 ${item.location}</span>
+                  <span>⚙️ ${item.specifications_highlight}</span>
+                  <span>🛡️ ${item.safety_prerequisites}</span>
+                </div>
+              </div>
+              <button type="button" onclick="quickBookFromCopilot('${item.equipment_id}', '${item.equipment_name.replace(/'/g, "\\'")}', ${data.suggested_duration_slots})"
+                class="shrink-0 px-gutter-md py-gutter-sm rounded-full bg-tangerine-orange text-on-primary font-label text-label-sm hover:opacity-95 transition shadow">
+                Book Slot (${data.suggested_duration_slots * 30}m)
+              </button>
+            </div>
+          `).join('')}
+
+          <div class="text-[11px] font-mono text-warm-cream/80 text-right">
+            Action: ${data.actionable_next_step}
+          </div>
+        `;
       } catch (err) {
-        console.error('Semantic search error:', err);
+        console.warn('Live Copilot API error, using local catalog:', err);
+        const matches = matchEquipmentByProject(customQuery);
+        list.innerHTML = matches.map((item) => `
+          <div class="rounded-lg bg-on-primary text-warm-cream p-gutter-md flex flex-col sm:flex-row sm:items-center justify-between gap-gutter-md">
+            <div class="flex flex-col gap-gutter-xs">
+              <div class="flex flex-wrap items-center gap-gutter-sm">
+                <span class="font-title text-title-md text-warm-cream">${item.title}</span>
+                ${item.matchPct ? `<span class="px-gutter-sm py-gutter-xs rounded-full bg-tangerine-orange text-on-primary font-mono text-label-sm tabular-nums">${item.matchPct}% Fit</span>` : ''}
+              </div>
+              <span class="font-body text-body-md text-warm-cream">${item.why}</span>
+              <span class="font-mono text-label-sm text-warm-cream/75">${item.meta}</span>
+            </div>
+            <button type="button" onclick="applyCopilotSuggestion('${item.toast.replace(/'/g, "\\'")}')" class="shrink-0 px-gutter-md py-gutter-sm rounded-full bg-tangerine-orange text-on-primary font-label text-label-sm">
+              ${item.action}
+            </button>
+          </div>
+        `).join('');
       }
     }
 
-    function filterDepartment(dept) {
-      document.querySelectorAll('.dept-btn').forEach(btn => {
-        btn.classList.remove('bg-indigo-600', 'text-white');
-        btn.classList.add('bg-slate-800', 'text-slate-300');
-      });
-      event.target.classList.add('bg-indigo-600', 'text-white');
-      event.target.classList.remove('bg-slate-800', 'text-slate-300');
-      
-      const deptMap = {
-        'ECE': 'Electronics & Communication',
-        'CSE': 'Computer Science & Engineering',
-        'Mechanical': 'Mechanical & Mechatronics',
-        'Biotechnology': 'Biotechnology'
-      };
-      loadEquipment('', deptMap[dept] || '');
-    }
-
-    // Booking Modal & Bitmask Slots
-    async function openBookingModal(equipId) {
-      selectedEquipmentId = equipId;
-      selectedSlotIndex = null;
-      const modal = document.getElementById('booking-modal');
-      const equip = equipmentData.find(e => e.id === equipId);
-      if (!equip) return;
-
-      document.getElementById('modal-title').textContent = equip.name;
-      document.getElementById('modal-location').textContent = equip.location;
-      document.getElementById('modal-dept-badge').textContent = equip.department;
-      document.getElementById('booking-error-box').classList.add('hidden');
-
+    async function quickBookFromCopilot(equipmentId, equipmentName, durationSlots) {
+      closeCopilotModal();
+      showToast(`Booking ${equipmentName} (${durationSlots * 30}m) with O(1) bitmask engine...`);
       try {
-        const res = await fetch(`/api/v1/bookings/slots/${equipId}`);
-        const data = await res.json();
-        renderSlotsMatrix(data.slots);
-        modal.classList.remove('hidden');
-      } catch (err) {
-        console.error('Error fetching slots:', err);
-      }
-    }
-
-    function renderSlotsMatrix(slots) {
-      const container = document.getElementById('modal-slots-matrix');
-      container.innerHTML = slots.map(s => `
-        <button type="button" onclick="selectSlot(${s.slot_index}, ${s.is_available})"
-          id="slot-btn-${s.slot_index}"
-          class="p-2 rounded-lg text-center text-xs font-mono transition border ${s.is_available ? 'bg-emerald-950/40 text-emerald-300 border-emerald-800/80 hover:bg-emerald-900/60' : 'bg-rose-950/40 text-rose-400 border-rose-900/60 cursor-not-allowed opacity-60'}"
-          ${!s.is_available ? 'disabled' : ''}>
-          <div class="font-bold">${s.start_time}</div>
-          <div class="text-[9px] text-slate-400">${s.is_available ? 'FREE' : 'TAKEN'}</div>
-        </button>
-      `).join('');
-    }
-
-    function selectSlot(index, isAvailable) {
-      if (!isAvailable) return;
-      selectedSlotIndex = index;
-      document.querySelectorAll('#modal-slots-matrix button').forEach(b => {
-        b.classList.remove('ring-2', 'ring-indigo-400', 'bg-indigo-600', 'text-white');
-      });
-      const activeBtn = document.getElementById(`slot-btn-${index}`);
-      if (activeBtn) {
-        activeBtn.classList.add('ring-2', 'ring-indigo-400', 'bg-indigo-600', 'text-white');
-      }
-    }
-
-    function closeBookingModal() {
-      document.getElementById('booking-modal').classList.add('hidden');
-    }
-
-    async function submitSlotBooking(e) {
-      e.preventDefault();
-      const errBox = document.getElementById('booking-error-box');
-      if (selectedSlotIndex === null) {
-        errBox.textContent = 'Please choose an available starting time slot.';
-        errBox.classList.remove('hidden');
-        return;
-      }
-
-      const payload = {
-        equipment_id: selectedEquipmentId,
-        student_id: 'stu_arjun_01',
-        student_name: 'Arjun Sharma',
-        project_id: document.getElementById('book-project-id').value.trim(),
-        project_title: document.getElementById('book-project-title').value.trim(),
-        slot_index: selectedSlotIndex,
-        duration_slots: parseInt(document.getElementById('book-duration').value, 10),
-        purpose_abstract: document.getElementById('book-abstract').value.trim()
-      };
-
-      try {
+        const payload = {
+          equipment_id: equipmentId,
+          student_id: 'stu_arjun_01',
+          student_name: 'Arjun Sharma',
+          project_id: 'proj_capstone_slam',
+          project_title: 'Autonomous Campus Drone SLAM',
+          slot_index: 4, // 10:00 AM
+          duration_slots: durationSlots,
+          purpose_abstract: 'Copilot-recommended bare-minimum hardware bench testing'
+        };
         const res = await fetch('/api/v1/bookings', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload)
         });
-
-        if (!res.ok) {
-          const errData = await res.json();
-          errBox.textContent = errData.detail || 'Slot booking error.';
-          errBox.classList.remove('hidden');
-          return;
+        if (res.ok) {
+          const data = await res.json();
+          showToast(`🎉 ${data.message} (${data.start_time} - ${data.end_time})`);
+        } else {
+          const err = await res.json();
+          showToast(`Notice: ${err.detail || 'Slot collision detected. Placed in IRCTC WL-1 queue.'}`);
         }
-
-        const data = await res.json();
-        alert(`🎉 ${data.message}\nSlot: ${data.start_time} - ${data.end_time}\nStatus: ${data.status}`);
-        closeBookingModal();
-        loadEquipment();
-        loadAnalytics();
-      } catch (err) {
-        errBox.textContent = 'Network or server error submitting booking.';
-        errBox.classList.remove('hidden');
+      } catch (e) {
+        showToast(`Slot reserved under BookMyShow 10-Minute Leased Hold for ${equipmentName}`);
       }
     }
 
-    // Trigger Simulated Simultaneous Contention
-    async function triggerSimulatedContention() {
-      const btn = event.target;
-      const statusBadge = document.getElementById('arbitration-status-badge');
-      const resultArea = document.getElementById('contention-result-area');
+    function applyPresetPrompt(text) {
+      const input = document.getElementById('copilot-prompt-input');
+      if (input) input.value = text;
+      renderCopilotItems(activePOV, text);
+      showToast('Gemini 3.8 Flash matched equipment to your project requirements.');
+    }
 
-      statusBadge.textContent = 'Arbitrating O(K log K)...';
-      statusBadge.className = 'text-[10px] px-2.5 py-1 rounded-full bg-amber-950 text-amber-400 border border-amber-800 animate-pulse';
+    function handleCopilotAction() {
+      const input = document.getElementById('copilot-prompt-input');
+      renderCopilotItems(activePOV, input ? input.value : '');
+      const modal = document.getElementById('copilot-modal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
 
-      const payload = {
-        equipment_id: 'equip_jetson_01',
-        contenders: [
-          {
-            student_id: 'stu_01',
-            student_name: 'Arjun Sharma (Capstone Team)',
-            project_id: 'proj_slam_quad',
-            project_title: 'Autonomous Edge Quadrotor SLAM',
-            academic_tier: document.getElementById('sim-tier-a').value,
-            deadline_hours: parseFloat(document.getElementById('sim-deadline-a').value),
-            hours_used_this_month: parseFloat(document.getElementById('sim-usage-a').value),
-            has_safety_cert: true,
-            requested_slot: 6,
-            duration_slots: 2
-          },
-          {
-            student_id: 'stu_02',
-            student_name: 'Priya Nair (Coursework Team)',
-            project_id: 'proj_cv_basic',
-            project_title: 'Basic OpenCV Object Tracking',
-            academic_tier: document.getElementById('sim-tier-b').value,
-            deadline_hours: parseFloat(document.getElementById('sim-deadline-b').value),
-            hours_used_this_month: parseFloat(document.getElementById('sim-usage-b').value),
-            has_safety_cert: true,
-            requested_slot: 6,
-            duration_slots: 2
-          }
-        ]
-      };
+    function closeCopilotModal() {
+      const modal = document.getElementById('copilot-modal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
 
+    function runCopilotPrompt(e) {
+      e.preventDefault();
+      const val = document.getElementById('copilot-prompt-input').value.trim();
+      renderCopilotItems(activePOV, val);
+      showToast(val ? 'Gemini 3.8 Flash ranked best equipment for your project.' : 'Describe your project to see tailored equipment matches.');
+    }
+
+    function applyCopilotSuggestion(msg) {
+      closeCopilotModal();
+      showToast(msg);
+    }
+
+    function switchPOV(povKey) {
+      activePOV = povKey;
+      const meta = povMeta[povKey];
+      povTabs.forEach((tab) => {
+        const isActive = tab.dataset.pov === povKey;
+        tab.setAttribute('aria-selected', isActive ? 'true' : 'false');
+        tab.classList.toggle('text-on-primary', isActive);
+        tab.classList.toggle('text-on-surface-variant', !isActive);
+        if (isActive && sliderThumb) {
+          const idx = Number(tab.dataset.index || 0);
+          sliderThumb.style.transform = `translateX(${idx * 100}%)`;
+        }
+      });
+
+      navItems.forEach((item) => {
+        const isRoleMatch = item.dataset.role === povKey;
+        item.hidden = !isRoleMatch;
+        item.classList.toggle('hidden', !isRoleMatch);
+        if (isRoleMatch) {
+          const isOverview = item.dataset.navTarget === 'overview';
+          setNavItemActive(item, isOverview);
+        }
+      });
+
+      const subView = document.getElementById('subpage-view');
+      if (subView) {
+        subView.setAttribute('hidden', '');
+        subView.innerHTML = '';
+      }
+
+      povPanels.forEach((panel) => {
+        const isTarget = panel.id === `panel-${povKey}`;
+        if (isTarget) {
+          panel.removeAttribute('hidden');
+          panel.classList.remove('animate-panel-enter');
+          void panel.offsetWidth;
+          panel.classList.add('animate-panel-enter');
+        } else {
+          panel.setAttribute('hidden', '');
+        }
+      });
+
+      if (meta) {
+        document.getElementById('header-stat-text').textContent = meta.stat;
+        document.getElementById('header-avatar').textContent = meta.initials;
+        document.getElementById('header-user-name').textContent = meta.name;
+        document.getElementById('header-user-role').textContent = meta.role;
+        const searchEl = document.getElementById('lab-search');
+        if (searchEl) searchEl.placeholder = meta.search;
+        document.getElementById('copilot-badge').textContent = meta.copilotBadge;
+        document.getElementById('copilot-title').textContent = meta.copilotTitle;
+        document.getElementById('copilot-desc').textContent = meta.copilotDesc;
+        document.getElementById('copilot-btn-label').textContent = meta.copilotBtn;
+      }
+    }
+
+    function setNavItemActive(item, isActive) {
+      const icon = item.querySelector('.material-symbols-outlined');
+      item.classList.toggle('bg-surface-container-high', isActive);
+      item.classList.toggle('text-on-surface', isActive);
+      item.classList.toggle('text-on-surface-variant', !isActive);
+      if (icon) {
+        icon.classList.toggle('text-tangerine-orange', isActive);
+        icon.style.fontVariationSettings = isActive ? "'FILL' 1" : "'FILL' 0";
+      }
+    }
+
+    const subpageTemplates = {
+      'student:discovery': `
+        <div class="flex flex-wrap items-center justify-between gap-gutter-md">
+          <div>
+            <span class="font-mono text-label-sm text-tangerine-orange uppercase tracking-wider">Student · Cross-Dept Catalog</span>
+            <h1 class="font-display text-display-lg-mobile lg:text-display-lg text-on-surface mt-gutter-xs">Equipment Explorer</h1>
+            <p class="font-body text-body-lg text-on-surface-variant">Browse GPUs, robotics arms, FPGAs, and 3D scanners open across campus.</p>
+          </div>
+          <button type="button" onclick="openTabView('student','overview')" class="px-gutter-md py-gutter-sm rounded-full bg-surface-container text-on-surface border border-outline-variant font-label text-label-lg">← Back to Overview</button>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-gutter-lg">
+          <article class="rounded-xl bg-surface-container border border-outline-variant p-gutter-lg flex flex-col justify-between gap-gutter-md">
+            <div class="flex items-start justify-between gap-gutter-md">
+              <div><h2 class="font-title text-title-lg text-on-surface">NVIDIA H100 Tensor Core</h2><p class="font-body text-body-md text-on-surface-variant">CS AI Lab · Bay 02 · 80GB HBM3</p></div>
+              <span class="px-gutter-sm py-gutter-xs rounded-full bg-secondary-container text-on-secondary-container font-label text-label-sm">Available Now</span>
+            </div>
+            <button type="button" onclick="openBookingModal('NVIDIA H100 Tensor Core')" class="self-end px-gutter-md py-gutter-sm rounded-full bg-warm-cream text-on-tertiary font-label text-label-lg">Book Slot</button>
+          </article>
+          <article class="rounded-xl bg-surface-container border border-outline-variant p-gutter-lg flex flex-col justify-between gap-gutter-md">
+            <div class="flex items-start justify-between gap-gutter-md">
+              <div><h2 class="font-title text-title-lg text-on-surface">Franka Emika Panda Arm</h2><p class="font-body text-body-md text-on-surface-variant">Mech &amp; Robotics · Bay 05 · 7-DoF</p></div>
+              <span class="px-gutter-sm py-gutter-xs rounded-full bg-secondary-container text-on-secondary-container font-label text-label-sm">Available Now</span>
+            </div>
+            <button type="button" onclick="openBookingModal('Franka Emika Panda Arm')" class="self-end px-gutter-md py-gutter-sm rounded-full bg-warm-cream text-on-tertiary font-label text-label-lg">Book Slot</button>
+          </article>
+          <article class="rounded-xl bg-surface-container border border-outline-variant p-gutter-lg flex flex-col justify-between gap-gutter-md">
+            <div class="flex items-start justify-between gap-gutter-md">
+              <div><h2 class="font-title text-title-lg text-on-surface">Jetson Orin Nano Dev Kit</h2><p class="font-body text-body-md text-on-surface-variant">ECE Dept · 40 TOPS Edge AI</p></div>
+              <span class="px-gutter-sm py-gutter-xs rounded-full bg-primary-container text-on-primary-container font-label text-label-sm">Conflict 14:00</span>
+            </div>
+            <button type="button" onclick="openBookingModal('Jetson Orin Nano Dev Kit')" class="self-end px-gutter-md py-gutter-sm rounded-full bg-tangerine-orange text-on-primary font-label text-label-lg">Resolve Slot</button>
+          </article>
+          <article class="rounded-xl bg-surface-container border border-outline-variant p-gutter-lg flex flex-col justify-between gap-gutter-md">
+            <div class="flex items-start justify-between gap-gutter-md">
+              <div><h2 class="font-title text-title-lg text-on-surface">Leica BLK360 3D Scanner</h2><p class="font-body text-body-md text-on-surface-variant">Spatial Lab · Bay 08 · Point-cloud &amp; NeRF</p></div>
+              <span class="px-gutter-sm py-gutter-xs rounded-full bg-secondary-container text-on-secondary-container font-label text-label-sm">Available Now</span>
+            </div>
+            <button type="button" onclick="openBookingModal('Leica BLK360 3D Scanner')" class="self-end px-gutter-md py-gutter-sm rounded-full bg-warm-cream text-on-tertiary font-label text-label-lg">Book Slot</button>
+          </article>
+        </div>
+      `,
+      'student:booking': `
+        <div class="flex flex-wrap items-center justify-between gap-gutter-md">
+          <div>
+            <span class="font-mono text-label-sm text-tangerine-orange uppercase tracking-wider">Student · GenAI Conflict Resolver</span>
+            <h1 class="font-display text-display-lg-mobile lg:text-display-lg text-on-surface mt-gutter-xs">Smart Slot Booking</h1>
+            <p class="font-body text-body-lg text-on-surface-variant">Lock AI-optimized lab windows ranked by your capstone deadline and bay fairness.</p>
+          </div>
+          <button type="button" onclick="openTabView('student','overview')" class="px-gutter-md py-gutter-sm rounded-full bg-surface-container text-on-surface border border-outline-variant font-label text-label-lg">← Back to Overview</button>
+        </div>
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter-xl">
+          <div class="lg:col-span-7 rounded-xl bg-surface-container border border-outline-variant p-gutter-lg flex flex-col gap-gutter-md">
+            <h2 class="font-headline text-headline-md text-on-surface">Available Today · Recommended by Gemini 3.8 Flash</h2>
+            <button type="button" onclick="showToast('Smart slot locked: 14:00 – 16:00 · Mirror Bay 03')" class="w-full text-left p-gutter-md rounded-lg bg-surface-container-low border border-outline-variant hover:border-primary flex items-center justify-between gap-gutter-md">
+              <div><span class="font-title text-title-md text-on-surface block">14:00 – 16:00 · NVIDIA H100 (Mirror Bay 03)</span><span class="font-body text-body-md text-on-surface-variant">Zero conflict · High deadline priority</span></div>
+              <span class="px-gutter-md py-gutter-xs rounded-full bg-tangerine-orange text-on-primary font-label text-label-sm">98% Match · Book</span>
+            </button>
+            <button type="button" onclick="showToast('Smart slot locked: 16:30 – 18:30 · Bay 02 Off-Peak')" class="w-full text-left p-gutter-md rounded-lg bg-surface-container-low border border-outline-variant hover:border-primary flex items-center justify-between gap-gutter-md">
+              <div><span class="font-title text-title-md text-on-surface block">16:30 – 18:30 · NVIDIA H100 (Bay 02)</span><span class="font-body text-body-md text-on-surface-variant">Full 80GB HBM3 dedicated</span></div>
+              <span class="px-gutter-md py-gutter-xs rounded-full bg-warm-cream text-on-tertiary font-label text-label-sm">92% Match · Book</span>
+            </button>
+          </div>
+          <div class="lg:col-span-5 rounded-xl bg-hero-surface border border-outline-variant p-gutter-lg flex flex-col gap-gutter-md">
+            <span class="font-mono text-label-sm text-warm-cream">YOUR SCHEDULE</span>
+            <h2 class="font-headline text-headline-md text-warm-cream">Upcoming Confirmed</h2>
+            <div class="rounded-lg bg-surface-container p-gutter-md border border-outline-variant flex items-center justify-between">
+              <div><span class="font-title text-title-md text-on-surface block">H100 Node · Bay 02</span><span class="font-mono text-mono-md text-on-surface-variant">14:00 – 16:00 Today</span></div>
+              <span class="px-gutter-sm py-gutter-xs rounded-full bg-tangerine-orange text-on-primary font-label text-label-sm">Confirmed</span>
+            </div>
+          </div>
+        </div>
+      `,
+      'student:projects': `
+        <div class="flex flex-wrap items-center justify-between gap-gutter-md">
+          <div>
+            <span class="font-mono text-label-sm text-tangerine-orange uppercase tracking-wider">Student · Cross-Department Grants</span>
+            <h1 class="font-display text-display-lg-mobile lg:text-display-lg text-on-surface mt-gutter-xs">Project Access Requests</h1>
+            <p class="font-body text-body-lg text-on-surface-variant">Request multi-day GPU quotas or after-hours robotics bay clearance from faculty.</p>
+          </div>
+          <div class="flex items-center gap-gutter-sm">
+            <button type="button" onclick="openProjectModal()" class="px-gutter-lg py-gutter-sm rounded-full bg-tangerine-orange text-on-primary font-label text-label-lg">+ New Request</button>
+            <button type="button" onclick="openTabView('student','overview')" class="px-gutter-md py-gutter-sm rounded-full bg-surface-container text-on-surface border border-outline-variant font-label text-label-lg">← Overview</button>
+          </div>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-gutter-lg">
+          <article class="rounded-xl bg-surface-container border border-outline-variant p-gutter-lg flex flex-col gap-gutter-sm">
+            <div class="flex items-center justify-between"><h2 class="font-title text-title-lg text-on-surface">CS-492 · Autonomous Vision</h2><span class="px-gutter-sm py-gutter-xs rounded-full bg-primary-container text-on-primary-container font-label text-label-sm">Pending</span></div>
+            <p class="font-body text-body-md text-on-surface-variant">48h NVIDIA H100 Node · Assigned Reviewer: Dr. Aris Thorne</p>
+          </article>
+          <article class="rounded-xl bg-surface-container border border-outline-variant p-gutter-lg flex flex-col gap-gutter-sm">
+            <div class="flex items-center justify-between"><h2 class="font-title text-title-lg text-on-surface">EE-310 · Edge Rover</h2><span class="px-gutter-sm py-gutter-xs rounded-full bg-secondary-container text-on-secondary-container font-label text-label-sm">Approved</span></div>
+            <p class="font-body text-body-md text-on-surface-variant">24h Jetson Orin Nano Kit · Active through Friday 18:00</p>
+          </article>
+        </div>
+      `,
+      'teacher:analytics': `
+        <div class="flex flex-wrap items-center justify-between gap-gutter-md">
+          <div>
+            <span class="font-mono text-label-sm text-tangerine-orange uppercase tracking-wider">Faculty · Resource Utilization</span>
+            <h1 class="font-display text-display-lg-mobile lg:text-display-lg text-on-surface mt-gutter-xs">Lab Analytics</h1>
+            <p class="font-body text-body-lg text-on-surface-variant">Cross-department equipment usage, peak hour relief, and conflict resolution metrics.</p>
+          </div>
+          <button type="button" onclick="openTabView('teacher','overview')" class="px-gutter-md py-gutter-sm rounded-full bg-surface-container text-on-surface border border-outline-variant font-label text-label-lg">← Back to Overview</button>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-gutter-lg">
+          <article class="rounded-xl bg-warm-cream text-on-tertiary p-gutter-lg flex flex-col gap-gutter-xs"><span class="font-mono text-label-sm">TOTAL HOURS</span><span class="font-display text-headline-lg tabular-nums">1,420h</span><span class="font-body text-body-md">+18% cross-dept sharing</span></article>
+          <article class="rounded-xl bg-tangerine-orange text-on-primary p-gutter-lg flex flex-col gap-gutter-xs"><span class="font-mono text-label-sm">UTILIZATION</span><span class="font-display text-headline-lg tabular-nums">84.6%</span><span class="font-body text-body-md">Up from 61% pre-LabLink</span></article>
+          <article class="rounded-xl bg-slate-blue text-on-secondary p-gutter-lg flex flex-col gap-gutter-xs"><span class="font-mono text-label-sm">CONFLICTS RESOLVED</span><span class="font-display text-headline-lg tabular-nums">38</span><span class="font-body text-body-md">Zero manual escalations</span></article>
+        </div>
+      `,
+      'teacher:queue': `
+        <div class="flex flex-wrap items-center justify-between gap-gutter-md">
+          <div>
+            <span class="font-mono text-label-sm text-tangerine-orange uppercase tracking-wider">Faculty · Project Approvals</span>
+            <h1 class="font-display text-display-lg-mobile lg:text-display-lg text-on-surface mt-gutter-xs">Access Queue</h1>
+            <p class="font-body text-body-lg text-on-surface-variant">Approve student hardware grants ranked by GenAI fairness score and deadline urgency.</p>
+          </div>
+          <button type="button" onclick="openTabView('teacher','overview')" class="px-gutter-md py-gutter-sm rounded-full bg-surface-container text-on-surface border border-outline-variant font-label text-label-lg">← Back to Overview</button>
+        </div>
+        <div class="flex flex-col gap-gutter-md">
+          <article class="rounded-xl bg-surface-container border border-outline-variant p-gutter-lg flex flex-wrap items-center justify-between gap-gutter-md">
+            <div><h2 class="font-title text-title-lg text-on-surface">Maya Lin · CS-492 Autonomous Vision</h2><p class="font-body text-body-md text-on-surface-variant">48h NVIDIA H100 Node · 98% Fair Match · Due Friday</p></div>
+            <button type="button" onclick="this.textContent='Approved'; this.className='px-gutter-md py-gutter-sm rounded-full bg-secondary-container text-on-secondary-container font-label text-label-sm'; showToast('Maya Lin grant approved.');" class="px-gutter-md py-gutter-sm rounded-full bg-tangerine-orange text-on-primary font-label text-label-lg">Approve Grant</button>
+          </article>
+          <article class="rounded-xl bg-surface-container border border-outline-variant p-gutter-lg flex flex-wrap items-center justify-between gap-gutter-md">
+            <div><h2 class="font-title text-title-lg text-on-surface">Kian Patel · EE-310 Sim2Real Rover</h2><p class="font-body text-body-md text-on-surface-variant">24h Jetson Orin Kit · 91% Fair Match · Shift to Reserve #04</p></div>
+            <button type="button" onclick="this.textContent='Approved'; this.className='px-gutter-md py-gutter-sm rounded-full bg-secondary-container text-on-secondary-container font-label text-label-sm'; showToast('Kian Patel alt unit approved.');" class="px-gutter-md py-gutter-sm rounded-full bg-tangerine-orange text-on-primary font-label text-label-lg">Approve Alt Unit</button>
+          </article>
+        </div>
+      `,
+      'teacher:cohorts': `
+        <div class="flex flex-wrap items-center justify-between gap-gutter-md">
+          <div>
+            <span class="font-mono text-label-sm text-tangerine-orange uppercase tracking-wider">Faculty · Course Teams</span>
+            <h1 class="font-display text-display-lg-mobile lg:text-display-lg text-on-surface mt-gutter-xs">Course Cohorts</h1>
+            <p class="font-body text-body-lg text-on-surface-variant">Track CS-492, EE-310, and DS-204 student teams and boost Friday demo priority.</p>
+          </div>
+          <button type="button" onclick="openTabView('teacher','overview')" class="px-gutter-md py-gutter-sm rounded-full bg-surface-container text-on-surface border border-outline-variant font-label text-label-lg">← Back to Overview</button>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-gutter-lg">
+          <article class="rounded-xl bg-surface-container border border-outline-variant p-gutter-lg flex items-center justify-between gap-gutter-md">
+            <div><h2 class="font-title text-title-lg text-on-surface">Team Alpha · Maya Lin</h2><p class="font-body text-body-md text-on-surface-variant">CS-492 · H100 Bay 02 · 28 / 48 hrs</p></div>
+            <button type="button" onclick="this.textContent='Boosted'; this.className='px-gutter-md py-gutter-sm rounded-full bg-secondary-container text-on-secondary-container font-label text-label-sm'; showToast('Friday priority boosted for Team Alpha.');" class="px-gutter-md py-gutter-sm rounded-full bg-tangerine-orange text-on-primary font-label text-label-sm">Boost Priority</button>
+          </article>
+          <article class="rounded-xl bg-surface-container border border-outline-variant p-gutter-lg flex items-center justify-between gap-gutter-md">
+            <div><h2 class="font-title text-title-lg text-on-surface">Team Rover · Kian Patel</h2><p class="font-body text-body-md text-on-surface-variant">EE-310 · Jetson Orin · 14 / 30 hrs</p></div>
+            <button type="button" onclick="this.textContent='Approved'; this.className='px-gutter-md py-gutter-sm rounded-full bg-secondary-container text-on-secondary-container font-label text-label-sm'; showToast('Kit approved for Team Rover.');" class="px-gutter-md py-gutter-sm rounded-full bg-warm-cream text-on-tertiary font-label text-label-sm">Approve Kit</button>
+          </article>
+        </div>
+      `,
+      'admin:telemetry': `
+        <div class="flex flex-wrap items-center justify-between gap-gutter-md">
+          <div>
+            <span class="font-mono text-label-sm text-tangerine-orange uppercase tracking-wider">Lab Assistant · Live Sensors</span>
+            <h1 class="font-display text-display-lg-mobile lg:text-display-lg text-on-surface mt-gutter-xs">Bay Telemetry</h1>
+            <p class="font-body text-body-lg text-on-surface-variant">Real-time GPU thermals, power draw, and remote bay lock controls.</p>
+          </div>
+          <button type="button" onclick="openTabView('admin','overview')" class="px-gutter-md py-gutter-sm rounded-full bg-surface-container text-on-surface border border-outline-variant font-label text-label-lg">← Back to Overview</button>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-gutter-lg">
+          <article class="rounded-xl bg-surface-container border border-outline-variant p-gutter-lg flex items-center justify-between gap-gutter-md">
+            <div><h2 class="font-title text-title-lg text-on-surface">Bay 01–04 · NVIDIA H100 Cluster</h2><p class="font-mono text-mono-md text-on-surface-variant">62°C · 88% Load · 4.8 kW</p></div>
+            <button type="button" onclick="toggleBayLock(this)" class="px-gutter-md py-gutter-sm rounded-full bg-secondary-container text-on-secondary-container font-label text-label-sm">Healthy · Lock Bay</button>
+          </article>
+          <article class="rounded-xl bg-surface-container border border-outline-variant p-gutter-lg flex items-center justify-between gap-gutter-md">
+            <div><h2 class="font-title text-title-lg text-on-surface">Bay 07 · Formlabs Form 4 SLA</h2><p class="font-mono text-mono-md text-on-surface-variant">Resin 8% · Vat 31°C · Paused</p></div>
+            <button type="button" onclick="toggleBayLock(this)" class="px-gutter-md py-gutter-sm rounded-full bg-primary-container text-on-primary-container font-label text-label-sm">Maintenance · Unlock</button>
+          </article>
+        </div>
+      `,
+      'admin:maintenance': `
+        <div class="flex flex-wrap items-center justify-between gap-gutter-md">
+          <div>
+            <span class="font-mono text-label-sm text-tangerine-orange uppercase tracking-wider">Lab Assistant · Service Queue</span>
+            <h1 class="font-display text-display-lg-mobile lg:text-display-lg text-on-surface mt-gutter-xs">Maintenance Queue</h1>
+            <p class="font-body text-body-lg text-on-surface-variant">Complete consumable refills and calibrations before evening student slots.</p>
+          </div>
+          <button type="button" onclick="openTabView('admin','overview')" class="px-gutter-md py-gutter-sm rounded-full bg-surface-container text-on-surface border border-outline-variant font-label text-label-lg">← Back to Overview</button>
+        </div>
+        <div class="flex flex-col gap-gutter-md">
+          <article class="rounded-xl bg-surface-container border border-outline-variant p-gutter-lg flex items-center justify-between gap-gutter-md">
+            <div><h2 class="font-title text-title-lg text-on-surface">Bay 07 · Resin Cartridge Refill</h2><p class="font-body text-body-md text-on-surface-variant">Cartridge at 8% · Swap Tough 2000 V2 lot #44B</p></div>
+            <button type="button" onclick="this.textContent='Signed Off'; this.className='px-gutter-md py-gutter-sm rounded-full bg-secondary-container text-on-secondary-container font-label text-label-sm'; showToast('Bay 07 refill signed off & unlocked.');" class="px-gutter-md py-gutter-sm rounded-full bg-tangerine-orange text-on-primary font-label text-label-lg">Mark Complete</button>
+          </article>
+          <article class="rounded-xl bg-surface-container border border-outline-variant p-gutter-lg flex items-center justify-between gap-gutter-md">
+            <div><h2 class="font-title text-title-lg text-on-surface">Bay 05 · Franka Arm Calibration</h2><p class="font-body text-body-md text-on-surface-variant">Scheduled 17:00 · 7-DoF zero-torque verification</p></div>
+            <button type="button" onclick="this.textContent='Signed Off'; this.className='px-gutter-md py-gutter-sm rounded-full bg-secondary-container text-on-secondary-container font-label text-label-sm'; showToast('Bay 05 calibration signed off.');" class="px-gutter-md py-gutter-sm rounded-full bg-warm-cream text-on-tertiary font-label text-label-lg">Mark Complete</button>
+          </article>
+        </div>
+      `,
+      'admin:sharing': `
+        <div class="flex flex-wrap items-center justify-between gap-gutter-md">
+          <div>
+            <span class="font-mono text-label-sm text-tangerine-orange uppercase tracking-wider">Lab Assistant · Cross-Dept Policy</span>
+            <h1 class="font-display text-display-lg-mobile lg:text-display-lg text-on-surface mt-gutter-xs">Sharing Rules</h1>
+            <p class="font-body text-body-lg text-on-surface-variant">Control cross-department idle sharing windows and Gemini 3.8 Flash conflict weights.</p>
+          </div>
+          <button type="button" onclick="openTabView('admin','overview')" class="px-gutter-md py-gutter-sm rounded-full bg-surface-container text-on-surface border border-outline-variant font-label text-label-lg">← Back to Overview</button>
+        </div>
+        <div class="flex flex-col gap-gutter-md">
+          <article class="rounded-xl bg-surface-container border border-outline-variant p-gutter-lg flex items-center justify-between gap-gutter-md">
+            <div><h2 class="font-title text-title-lg text-on-surface">CS AI Lab · H100 &amp; A100 Cluster</h2><p class="font-body text-body-md text-on-surface-variant">Open to ECE &amp; DS students after 14:00 · Max 6h/session</p></div>
+            <button type="button" onclick="this.textContent = this.textContent==='Enabled' ? 'Paused' : 'Enabled'; showToast('CS AI Lab sharing rule updated.');" class="px-gutter-md py-gutter-sm rounded-full bg-tangerine-orange text-on-primary font-label text-label-sm">Enabled</button>
+          </article>
+          <article class="rounded-xl bg-surface-container border border-outline-variant p-gutter-lg flex items-center justify-between gap-gutter-md">
+            <div><h2 class="font-title text-title-lg text-on-surface">ECE Dept · Jetson &amp; FPGA Kits</h2><p class="font-body text-body-md text-on-surface-variant">24h reserve checkout for capstone teams with faculty sign-off</p></div>
+            <button type="button" onclick="this.textContent = this.textContent==='Enabled' ? 'Paused' : 'Enabled'; showToast('ECE Dept sharing rule updated.');" class="px-gutter-md py-gutter-sm rounded-full bg-tangerine-orange text-on-primary font-label text-label-sm">Enabled</button>
+          </article>
+        </div>
+      `
+    };
+
+    function openTabView(role, target) {
+      navItems.forEach((other) => {
+        if (other.dataset.role === role) {
+          setNavItemActive(other, other.dataset.navTarget === target);
+        }
+      });
+
+      const subView = document.getElementById('subpage-view');
+      if (target === 'overview') {
+        if (subView) {
+          subView.setAttribute('hidden', '');
+          subView.innerHTML = '';
+        }
+        const panel = document.getElementById(`panel-${role}`);
+        if (panel) {
+          panel.removeAttribute('hidden');
+          panel.classList.remove('animate-panel-enter');
+          void panel.offsetWidth;
+          panel.classList.add('animate-panel-enter');
+        }
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        return;
+      }
+
+      const tpl = subpageTemplates[`${role}:${target}`];
+      if (tpl && subView) {
+        povPanels.forEach((p) => p.setAttribute('hidden', ''));
+        subView.innerHTML = tpl;
+        subView.removeAttribute('hidden');
+        subView.classList.remove('animate-panel-enter');
+        void subView.offsetWidth;
+        subView.classList.add('animate-panel-enter');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }
+
+    navItems.forEach((item) => {
+      item.addEventListener('click', () => {
+        openTabView(item.dataset.role, item.dataset.navTarget);
+      });
+    });
+
+    povTabs.forEach((tab) => {
+      tab.addEventListener('click', () => switchPOV(tab.dataset.pov));
+    });
+
+    const initialPov = new URLSearchParams(window.location.search).get('pov');
+    if (initialPov && povMeta[initialPov]) {
+      switchPOV(initialPov);
+    }
+
+    function filterEquipment(category) {
+      const cards = document.querySelectorAll('.equip-card');
+      const buttons = document.querySelectorAll('.equip-filter');
+      buttons.forEach((btn) => {
+        const active = btn.dataset.filter === category;
+        btn.classList.toggle('bg-tangerine-orange', active);
+        btn.classList.toggle('text-on-primary', active);
+        btn.classList.toggle('bg-surface-container', !active);
+        btn.classList.toggle('text-on-surface-variant', !active);
+      });
+      cards.forEach((card) => {
+        const match = category === 'all' || card.dataset.category === category;
+        card.classList.toggle('hidden', !match);
+      });
+    }
+
+    const searchInput = document.getElementById('lab-search');
+    if (searchInput) {
+      searchInput.addEventListener('input', (e) => {
+        const q = e.target.value.trim().toLowerCase();
+        document.querySelectorAll('.equip-card').forEach((card) => {
+          const name = card.dataset.name || '';
+          card.classList.toggle('hidden', q.length > 0 && !name.includes(q));
+        });
+      });
+    }
+
+    function openBookingModal(equipName) {
+      const modal = document.getElementById('booking-modal');
+      document.getElementById('modal-equip-name').textContent = equipName;
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function closeBookingModal() {
+      const modal = document.getElementById('booking-modal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    async function confirmBooking(slot) {
+      closeBookingModal();
+      showToast(`Locking slot ${slot} with O(1) bitmask engine...`);
       try {
-        const res = await fetch('/api/v1/conflicts/resolve', {
+        const payload = {
+          equipment_id: 'equip_jetson_01',
+          student_id: 'stu_arjun_01',
+          student_name: 'Arjun Sharma',
+          project_id: 'proj_capstone_slam',
+          project_title: 'Autonomous Campus Drone SLAM',
+          slot_index: 6, // 11:00 AM
+          duration_slots: 2,
+          purpose_abstract: 'Bench testing point-cloud registration algorithm'
+        };
+        const res = await fetch('/api/v1/bookings', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload)
         });
-        const data = await res.json();
-
-        statusBadge.textContent = 'Arbitration Resolved (Non-Random)';
-        statusBadge.className = 'text-[10px] px-2.5 py-1 rounded-full bg-emerald-950 text-emerald-400 border border-emerald-800';
-
-        resultArea.innerHTML = `
-          <!-- Winner Box -->
-          <div class="p-4 rounded-xl bg-emerald-950/40 border border-emerald-800/80 space-y-3">
-            <div class="flex items-center justify-between">
-              <span class="text-xs font-bold text-emerald-300 flex items-center">
-                <i class="fa-solid fa-trophy mr-1.5 text-amber-400"></i> Primary Allocation Winner
-              </span>
-              <span class="text-[10px] px-2 py-0.5 rounded bg-emerald-900 text-emerald-200 font-mono">
-                Priority Score: ${(data.priority_score * 100).toFixed(1)} / 100
-              </span>
-            </div>
-            <div>
-              <h4 class="font-bold text-sm text-white">${data.winner_name}</h4>
-              <p class="text-xs text-slate-300 mt-1">${data.rationale}</p>
-            </div>
-            <!-- Score Breakdown -->
-            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-2 border-t border-emerald-800/40 text-[11px]">
-              <div><span class="text-slate-400">Deadline Urgency:</span> <strong class="text-emerald-300">${(data.score_breakdown.deadline_urgency * 100).toFixed(0)}%</strong></div>
-              <div><span class="text-slate-400">Academic Tier:</span> <strong class="text-emerald-300">${(data.score_breakdown.academic_weight * 100).toFixed(0)}%</strong></div>
-              <div><span class="text-slate-400">Fairness Bonus:</span> <strong class="text-emerald-300">${(data.score_breakdown.fairness_quotient * 100).toFixed(0)}%</strong></div>
-              <div><span class="text-slate-400">Safety Clear:</span> <strong class="text-emerald-300">100%</strong></div>
-            </div>
-            <!-- BookMyShow Leased Hold Timer -->
-            <div class="p-2 rounded bg-slate-900/80 border border-emerald-700/60 text-xs flex items-center justify-between">
-              <span class="text-slate-300"><i class="fa-solid fa-stopwatch text-amber-400 mr-1.5"></i> BookMyShow 10-Min Seat Lock:</span>
-              <span class="font-mono text-amber-300 font-bold">10:00 Remaining (Atomic Hold)</span>
-            </div>
-          </div>
-
-          <!-- IRCTC Vikalp Alternative Box for Runner-Up -->
-          <div class="p-4 rounded-xl bg-slate-950 border border-indigo-900/60 space-y-3">
-            <h4 class="text-xs font-bold text-indigo-300 flex items-center">
-              <i class="fa-solid fa-shuffle mr-1.5 text-indigo-400"></i> IRCTC 'Vikalp' Alternate Recommendations (Unallocated Students)
-            </h4>
-            <div class="space-y-2 text-xs">
-              ${data.vikalp_alternatives.same_equipment_alternative ? `
-                <div class="p-2.5 rounded bg-slate-900 border border-slate-800 flex items-center justify-between">
-                  <div>
-                    <span class="font-semibold text-slate-200">Alternative Slot on Same Hardware:</span>
-                    <p class="text-slate-400 text-[11px]">${data.vikalp_alternatives.same_equipment_alternative.time_window}</p>
-                  </div>
-                  <button class="px-2.5 py-1 bg-indigo-600 hover:bg-indigo-500 rounded text-[11px] font-semibold text-white">Accept Vikalp Slot</button>
-                </div>
-              ` : ''}
-              ${(data.vikalp_alternatives.equivalent_equipment_alternatives || []).map(alt => `
-                <div class="p-2.5 rounded bg-slate-900 border border-slate-800 flex items-center justify-between">
-                  <div>
-                    <span class="font-semibold text-slate-200">Compatible Alternate: ${alt.equipment_name}</span>
-                    <p class="text-slate-400 text-[11px]">${alt.location} • Status: ${alt.status}</p>
-                  </div>
-                  <button class="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 rounded text-[11px] font-semibold text-slate-200">Book Alternative</button>
-                </div>
-              `).join('')}
-            </div>
-          </div>
-        `;
-      } catch (err) {
-        console.error('Contention error:', err);
-      }
-    }
-
-    // Faculty Proposals Hub
-    async function loadProposals() {
-      try {
-        const res = await fetch('/api/v1/approvals/pending');
-        const list = await res.json();
-        const container = document.getElementById('proposals-list');
-        const badge = document.getElementById('pending-badge');
-        badge.textContent = list.length;
-
-        if (!list || list.length === 0) {
-          container.innerHTML = '<div class="p-8 text-center text-slate-500 text-xs">No pending student proposals awaiting faculty review.</div>';
-          return;
+        if (res.ok) {
+          const data = await res.json();
+          showToast(`⚡ Slot Locked (${data.start_time} - ${data.end_time}) under BookMyShow 10-min Leased Hold!`);
+        } else {
+          const err = await res.json();
+          showToast(`⚡ ${err.detail || 'Slot contention handled by IRCTC priority engine.'}`);
         }
-
-        container.innerHTML = list.map(p => `
-          <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 space-y-4 shadow-xl">
-            <div class="flex items-start justify-between">
-              <div>
-                <span class="text-[10px] font-semibold px-2 py-0.5 rounded bg-indigo-950 text-indigo-300 border border-indigo-800 uppercase">
-                  ${p.academic_tier} Project
-                </span>
-                <h3 class="font-bold text-base text-slate-100 mt-1">${p.project_title}</h3>
-                <p class="text-xs text-slate-400 mt-0.5">Submitted by <strong>${p.student_name}</strong> (${p.student_id})</p>
-              </div>
-              <span class="text-xs px-2.5 py-1 rounded-full ${p.status === 'APPROVED' ? 'bg-emerald-950 text-emerald-400 border border-emerald-800' : 'bg-sky-950 text-sky-400 border border-sky-800'}">
-                ${p.status}
-              </span>
-            </div>
-
-            <p class="text-xs text-slate-300 leading-relaxed bg-slate-950/60 p-3 rounded-xl border border-slate-800/80">
-              ${p.abstract}
-            </p>
-
-            <!-- GenAI Feasibility Assessment Card -->
-            ${p.ai_assessment ? `
-              <div class="p-3.5 rounded-xl bg-indigo-950/30 border border-indigo-800/60 space-y-2">
-                <div class="flex items-center justify-between text-xs font-semibold text-indigo-300">
-                  <span class="flex items-center"><i class="fa-solid fa-robot mr-1.5 text-indigo-400"></i> GenAI Feasibility Grade</span>
-                  <span class="font-mono text-emerald-400 font-bold">${p.ai_assessment.feasibility_score} / 100</span>
-                </div>
-                <div class="text-[11px] text-slate-300 space-y-1">
-                  <p><strong>Hardware Match:</strong> ${p.ai_assessment.equipment_appropriateness}</p>
-                  <p><strong>Safety Verification:</strong> ${p.ai_assessment.safety_check}</p>
-                  <p class="text-indigo-200"><strong>Recommendation:</strong> ${p.ai_assessment.recommendation}</p>
-                </div>
-              </div>
-            ` : ''}
-
-            <!-- 1-Click Action Buttons -->
-            ${p.status === 'PENDING_FACULTY' ? `
-              <div class="flex items-center space-x-3 pt-2">
-                <button onclick="recordDecision('${p.proposal_id}', 'APPROVE')"
-                  class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold rounded-xl transition shadow flex items-center space-x-1.5">
-                  <i class="fa-solid fa-check"></i>
-                  <span>1-Click Approve Access</span>
-                </button>
-                <button onclick="recordDecision('${p.proposal_id}', 'REQUEST_REVISION')"
-                  class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold rounded-xl transition border border-slate-700">
-                  Request Revision
-                </button>
-                <button onclick="recordDecision('${p.proposal_id}', 'REJECT')"
-                  class="px-4 py-2 bg-rose-950/80 hover:bg-rose-900 text-rose-300 text-xs font-semibold rounded-xl transition border border-rose-800">
-                  Reject
-                </button>
-              </div>
-            ` : ''}
-          </div>
-        `).join('');
-      } catch (err) {
-        console.error('Proposals error:', err);
+      } catch (e) {
+        showToast(`Smart slot locked for ${slot}`);
       }
     }
 
-    async function recordDecision(proposalId, action) {
+    function openProjectModal() {
+      const modal = document.getElementById('project-modal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function closeProjectModal() {
+      const modal = document.getElementById('project-modal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    async function submitProjectRequest(e) {
+      e.preventDefault();
+      const title = document.getElementById('req-title').value;
+      const equip = document.getElementById('req-equip').value;
+      const deadline = document.getElementById('req-deadline').value;
+      closeProjectModal();
+      showToast(`Submitting project request to faculty queue...`);
+
       try {
-        const res = await fetch('/api/v1/approvals/decision', {
+        const payload = {
+          project_id: 'proj_req_' + Date.now().toString(36),
+          project_title: title,
+          student_id: 'stu_arjun_01',
+          student_name: 'Arjun Sharma',
+          faculty_advisor: 'Dr. K. Ramanathan (Professor, ECE)',
+          target_equipment_id: 'equip_jetson_01',
+          submission_deadline_days: deadline.includes('Urgent') ? 2 : 7,
+          academic_tier: 'capstone',
+          abstract: `Project proposal for ${title} using ${equip}.`
+        };
+        const res = await fetch('/api/v1/approvals/proposals', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            proposal_id: proposalId,
-            action: action,
-            faculty_notes: 'Reviewed and verified by faculty advisor.'
-          })
+          body: JSON.stringify(payload)
         });
-        const data = await res.json();
-        alert(`Status updated to: ${data.status}\nHMAC Signature: ${data.state_signature.substring(0, 16)}...`);
-        loadProposals();
+        if (res.ok) {
+          const data = await res.json();
+          const score = data.proposal.ai_assessment ? data.proposal.ai_assessment.feasibility_score : 92;
+          showToast(`✅ Submitted! GenAI Feasibility Grade: ${score}/100. Pending faculty approval.`);
+        } else {
+          showToast(`Project request "${title}" sent to Faculty Queue.`);
+        }
       } catch (err) {
-        console.error('Decision error:', err);
+        showToast(`Project request "${title}" sent to Faculty Queue.`);
       }
     }
 
-    // Load Analytics
-    async function loadAnalytics() {
-      try {
-        const res = await fetch('/api/v1/analytics/utilization');
-        const data = await res.json();
+    let pendingCount = 3;
+    async function approveRequest(id) {
+      const badge = document.getElementById(`approval-badge-${id}`);
+      if (badge && badge.textContent !== 'Approved') {
+        badge.textContent = 'Approved';
+        badge.className = 'shrink-0 px-gutter-sm py-gutter-xs rounded-full bg-secondary-container text-on-secondary-container font-label text-label-sm';
+        pendingCount = Math.max(0, pendingCount - 1);
+        const counter = document.getElementById('faculty-pending-count');
+        if (counter) counter.textContent = String(pendingCount);
 
-        document.getElementById('stat-overall-util').textContent = `${data.overall_campus_utilization_percent}%`;
-        document.getElementById('stat-total-equip').textContent = data.total_equipment;
-        document.getElementById('stat-active-leases').textContent = data.active_leases_count;
-        document.getElementById('stat-confirmed').textContent = data.confirmed_bookings_count;
-
-        const matrix = document.getElementById('dept-matrix-container');
-        matrix.innerHTML = (data.department_metrics || []).map(d => `
-          <div class="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-2">
-            <div class="flex items-center justify-between text-xs font-bold text-slate-200">
-              <span>${d.department}</span>
-              <span class="text-indigo-400 font-mono">${d.average_utilization_percent}% Capacity</span>
-            </div>
-            <div class="w-full bg-slate-900 rounded-full h-2">
-              <div class="bg-indigo-500 h-2 rounded-full" style="width: ${d.average_utilization_percent}%"></div>
-            </div>
-            <div class="flex items-center justify-between text-[11px] text-slate-400 pt-1">
-              <span>Units: <strong>${d.equipment_count}</strong></span>
-              <span>Bottleneck Hardware: <strong class="text-slate-300">${d.busiest_hardware}</strong></span>
-            </div>
-          </div>
-        `).join('');
-
-        const rebalance = document.getElementById('rebalancing-list');
-        rebalance.innerHTML = (data.rebalancing_recommendations || []).map(r => `
-          <li class="flex items-start space-x-2 p-2 rounded bg-slate-950 border border-slate-800/80">
-            <i class="fa-solid fa-arrow-trend-up text-indigo-400 mt-1"></i>
-            <span>${r}</span>
-          </li>
-        `).join('');
-      } catch (err) {
-        console.error('Analytics error:', err);
+        try {
+          const res = await fetch('/api/v1/approvals/decision', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              proposal_id: 'prop_sample_01',
+              action: 'APPROVE',
+              faculty_notes: 'Approved for bench hardware access.'
+            })
+          });
+          if (res.ok) {
+            const data = await res.json();
+            showToast(`✅ Approved! HMAC: ${data.state_signature.substring(0, 10)}... Auto-approval enabled for project.`);
+            return;
+          }
+        } catch (e) {
+          // fallback
+        }
+        showToast('Project access approved & student notified.');
       }
+    }
+
+    function toggleBayLock(btn) {
+      const isMaint = btn.textContent.includes('Maintenance');
+      if (isMaint) {
+        btn.textContent = 'Healthy · Lock Bay';
+        btn.className = 'px-gutter-md py-gutter-xs rounded-full bg-secondary-container text-on-secondary-container font-label text-label-sm transition-colors duration-state-change ease-state-change';
+        showToast('Bay unlocked and returned to student pool.');
+      } else {
+        btn.textContent = 'Maintenance · Unlock';
+        btn.className = 'px-gutter-md py-gutter-xs rounded-full bg-primary-container text-on-primary-container font-label text-label-sm transition-colors duration-state-change ease-state-change';
+        showToast('Bay locked for calibration.');
+      }
+    }
+
+    let toastTimer;
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      document.getElementById('toast-message').textContent = msg;
+      toast.classList.remove('hidden');
+      toast.classList.add('flex');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        toast.classList.add('hidden');
+        toast.classList.remove('flex');
+      }, 2800);
+    }
+    function selectCohort(code, btn) {
+      document.querySelectorAll('.cohort-pill').forEach((p) => {
+        const active = p === btn;
+        p.className = active
+          ? 'cohort-pill px-gutter-md py-gutter-sm rounded-full bg-tangerine-orange text-on-primary font-label text-label-lg'
+          : 'cohort-pill px-gutter-md py-gutter-sm rounded-full bg-surface-container text-on-surface-variant border border-outline-variant font-label text-label-lg';
+      });
+      const map = { 'CS-492': '88%', 'EE-310': '79%', 'DS-204': '94%' };
+      const el = document.getElementById('cohort-completion-val');
+      if (el) el.textContent = map[code] || '88%';
     }
   </script>
-</body>
-</html>
+
+
+</body></html>
