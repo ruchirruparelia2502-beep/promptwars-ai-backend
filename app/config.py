@@ -14,7 +14,7 @@ class Settings(BaseSettings):
     
     # AI Studio / Gemini API Key
     GEMINI_API_KEY: str = ""
-    DEFAULT_GEMINI_MODEL: str = "gemini-2.5-flash"
+    DEFAULT_GEMINI_MODEL: str = "gemini-3.8-flash"
     
     model_config = SettingsConfigDict(
         env_file=".env",

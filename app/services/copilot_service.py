@@ -189,12 +189,12 @@ def process_copilot_chat(request: CopilotChatRequest) -> CopilotChatResponse:
     if not api_key:
         return _generate_fallback_copilot_response(request)
 
-    model_name = os.environ.get("DEFAULT_GEMINI_MODEL", "gemini-2.5-flash")
+    model_name = os.environ.get("DEFAULT_GEMINI_MODEL", "gemini-3.8-flash")
 
     try:
-        import google.generativeai as genai
-        genai.configure(api_key=api_key)
-        model = genai.GenerativeModel(model_name)
+        # Prefer modern Google GenAI Client
+        from google import genai
+        client = genai.Client(api_key=api_key, http_options={"timeout": 5000})
 
         inventory_context = _build_system_inventory_context()
         prompt = (
@@ -229,9 +229,9 @@ def process_copilot_chat(request: CopilotChatRequest) -> CopilotChatResponse:
             "}"
         )
 
-        response = model.generate_content(
-            prompt,
-            generation_config={"temperature": 0.2, "max_output_tokens": 1024}
+        response = client.models.generate_content(
+            model=model_name,
+            contents=prompt
         )
         text = response.text.strip()
         if text.startswith("```json"):
