@@ -215,8 +215,8 @@ class SQLiteLabDatabase:
 
         cursor.execute("SELECT COUNT(*) as cnt FROM equipment;")
         if cursor.fetchone()["cnt"] == 0:
-            from app.core.database import db as in_memory_db
-            items = in_memory_db.get_all_equipment()
+            from app.core.seed_data import SEED_EQUIPMENT
+            items = SEED_EQUIPMENT
             for it in items:
                 rate = 2.0
                 try:

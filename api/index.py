@@ -13,7 +13,8 @@ os.environ["VERCEL"] = "1"
 try:
     from app.main import app
 except Exception as e:
-    tb = traceback.format_exc()
+    err_msg = str(e)
+    tb_lines = traceback.format_exc().splitlines()
     from fastapi import FastAPI
     from fastapi.responses import JSONResponse
     
@@ -25,8 +26,8 @@ except Exception as e:
             status_code=500,
             content={
                 "error": "STARTUP_EXCEPTION",
-                "exception": str(e),
-                "traceback": tb.splitlines()
+                "exception": err_msg,
+                "traceback": tb_lines
             }
         )
 
@@ -36,7 +37,7 @@ except Exception as e:
             status_code=500,
             content={
                 "error": "STARTUP_EXCEPTION",
-                "exception": str(e),
-                "traceback": tb.splitlines()
+                "exception": err_msg,
+                "traceback": tb_lines
             }
         )
