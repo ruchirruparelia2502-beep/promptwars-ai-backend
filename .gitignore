@@ -24,6 +24,16 @@ wheels/
 .installed.cfg
 *.egg
 
+# Database & Persistent State
+*.db
+*.db-wal
+*.db-shm
+*.sqlite
+*.sqlite3
+data/*.db
+data/*.db-wal
+data/*.db-shm
+
 # Environment & Secrets (Never committed to Git)
 .env
 .env*

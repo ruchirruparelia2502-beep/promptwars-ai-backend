@@ -105,7 +105,7 @@ if (typeof module !== 'undefined') module.exports = globalThis.tailwind.config;
   <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&amp;family=Space+Grotesk:wght@500;600;700&amp;family=Space+Mono:wght@400;700&amp;display=swap" rel="stylesheet">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=block" rel="stylesheet">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <style>
     [hidden] {
@@ -116,7 +116,7 @@ if (typeof module !== 'undefined') module.exports = globalThis.tailwind.config;
       font-family: 'Material Symbols Outlined';
       font-style: normal;
       font-weight: 100 700;
-      font-display: swap;
+      font-display: block;
       src: url('/static/fonts/material-symbols-outlined.woff2') format('woff2'),
            url('https://fonts.gstatic.com/s/materialsymbolsoutlined/v385/kJEPBvYX7BgnkSrUwT8OhrdQw4oELdPIeeII9v6oDMzBwG-RpA6RzaxHMPdY40KH8nGzv3fzfVJO1USv9ls.woff2') format('woff2');
     }
@@ -204,11 +204,11 @@ if (typeof module !== 'undefined') module.exports = globalThis.tailwind.config;
 </head>
 <body class="bg-surface text-on-surface font-body antialiased selection:bg-primary selection:text-on-primary">
 
-  <!-- Root App Shell (min-h-screen per critical layout rule) -->
-  <div class="min-h-[1024px] flex flex-col lg:flex-row bg-surface text-on-surface" data-stitch-vh="min-h-[1024px]===min-h-screen">
+  <!-- Root App Shell -->
+  <div class="min-h-screen flex flex-col lg:flex-row bg-surface text-on-surface">
 
     <!-- Left Navigation Sidebar -->
-    <aside class="w-full lg:w-[248px] lg:min-h-[1024px] shrink-0 bg-surface-container-low border-b lg:border-b-0 lg:border-r border-outline-variant p-gutter-lg flex flex-col justify-between gap-gutter-xl" data-stitch-vh="lg:min-h-[1024px]===lg:min-h-screen">
+    <aside class="w-full lg:w-[248px] lg:min-h-screen lg:max-h-screen lg:sticky lg:top-0 lg:overflow-y-auto shrink-0 bg-surface-container-low border-b lg:border-b-0 lg:border-r border-outline-variant p-gutter-lg flex flex-col justify-between gap-gutter-md">
       <div class="flex flex-col gap-gutter-xl">
         <!-- Brand Mark -->
         <a href="#top" class="flex items-center gap-gutter-sm px-gutter-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-lg">
@@ -299,40 +299,38 @@ if (typeof module !== 'undefined') module.exports = globalThis.tailwind.config;
     <div class="flex-1 flex flex-col min-w-0">
 
       <!-- Top Header with Hackathon POV Slider -->
-      <header class="sticky top-0 z-30 bg-surface/95 border-b border-outline-variant px-gutter-lg lg:px-gutter-xl py-gutter-md flex flex-wrap items-center justify-between gap-gutter-md">
+      <header class="sticky top-0 z-30 bg-surface/95 backdrop-blur-md border-b border-outline-variant px-3 sm:px-gutter-lg lg:px-gutter-xl py-2.5 sm:py-gutter-md flex flex-wrap items-center justify-between gap-2 sm:gap-gutter-md">
         <!-- Search Input -->
-        <div class="relative flex-1 min-w-[220px] max-w-xs">
+        <div class="relative flex-1 min-w-[150px] sm:min-w-[220px] max-w-xs">
           <span class="material-symbols-outlined text-[18px] text-on-surface-variant absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" aria-hidden="true">search</span>
           <input id="lab-search" type="search" placeholder="Search GPUs, dev kits, or bays..." aria-label="Search lab workspace" class="w-full pl-10 pr-gutter-md py-gutter-sm rounded-full bg-surface-container-low border border-outline-variant text-body-md text-on-surface placeholder:text-on-surface-variant focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary">
         </div>
 
-        <!-- TOP POV SLIDER (Student / Faculty / Lab Assistant) -->
-        <div class="flex items-center gap-gutter-sm">
+        <!-- TOP POV SLIDER (Student / Faculty / Lab Assistant) with Cryptographic JWT Session -->
+        <div class="flex items-center gap-1 sm:gap-gutter-sm">
           <span class="hidden xl:inline font-label text-label-sm text-on-surface-variant uppercase tracking-wider" data-design-text-token="label-sm">View as</span>
-          <div data-component-id="pov-slider" data-component-type="tabs" data-component-variant="with-icon" role="tablist" aria-label="Portal Perspective Switcher" class="relative grid grid-cols-3 p-gutter-xs rounded-full bg-surface-container-lowest border border-outline-variant">
-            <!-- Smooth Sliding Pill Indicator -->
-            <div id="pov-slider-thumb" aria-hidden="true" class="absolute top-1 bottom-1 left-1 w-[calc(33.333%-4px)] rounded-full bg-tangerine-orange transition-transform duration-pov-switch ease-pov-switch pointer-events-none" style="transform: translateX(0%);"></div>
-
-            <button type="button" role="tab" id="tab-student" aria-selected="true" aria-controls="panel-student" data-pov="student" data-index="0" class="pov-tab relative z-10 inline-flex items-center justify-center gap-gutter-xs px-gutter-md py-gutter-sm rounded-full font-label text-label-lg text-on-primary transition-colors duration-pov-switch ease-pov-switch whitespace-nowrap">
-              <span class="material-symbols-outlined text-[18px]" aria-hidden="true">school</span>
+          <div data-component-id="pov-slider" data-component-type="tabs" data-component-variant="with-icon" role="tablist" aria-label="Portal Perspective Switcher" class="relative flex items-center p-1 rounded-full bg-surface-container-lowest border border-outline-variant gap-1">
+            <button type="button" role="tab" id="tab-student" aria-selected="true" aria-controls="panel-student" data-pov="student" class="pov-tab inline-flex items-center justify-center gap-1.5 px-3 sm:px-4 py-1.5 rounded-full font-label text-label-sm sm:text-label-md bg-tangerine-orange text-on-primary font-semibold transition-all duration-state-change whitespace-nowrap shadow-sm">
+              <span class="material-symbols-outlined text-[16px] sm:text-[18px]" aria-hidden="true">school</span>
               <span data-design-text-token="label-lg">Student</span>
             </button>
 
-            <button type="button" role="tab" id="tab-teacher" aria-selected="false" aria-controls="panel-teacher" data-pov="teacher" data-index="1" class="pov-tab relative z-10 inline-flex items-center justify-center gap-gutter-xs px-gutter-md py-gutter-sm rounded-full font-label text-label-lg text-on-surface-variant hover:text-on-surface transition-colors duration-pov-switch ease-pov-switch whitespace-nowrap">
-              <span class="material-symbols-outlined text-[18px]" aria-hidden="true">analytics</span>
+            <button type="button" role="tab" id="tab-teacher" aria-selected="false" aria-controls="panel-teacher" data-pov="teacher" class="pov-tab inline-flex items-center justify-center gap-1.5 px-3 sm:px-4 py-1.5 rounded-full font-label text-label-sm sm:text-label-md text-on-surface-variant hover:text-on-surface transition-all duration-state-change whitespace-nowrap">
+              <span class="material-symbols-outlined text-[16px] sm:text-[18px]" aria-hidden="true">analytics</span>
               <span data-design-text-token="label-lg">Faculty</span>
             </button>
 
-            <button type="button" role="tab" id="tab-admin" aria-selected="false" aria-controls="panel-admin" data-pov="admin" data-index="2" class="pov-tab relative z-10 inline-flex items-center justify-center gap-gutter-xs px-gutter-md py-gutter-sm rounded-full font-label text-label-lg text-on-surface-variant hover:text-on-surface transition-colors duration-pov-switch ease-pov-switch whitespace-nowrap">
-              <span class="material-symbols-outlined text-[18px]" aria-hidden="true">admin_panel_settings</span>
-              <span data-design-text-token="label-lg">Lab Assistant</span>
+            <button type="button" role="tab" id="tab-admin" aria-selected="false" aria-controls="panel-admin" data-pov="admin" class="pov-tab inline-flex items-center justify-center gap-1.5 px-3 sm:px-4 py-1.5 rounded-full font-label text-label-sm sm:text-label-md text-on-surface-variant hover:text-on-surface transition-all duration-state-change whitespace-nowrap">
+              <span class="material-symbols-outlined text-[16px] sm:text-[18px]" aria-hidden="true">admin_panel_settings</span>
+              <span class="hidden sm:inline" data-design-text-token="label-lg">Lab Assistant</span>
+              <span class="sm:hidden" data-design-text-token="label-lg">Staff</span>
             </button>
           </div>
         </div>
 
         <!-- Active Role Telemetry & Profile Pill -->
-        <div class="flex items-center gap-gutter-sm">
-          <div class="hidden sm:flex items-center gap-gutter-xs px-gutter-md py-gutter-sm rounded-full bg-surface-container border border-outline-variant">
+        <div class="flex items-center gap-2 sm:gap-gutter-sm shrink-0">
+          <div class="hidden lg:flex items-center gap-gutter-xs px-gutter-md py-gutter-sm rounded-full bg-surface-container border border-outline-variant">
             <span class="inline-block w-2 h-2 rounded-full bg-tangerine-orange"></span>
             <span id="header-stat-text" class="font-mono text-mono-md text-on-surface tabular-nums" data-design-text-token="mono-md">32 GPU hrs left</span>
           </div>
@@ -346,8 +344,8 @@ if (typeof module !== 'undefined') module.exports = globalThis.tailwind.config;
         </div>
       </header>
 
-      <!-- Main Content Container (pb-24 for fixed toast clearance) -->
-      <main class="flex-1 p-gutter-lg lg:p-gutter-xl pb-24 max-w-[1400px] w-full mx-auto flex flex-col gap-gutter-xl">
+      <!-- Main Content Container (pb-36 for fixed toast & floating copilot clearance) -->
+      <main class="flex-1 p-gutter-lg lg:p-gutter-xl pb-36 sm:pb-40 max-w-[1400px] w-full mx-auto flex flex-col gap-gutter-xl">
 
         <!-- =================================================================== -->
         <!-- POV 1: STUDENT VIEW                                                 -->
@@ -443,83 +441,12 @@ if (typeof module !== 'undefined') module.exports = globalThis.tailwind.config;
                 </div>
               </div>
 
-              <!-- Equipment Rows -->
+              <!-- Equipment Rows (Dynamically Populated from Registry) -->
               <div class="flex flex-col gap-gutter-md" id="equipment-list">
-                <!-- Item 1 -->
-                <article data-category="compute" data-name="nvidia h100 tensor core cs ai lab" class="equip-card rounded-xl bg-surface-container p-gutter-lg border border-outline-variant flex flex-col sm:flex-row sm:items-center justify-between gap-gutter-md transition-transform duration-state-change ease-state-change hover:-translate-y-0.5">
-                  <div class="flex items-start sm:items-center gap-gutter-md">
-                    <span class="inline-flex items-center justify-center w-11 h-11 rounded-full bg-tangerine-orange text-on-primary shrink-0">
-                      <span class="material-symbols-outlined text-[22px]">memory</span>
-                    </span>
-                    <div class="flex flex-col gap-gutter-xs">
-                      <div class="flex flex-wrap items-center gap-gutter-sm">
-                        <h3 class="font-title text-title-md text-on-surface" data-design-text-token="title-md">NVIDIA H100 Tensor Core</h3>
-                        <span class="px-gutter-sm py-gutter-xs rounded-full bg-secondary-container text-on-secondary-container font-label text-label-sm" data-design-text-token="label-sm">Available Now</span>
-                      </div>
-                      <p class="font-body text-body-md text-on-surface-variant" data-design-text-token="body-md">CS AI Lab · Bay 02 · 80GB HBM3 Workstation</p>
-                    </div>
-                  </div>
-                  <button type="button" onclick="openBookingModal(&#39;NVIDIA H100 Tensor Core&#39;)" class="shrink-0 px-gutter-md py-gutter-sm rounded-full bg-warm-cream text-on-tertiary font-label text-label-lg transition-transform duration-state-change ease-state-change hover:-translate-y-0.5">
-                    <span data-design-text-token="label-lg">Book Slot</span>
-                  </button>
-                </article>
-
-                <!-- Item 2 -->
-                <article data-category="robotics" data-name="franka emika panda arm mech robotics" class="equip-card rounded-xl bg-surface-container p-gutter-lg border border-outline-variant flex flex-col sm:flex-row sm:items-center justify-between gap-gutter-md transition-transform duration-state-change ease-state-change hover:-translate-y-0.5">
-                  <div class="flex items-start sm:items-center gap-gutter-md">
-                    <span class="inline-flex items-center justify-center w-11 h-11 rounded-full bg-secondary-container text-on-secondary-container shrink-0">
-                      <span class="material-symbols-outlined text-[22px]">precision_manufacturing</span>
-                    </span>
-                    <div class="flex flex-col gap-gutter-xs">
-                      <div class="flex flex-wrap items-center gap-gutter-sm">
-                        <h3 class="font-title text-title-md text-on-surface" data-design-text-token="title-md">Franka Emika Panda Arm</h3>
-                        <span class="px-gutter-sm py-gutter-xs rounded-full bg-secondary-container text-on-secondary-container font-label text-label-sm" data-design-text-token="label-sm">Available Now</span>
-                      </div>
-                      <p class="font-body text-body-md text-on-surface-variant" data-design-text-token="body-md">Mech &amp; Robotics · Bay 05 · 7-DoF Force-Torque</p>
-                    </div>
-                  </div>
-                  <button type="button" onclick="openBookingModal(&#39;Franka Emika Panda Arm&#39;)" class="shrink-0 px-gutter-md py-gutter-sm rounded-full bg-warm-cream text-on-tertiary font-label text-label-lg transition-transform duration-state-change ease-state-change hover:-translate-y-0.5">
-                    <span data-design-text-token="label-lg">Book Slot</span>
-                  </button>
-                </article>
-
-                <!-- Item 3 -->
-                <article data-category="compute" data-name="jetson orin nano dev kit ece dept" class="equip-card rounded-xl bg-surface-container p-gutter-lg border border-outline-variant flex flex-col sm:flex-row sm:items-center justify-between gap-gutter-md transition-transform duration-state-change ease-state-change hover:-translate-y-0.5">
-                  <div class="flex items-start sm:items-center gap-gutter-md">
-                    <span class="inline-flex items-center justify-center w-11 h-11 rounded-full bg-warm-cream text-on-tertiary shrink-0">
-                      <span class="material-symbols-outlined text-[22px]">developer_board</span>
-                    </span>
-                    <div class="flex flex-col gap-gutter-xs">
-                      <div class="flex flex-wrap items-center gap-gutter-sm">
-                        <h3 class="font-title text-title-md text-on-surface" data-design-text-token="title-md">Jetson Orin Nano Dev Kit</h3>
-                        <span class="px-gutter-sm py-gutter-xs rounded-full bg-primary-container text-on-primary-container font-label text-label-sm" data-design-text-token="label-sm">Conflict at 14:00</span>
-                      </div>
-                      <p class="font-body text-body-md text-on-surface-variant" data-design-text-token="body-md">ECE Dept · Edge AI Kit · 40 TOPS · Checkout</p>
-                    </div>
-                  </div>
-                  <button type="button" onclick="openBookingModal(&#39;Jetson Orin Nano Dev Kit&#39;)" class="shrink-0 px-gutter-md py-gutter-sm rounded-full bg-tangerine-orange text-on-primary font-label text-label-lg transition-transform duration-state-change ease-state-change hover:-translate-y-0.5">
-                    <span data-design-text-token="label-lg">Resolve Slot</span>
-                  </button>
-                </article>
-
-                <!-- Item 4 -->
-                <article data-category="sensors" data-name="leica blk360 3d scanner spatial lab" class="equip-card rounded-xl bg-surface-container p-gutter-lg border border-outline-variant flex flex-col sm:flex-row sm:items-center justify-between gap-gutter-md transition-transform duration-state-change ease-state-change hover:-translate-y-0.5">
-                  <div class="flex items-start sm:items-center gap-gutter-md">
-                    <span class="inline-flex items-center justify-center w-11 h-11 rounded-full bg-secondary-container text-on-secondary-container shrink-0">
-                      <span class="material-symbols-outlined text-[22px]">view_in_ar</span>
-                    </span>
-                    <div class="flex flex-col gap-gutter-xs">
-                      <div class="flex flex-wrap items-center gap-gutter-sm">
-                        <h3 class="font-title text-title-md text-on-surface" data-design-text-token="title-md">Leica BLK360 3D Scanner</h3>
-                        <span class="px-gutter-sm py-gutter-xs rounded-full bg-secondary-container text-on-secondary-container font-label text-label-sm" data-design-text-token="label-sm">Available Now</span>
-                      </div>
-                      <p class="font-body text-body-md text-on-surface-variant text-balance" data-design-text-token="body-md">Spatial Lab · Bay 08 · Point-cloud &amp; NeRF</p>
-                    </div>
-                  </div>
-                  <button type="button" onclick="openBookingModal(&#39;Leica BLK360 3D Scanner&#39;)" class="shrink-0 px-gutter-md py-gutter-sm rounded-full bg-warm-cream text-on-tertiary font-label text-label-lg transition-transform duration-state-change ease-state-change hover:-translate-y-0.5">
-                    <span data-design-text-token="label-lg">Book Slot</span>
-                  </button>
-                </article>
+                <div class="rounded-xl bg-surface-container p-gutter-lg border border-outline-variant flex items-center justify-center gap-gutter-md text-on-surface-variant">
+                  <span class="material-symbols-outlined text-[24px] animate-spin text-tangerine-orange">progress_activity</span>
+                  <span class="font-body text-body-md">Connecting to Campus Hardware Registry (25 Workstations &amp; Kits)...</span>
+                </div>
               </div>
             </div>
 
@@ -675,34 +602,11 @@ if (typeof module !== 'undefined') module.exports = globalThis.tailwind.config;
                   </div>
                 </div>
 
-                <div class="flex flex-col gap-gutter-md">
-                  <article class="rounded-lg bg-surface-container p-gutter-md border border-outline-variant flex flex-col gap-gutter-sm">
-                    <div class="flex items-start justify-between gap-gutter-sm">
-                      <div class="min-w-0">
-                        <h3 class="font-title text-title-md text-on-surface truncate" data-design-text-token="title-md">Maya Lin · Vision</h3>
-                        <p class="font-body text-body-md text-on-surface-variant" data-design-text-token="body-md">48h H100 Node · CS-492</p>
-                      </div>
-                      <span id="approval-badge-1" class="shrink-0 px-gutter-sm py-gutter-xs rounded-full bg-primary-container text-on-primary-container font-label text-label-sm">Pending</span>
-                    </div>
-                    <div class="flex items-center gap-gutter-sm pt-gutter-xs">
-                      <button type="button" onclick="approveRequest(1)" class="px-gutter-md py-gutter-xs rounded-full bg-tangerine-orange text-on-primary font-label text-label-sm">Approve</button>
-                      <button type="button" onclick="showToast(&#39;AI Fairness Score: 98% (Capstone due Fri).&#39;)" class="px-gutter-md py-gutter-xs rounded-full bg-surface-container-high text-on-surface font-label text-label-sm">AI Score</button>
-                    </div>
-                  </article>
-
-                  <article class="rounded-lg bg-surface-container p-gutter-md border border-outline-variant flex flex-col gap-gutter-sm">
-                    <div class="flex items-start justify-between gap-gutter-sm">
-                      <div class="min-w-0">
-                        <h3 class="font-title text-title-md text-on-surface truncate" data-design-text-token="title-md">Kian Patel · Sim2Real</h3>
-                        <p class="font-body text-body-md text-on-surface-variant" data-design-text-token="body-md">24h Jetson Kit · ECE-310</p>
-                      </div>
-                      <span id="approval-badge-2" class="shrink-0 px-gutter-sm py-gutter-xs rounded-full bg-primary-container text-on-primary-container font-label text-label-sm">Pending</span>
-                    </div>
-                    <div class="flex items-center gap-gutter-sm pt-gutter-xs">
-                      <button type="button" onclick="approveRequest(2)" class="px-gutter-md py-gutter-xs rounded-full bg-tangerine-orange text-on-primary font-label text-label-sm">Approve</button>
-                      <button type="button" onclick="showToast(&#39;AI Fairness Score: 91% (Low quota usage).&#39;)" class="px-gutter-md py-gutter-xs rounded-full bg-surface-container-high text-on-surface font-label text-label-sm">AI Score</button>
-                    </div>
-                  </article>
+                <div class="flex flex-col gap-gutter-md" id="faculty-overview-queue">
+                  <div class="rounded-lg bg-surface-container p-gutter-md border border-outline-variant flex items-center justify-center gap-gutter-sm text-on-surface-variant">
+                    <span class="material-symbols-outlined text-[20px] animate-spin text-tangerine-orange">progress_activity</span>
+                    <span class="font-body text-body-sm">Syncing Faculty Access Queue from Database...</span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -834,8 +738,8 @@ if (typeof module !== 'undefined') module.exports = globalThis.tailwind.config;
   </div>
 
   <!-- Interactive AI Conflict Resolver & Smart Slot Modal -->
-  <div id="booking-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-surface-container-lowest/80 p-gutter-lg" role="dialog" aria-modal="true" aria-labelledby="modal-title">
-    <div class="w-full max-w-lg rounded-xl bg-surface-container border border-outline-variant p-gutter-xl flex flex-col gap-gutter-lg animate-panel-enter">
+  <div id="booking-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/90 backdrop-blur-md p-gutter-lg" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="w-full max-w-lg rounded-xl bg-[#1c1b1b] border border-outline/60 p-gutter-xl flex flex-col gap-gutter-lg shadow-2xl animate-panel-enter">
       <div class="flex items-start justify-between gap-gutter-md">
         <div>
           <span class="font-mono text-label-sm text-tangerine-orange" data-design-text-token="label-sm">GENAI CONFLICT RESOLVER</span>
@@ -903,8 +807,8 @@ if (typeof module !== 'undefined') module.exports = globalThis.tailwind.config;
   </div>
 
   <!-- Interactive Project-Based Access Request Modal -->
-  <div id="project-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-surface-container-lowest/80 p-gutter-lg" role="dialog" aria-modal="true" aria-labelledby="project-modal-title">
-    <form onsubmit="submitProjectRequest(event)" class="w-full max-w-lg rounded-xl bg-surface-container border border-outline-variant p-gutter-xl flex flex-col gap-gutter-lg animate-panel-enter">
+  <div id="project-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/90 backdrop-blur-md p-gutter-lg" role="dialog" aria-modal="true" aria-labelledby="project-modal-title">
+    <form onsubmit="submitProjectRequest(event)" class="w-full max-w-lg rounded-xl bg-[#1c1b1b] border border-outline/60 p-gutter-xl flex flex-col gap-gutter-lg shadow-2xl animate-panel-enter">
       <div class="flex items-start justify-between gap-gutter-md">
         <div>
           <span class="font-mono text-label-sm text-slate-blue" data-design-text-token="label-sm">CROSS-DEPARTMENT GRANT</span>
@@ -916,14 +820,14 @@ if (typeof module !== 'undefined') module.exports = globalThis.tailwind.config;
       </div>
 
       <div class="flex flex-col gap-gutter-md">
-        <label class="flex flex-col gap-gutter-xs">
-          <span class="font-label text-label-sm text-on-surface-variant">Project &amp; Course Code</span>
-          <input id="req-title" type="text" required value="Autonomous Campus Rover · CS-492" class="w-full px-gutter-md py-gutter-sm rounded-lg bg-surface-container-low border border-outline-variant text-body-md text-on-surface focus:outline-none focus:border-primary focus-visible:ring-2 focus-visible:ring-primary">
-        </label>
+        <div class="flex flex-col gap-gutter-xs">
+          <label for="req-title" class="font-label text-label-sm text-on-surface-variant">Project &amp; Course Code</label>
+          <input id="req-title" name="req-title" type="text" required value="Autonomous Campus Rover · CS-492" class="w-full px-gutter-md py-gutter-sm rounded-lg bg-surface-container-low border border-outline-variant text-body-md text-on-surface focus:outline-none focus:border-primary focus-visible:ring-2 focus-visible:ring-primary">
+        </div>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-gutter-md">
-          <label class="flex flex-col gap-gutter-xs">
-            <span class="font-label text-label-sm text-on-surface-variant">Target Equipment</span>
-            <select id="req-equip" class="w-full px-gutter-md py-gutter-sm rounded-lg bg-surface-container-low border border-outline-variant text-body-md text-on-surface focus:outline-none focus:border-primary focus-visible:ring-2 focus-visible:ring-primary">
+          <div class="flex flex-col gap-gutter-xs">
+            <label for="req-equip" class="font-label text-label-sm text-on-surface-variant">Target Equipment</label>
+            <select id="req-equip" name="req-equip" class="w-full px-gutter-md py-gutter-sm rounded-lg bg-surface-container-low border border-outline-variant text-body-md text-on-surface focus:outline-none focus:border-primary focus-visible:ring-2 focus-visible:ring-primary">
               <option value="equip_rpi_01">Raspberry Pi 5 + Hailo NPU (13 TOPS) · Frugal Entry ($0.50/hr)</option>
               <option value="equip_jetson_01">Jetson AGX Orin 64GB Industrial Kit · ECE Robotics ($12.00/hr)</option>
               <option value="equip_rtx_01">Dual RTX 4090 AI Workstation Alpha · CS AI Lab ($10.00/hr)</option>
@@ -934,15 +838,15 @@ if (typeof module !== 'undefined') module.exports = globalThis.tailwind.config;
               <option value="equip_tek_01">Tektronix 4-GHz Mixed Signal Scope · ECE RF ($18.00/hr)</option>
               <option value="equip_hpc_01">Campus HPC GPU Cluster Node (4x A100) · Data Center ($35.00/hr)</option>
             </select>
-          </label>
-          <label class="flex flex-col gap-gutter-xs">
-            <span class="font-label text-label-sm text-on-surface-variant">Project Deadline</span>
-            <select id="req-deadline" class="w-full px-gutter-md py-gutter-sm rounded-lg bg-surface-container-low border border-outline-variant text-body-md text-on-surface focus:outline-none focus:border-primary focus-visible:ring-2 focus-visible:ring-primary">
+          </div>
+          <div class="flex flex-col gap-gutter-xs">
+            <label for="req-deadline" class="font-label text-label-sm text-on-surface-variant">Project Deadline</label>
+            <select id="req-deadline" name="req-deadline" class="w-full px-gutter-md py-gutter-sm rounded-lg bg-surface-container-low border border-outline-variant text-body-md text-on-surface focus:outline-none focus:border-primary focus-visible:ring-2 focus-visible:ring-primary">
               <option>This Friday (Urgent)</option>
               <option>Next Week</option>
               <option>End of Semester</option>
             </select>
-          </label>
+          </div>
         </div>
       </div>
 
@@ -953,20 +857,14 @@ if (typeof module !== 'undefined') module.exports = globalThis.tailwind.config;
     </form>
   </div>
 
-  <!-- Big Orange Lab Copilot Tab (Gemini 3.8 Flash) -->
-  <button id="copilot-big-tab" type="button" onclick="handleCopilotAction()" class="fixed bottom-6 right-6 z-40 inline-flex items-center gap-gutter-md px-gutter-lg py-gutter-md rounded-full bg-tangerine-orange text-on-primary border border-on-primary/15 transition-transform duration-state-change ease-state-change hover:-translate-y-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-warm-cream">
-    <span class="inline-flex items-center justify-center w-9 h-9 rounded-full bg-on-primary text-tangerine-orange shrink-0">
-      <span class="material-symbols-outlined text-[20px]" style="font-variation-settings: &#39;FILL&#39; 1;">auto_awesome</span>
-    </span>
-    <span class="flex flex-col items-start text-left">
-      <span class="font-headline text-title-md text-on-primary leading-none" data-design-text-token="title-md">Lab Copilot</span>
-      <span class="font-mono text-label-sm text-on-primary leading-tight" data-design-text-token="label-sm">Gemini 3.8 Flash</span>
-    </span>
-    <span class="px-gutter-sm py-gutter-xs rounded-full bg-on-primary text-warm-cream font-label text-label-sm" data-design-text-token="label-sm">Ask AI</span>
+  <!-- Sleek Floating Lab Copilot Button (Visible on mobile/tablet when sidebar is collapsed) -->
+  <button id="copilot-big-tab" type="button" onclick="handleCopilotAction()" class="lg:hidden fixed bottom-4 right-4 z-40 inline-flex items-center gap-2 px-3.5 py-2 rounded-full bg-tangerine-orange shadow-2xl text-on-primary border border-on-primary/20 transition-all duration-state-change ease-state-change hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-warm-cream">
+    <span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+    <span class="font-label text-label-sm font-semibold whitespace-nowrap">Lab Copilot</span>
   </button>
 
   <!-- Big Orange Lab Copilot Popup Modal (Gemini 3.8 Flash) -->
-  <div id="copilot-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-surface-container-lowest/85 p-gutter-lg animate-modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="copilot-modal-title">
+  <div id="copilot-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/90 backdrop-blur-md p-gutter-lg animate-modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="copilot-modal-title">
     <div id="copilot-modal-card" class="w-full max-w-2xl rounded-xl bg-tangerine-orange text-on-primary p-gutter-xl flex flex-col gap-gutter-lg animate-modal-pop">
       <!-- Modal Header -->
       <div class="flex items-start justify-between gap-gutter-md">
@@ -1016,9 +914,9 @@ if (typeof module !== 'undefined') module.exports = globalThis.tailwind.config;
     </div>
   </div>
 
-  <!-- Feedback Toast -->
-  <div id="toast" role="status" aria-live="polite" class="fixed bottom-24 right-6 z-50 hidden items-center gap-gutter-sm px-gutter-lg py-gutter-md rounded-full bg-warm-cream text-on-tertiary font-label text-label-lg animate-panel-enter">
-    <span class="material-symbols-outlined text-[18px] text-tangerine-orange" style="font-variation-settings: &#39;FILL&#39; 1;">check_circle</span>
+  <!-- Feedback Toast with Dynamic role="alert" / role="status" and Error/Success Icons -->
+  <div id="toast" role="status" aria-live="polite" class="fixed top-6 right-6 z-50 hidden items-center gap-gutter-sm px-gutter-lg py-gutter-md rounded-full bg-warm-cream text-on-tertiary font-label text-label-lg shadow-2xl border border-outline-variant animate-panel-enter">
+    <span id="toast-icon" class="material-symbols-outlined text-[20px] text-tangerine-orange shrink-0" style="font-variation-settings: 'FILL' 1;">check_circle</span>
     <span id="toast-message">Action confirmed</span>
   </div>
 
@@ -1349,7 +1247,7 @@ if (typeof module !== 'undefined') module.exports = globalThis.tailwind.config;
       `;
 
       try {
-        const res = await fetch('/api/v1/copilot/chat', {
+        const res = await apiFetch('/api/v1/copilot/chat', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -1366,9 +1264,9 @@ if (typeof module !== 'undefined') module.exports = globalThis.tailwind.config;
           <div class="rounded-lg bg-on-primary/95 text-warm-cream p-gutter-md border border-on-primary/30 flex flex-col gap-gutter-xs">
             <div class="flex items-center gap-gutter-xs text-tangerine-orange font-mono text-label-sm">
               <span class="material-symbols-outlined text-[16px]">psychology</span>
-              <span>COPILOT ANALYSIS (${data.model_used}):</span>
+              <span>COPILOT ANALYSIS (${escapeHtml(data.model_used)}):</span>
             </div>
-            <p class="font-body text-body-md text-warm-cream leading-relaxed">${data.reply}</p>
+            <p class="font-body text-body-md text-warm-cream leading-relaxed">${escapeHtml(data.reply)}</p>
           </div>
 
           <!-- Frugal Resource Efficiency Note -->
@@ -1377,7 +1275,7 @@ if (typeof module !== 'undefined') module.exports = globalThis.tailwind.config;
               <span class="material-symbols-outlined text-[18px] text-tangerine-orange shrink-0 mt-0.5">eco</span>
               <div class="text-xs">
                 <strong class="text-tangerine-orange font-mono uppercase">Frugal / Minimum-Viable Choice:</strong>
-                <span class="text-warm-cream/90 ml-1">${data.resource_efficiency_note}</span>
+                <span class="text-warm-cream/90 ml-1">${escapeHtml(data.resource_efficiency_note)}</span>
               </div>
             </div>
           ` : ''}
@@ -1387,16 +1285,16 @@ if (typeof module !== 'undefined') module.exports = globalThis.tailwind.config;
             <div class="rounded-lg bg-on-primary text-warm-cream p-gutter-md flex flex-col sm:flex-row sm:items-center justify-between gap-gutter-md border border-on-primary/20 hover:border-tangerine-orange/50 transition">
               <div class="flex flex-col gap-gutter-xs">
                 <div class="flex flex-wrap items-center gap-gutter-sm">
-                  <span class="font-title text-title-md text-warm-cream font-bold">${item.equipment_name}</span>
+                  <span class="font-title text-title-md text-warm-cream font-bold">${escapeHtml(item.equipment_name)}</span>
                   <span class="px-gutter-sm py-gutter-xs rounded-full bg-tangerine-orange text-on-primary font-mono text-label-sm">
                     ${item.is_cost_effective_choice ? 'Cost-Conscious Pick' : 'High-Performance'}
                   </span>
                 </div>
-                <span class="font-body text-body-md text-warm-cream">${item.fit_reason}</span>
+                <span class="font-body text-body-md text-warm-cream">${escapeHtml(item.fit_reason)}</span>
                 <div class="flex flex-wrap items-center gap-gutter-md text-[11px] text-warm-cream/75 font-mono pt-1">
-                  <span>📍 ${item.location}</span>
-                  <span>⚙️ ${item.specifications_highlight}</span>
-                  <span>🛡️ ${item.safety_prerequisites}</span>
+                  <span>📍 ${escapeHtml(item.location)}</span>
+                  <span>⚙️ ${escapeHtml(item.specifications_highlight)}</span>
+                  <span>🛡️ ${escapeHtml(item.safety_prerequisites)}</span>
                 </div>
               </div>
               <button type="button" onclick="quickBookFromCopilot('${item.equipment_id}', '${item.equipment_name.replace(/'/g, "\\'")}', ${data.suggested_duration_slots})"
@@ -1407,7 +1305,7 @@ if (typeof module !== 'undefined') module.exports = globalThis.tailwind.config;
           `).join('')}
 
           <div class="text-[11px] font-mono text-warm-cream/80 text-right">
-            Action: ${data.actionable_next_step}
+            Action: ${escapeHtml(data.actionable_next_step)}
           </div>
         `;
       } catch (err) {
@@ -1431,6 +1329,95 @@ if (typeof module !== 'undefined') module.exports = globalThis.tailwind.config;
       }
     }
 
+    // --- XSS HTML Escaping Helper ---
+    function escapeHtml(str) {
+      if (str === null || str === undefined) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    // --- Authentication & Role Authorization State ---
+    let currentAuthToken = sessionStorage.getItem('lablink_jwt') || '';
+    let currentRole = sessionStorage.getItem('lablink_role') || 'student';
+
+    async function setPerspectiveAuth(povKey) {
+      const backendRole = (povKey === 'teacher') ? 'faculty' : (povKey === 'admin' ? 'admin' : 'student');
+      currentRole = backendRole;
+      sessionStorage.setItem('lablink_role', backendRole);
+
+      try {
+        const res = await fetch(`/api/v1/auth/token?role=${encodeURIComponent(backendRole)}`, {
+          method: 'POST'
+        });
+        if (res.ok) {
+          const data = await res.json();
+          currentAuthToken = data.access_token;
+          sessionStorage.setItem('lablink_jwt', currentAuthToken);
+        }
+      } catch (err) {
+        console.warn('Auth token issuance offline fallback:', err);
+      }
+    }
+
+    // Authenticated API Fetch Wrapper with Bearer Token and Role Header
+    async function apiFetch(url, options = {}) {
+      options.headers = options.headers || {};
+      if (currentAuthToken) {
+        options.headers['Authorization'] = `Bearer ${currentAuthToken}`;
+      }
+      options.headers['X-User-Role'] = currentRole;
+      return fetch(url, options);
+    }
+
+    // --- Feedback Toast Notification (with Red/Alert Error & Green/Status Success) ---
+    let toastTimer;
+    function showToast(msg, isError = false) {
+      const toast = document.getElementById('toast');
+      const toastIcon = document.getElementById('toast-icon');
+      const toastMsg = document.getElementById('toast-message');
+      if (!toast || !toastMsg) return;
+
+      toastMsg.textContent = msg;
+
+      if (isError) {
+        toast.setAttribute('role', 'alert');
+        toast.className = 'fixed top-6 right-6 z-50 flex items-center gap-gutter-sm px-gutter-lg py-gutter-md rounded-full bg-rose-950 text-rose-100 border border-rose-500/60 shadow-2xl font-label text-label-md animate-panel-enter';
+        if (toastIcon) {
+          toastIcon.textContent = 'error';
+          toastIcon.className = 'material-symbols-outlined text-[20px] text-rose-400 shrink-0';
+          toastIcon.style.fontVariationSettings = "'FILL' 1";
+        }
+      } else {
+        toast.setAttribute('role', 'status');
+        toast.className = 'fixed top-6 right-6 z-50 flex items-center gap-gutter-sm px-gutter-lg py-gutter-md rounded-full bg-warm-cream text-on-tertiary border border-tangerine-orange/40 shadow-2xl font-label text-label-md animate-panel-enter';
+        if (toastIcon) {
+          toastIcon.textContent = 'check_circle';
+          toastIcon.className = 'material-symbols-outlined text-[20px] text-tangerine-orange shrink-0';
+          toastIcon.style.fontVariationSettings = "'FILL' 1";
+        }
+      }
+
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        toast.classList.add('hidden');
+        toast.classList.remove('flex');
+      }, 3500);
+    }
+
+    // --- Global Accessibility: Escape Key to Close All Modals ---
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeBookingModal();
+        closeProjectModal();
+        closeCopilotModal();
+      }
+    });
+
+    // --- Copilot Handlers ---
     function quickBookFromCopilot(equipmentId, equipmentName, durationSlots) {
       closeCopilotModal();
       openBookingModal(equipmentId, equipmentName, durationSlots);
@@ -1449,6 +1436,7 @@ if (typeof module !== 'undefined') module.exports = globalThis.tailwind.config;
       const modal = document.getElementById('copilot-modal');
       modal.classList.remove('hidden');
       modal.classList.add('flex');
+      if (input) input.focus();
     }
 
     function closeCopilotModal() {
@@ -1459,9 +1447,15 @@ if (typeof module !== 'undefined') module.exports = globalThis.tailwind.config;
 
     function runCopilotPrompt(e) {
       e.preventDefault();
-      const val = document.getElementById('copilot-prompt-input').value.trim();
+      const input = document.getElementById('copilot-prompt-input');
+      const val = input ? input.value.trim() : '';
+      if (!val) {
+        showToast('Please type your project requirements or select a preset below.', true);
+        if (input) input.focus();
+        return;
+      }
       renderCopilotItems(activePOV, val);
-      showToast(val ? 'Gemini 3.8 Flash ranked best equipment for your project.' : 'Describe your project to see tailored equipment matches.');
+      showToast('Gemini 3.8 Flash ranked best equipment for your project.');
     }
 
     function applyCopilotSuggestion(msg) {
@@ -1469,18 +1463,20 @@ if (typeof module !== 'undefined') module.exports = globalThis.tailwind.config;
       showToast(msg);
     }
 
-    function switchPOV(povKey) {
+    // --- Perspective Switcher (Student / Faculty / Lab Assistant) ---
+    async function switchPOV(povKey) {
       activePOV = povKey;
+      await setPerspectiveAuth(povKey);
+
       const meta = povMeta[povKey];
       povTabs.forEach((tab) => {
         const isActive = tab.dataset.pov === povKey;
         tab.setAttribute('aria-selected', isActive ? 'true' : 'false');
+        tab.classList.toggle('bg-tangerine-orange', isActive);
         tab.classList.toggle('text-on-primary', isActive);
+        tab.classList.toggle('shadow-sm', isActive);
+        tab.classList.toggle('font-semibold', isActive);
         tab.classList.toggle('text-on-surface-variant', !isActive);
-        if (isActive && sliderThumb) {
-          const idx = Number(tab.dataset.index || 0);
-          sliderThumb.style.transform = `translateX(${idx * 100}%)`;
-        }
       });
 
       navItems.forEach((item) => {
@@ -1523,6 +1519,9 @@ if (typeof module !== 'undefined') module.exports = globalThis.tailwind.config;
         document.getElementById('copilot-desc').textContent = meta.copilotDesc;
         document.getElementById('copilot-btn-label').textContent = meta.copilotBtn;
       }
+
+      // Refresh real proposals on view switch
+      loadProposalsData();
     }
 
     function setNavItemActive(item, isActive) {
@@ -1536,47 +1535,38 @@ if (typeof module !== 'undefined') module.exports = globalThis.tailwind.config;
       }
     }
 
+    // --- Dynamic Subpage Navigation & Templates ---
     const subpageTemplates = {
       'student:discovery': `
         <div class="flex flex-wrap items-center justify-between gap-gutter-md">
           <div>
             <span class="font-mono text-label-sm text-tangerine-orange uppercase tracking-wider">Student · Cross-Dept Catalog</span>
             <h1 class="font-display text-display-lg-mobile lg:text-display-lg text-on-surface mt-gutter-xs">Equipment Explorer</h1>
-            <p class="font-body text-body-lg text-on-surface-variant">Browse GPUs, robotics arms, FPGAs, and 3D scanners open across campus.</p>
+            <p class="font-body text-body-lg text-on-surface-variant">Browse all 25 campus workstations, robotics arms, FPGAs, and bio instruments.</p>
           </div>
           <button type="button" onclick="openTabView('student','overview')" class="px-gutter-md py-gutter-sm rounded-full bg-surface-container text-on-surface border border-outline-variant font-label text-label-lg">← Back to Overview</button>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-gutter-lg">
-          <article class="rounded-xl bg-surface-container border border-outline-variant p-gutter-lg flex flex-col justify-between gap-gutter-md">
-            <div class="flex items-start justify-between gap-gutter-md">
-              <div><h2 class="font-title text-title-lg text-on-surface">NVIDIA H100 Tensor Core</h2><p class="font-body text-body-md text-on-surface-variant">CS AI Lab · Bay 02 · 80GB HBM3</p></div>
-              <span class="px-gutter-sm py-gutter-xs rounded-full bg-secondary-container text-on-secondary-container font-label text-label-sm">Available Now</span>
-            </div>
-            <button type="button" onclick="openBookingModal('NVIDIA H100 Tensor Core')" class="self-end px-gutter-md py-gutter-sm rounded-full bg-warm-cream text-on-tertiary font-label text-label-lg">Book Slot</button>
-          </article>
-          <article class="rounded-xl bg-surface-container border border-outline-variant p-gutter-lg flex flex-col justify-between gap-gutter-md">
-            <div class="flex items-start justify-between gap-gutter-md">
-              <div><h2 class="font-title text-title-lg text-on-surface">Franka Emika Panda Arm</h2><p class="font-body text-body-md text-on-surface-variant">Mech &amp; Robotics · Bay 05 · 7-DoF</p></div>
-              <span class="px-gutter-sm py-gutter-xs rounded-full bg-secondary-container text-on-secondary-container font-label text-label-sm">Available Now</span>
-            </div>
-            <button type="button" onclick="openBookingModal('Franka Emika Panda Arm')" class="self-end px-gutter-md py-gutter-sm rounded-full bg-warm-cream text-on-tertiary font-label text-label-lg">Book Slot</button>
-          </article>
-          <article class="rounded-xl bg-surface-container border border-outline-variant p-gutter-lg flex flex-col justify-between gap-gutter-md">
-            <div class="flex items-start justify-between gap-gutter-md">
-              <div><h2 class="font-title text-title-lg text-on-surface">Jetson Orin Nano Dev Kit</h2><p class="font-body text-body-md text-on-surface-variant">ECE Dept · 40 TOPS Edge AI</p></div>
-              <span class="px-gutter-sm py-gutter-xs rounded-full bg-primary-container text-on-primary-container font-label text-label-sm">Conflict 14:00</span>
-            </div>
-            <button type="button" onclick="openBookingModal('Jetson Orin Nano Dev Kit')" class="self-end px-gutter-md py-gutter-sm rounded-full bg-tangerine-orange text-on-primary font-label text-label-lg">Resolve Slot</button>
-          </article>
-          <article class="rounded-xl bg-surface-container border border-outline-variant p-gutter-lg flex flex-col justify-between gap-gutter-md">
-            <div class="flex items-start justify-between gap-gutter-md">
-              <div><h2 class="font-title text-title-lg text-on-surface">Leica BLK360 3D Scanner</h2><p class="font-body text-body-md text-on-surface-variant">Spatial Lab · Bay 08 · Point-cloud &amp; NeRF</p></div>
-              <span class="px-gutter-sm py-gutter-xs rounded-full bg-secondary-container text-on-secondary-container font-label text-label-sm">Available Now</span>
-            </div>
-            <button type="button" onclick="openBookingModal('Leica BLK360 3D Scanner')" class="self-end px-gutter-md py-gutter-sm rounded-full bg-warm-cream text-on-tertiary font-label text-label-lg">Book Slot</button>
-          </article>
+
+        <!-- Explorer Search & Filter Bar -->
+        <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-gutter-md my-gutter-md">
+          <div class="relative flex-1 max-w-md">
+            <span class="material-symbols-outlined text-[18px] text-on-surface-variant absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none">search</span>
+            <input id="explorer-search-input" oninput="filterExplorerItems(this.value)" type="search" placeholder="Search 25 campus instruments by name, dept, or spec..." class="w-full pl-10 pr-gutter-md py-gutter-sm rounded-full bg-surface-container-low border border-outline-variant text-body-md text-on-surface placeholder:text-on-surface-variant focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary">
+          </div>
+          <div class="flex flex-wrap items-center gap-gutter-xs" id="explorer-filter-pills">
+            <button type="button" onclick="setExplorerCategory('all', this)" class="explorer-cat-btn px-gutter-md py-gutter-xs rounded-full bg-tangerine-orange text-on-primary font-label text-label-sm">All</button>
+            <button type="button" onclick="setExplorerCategory('compute', this)" class="explorer-cat-btn px-gutter-md py-gutter-xs rounded-full bg-surface-container text-on-surface-variant border border-outline-variant font-label text-label-sm">Compute &amp; Edge</button>
+            <button type="button" onclick="setExplorerCategory('robotics', this)" class="explorer-cat-btn px-gutter-md py-gutter-xs rounded-full bg-surface-container text-on-surface-variant border border-outline-variant font-label text-label-sm">Robotics</button>
+            <button type="button" onclick="setExplorerCategory('sensors', this)" class="explorer-cat-btn px-gutter-md py-gutter-xs rounded-full bg-surface-container text-on-surface-variant border border-outline-variant font-label text-label-sm">RF &amp; Sensors</button>
+            <button type="button" onclick="setExplorerCategory('fab', this)" class="explorer-cat-btn px-gutter-md py-gutter-xs rounded-full bg-surface-container text-on-surface-variant border border-outline-variant font-label text-label-sm">Fab &amp; Bio</button>
+          </div>
+        </div>
+
+        <div id="explorer-equipment-grid" class="grid grid-cols-1 md:grid-cols-2 gap-gutter-lg">
+          <!-- Dynamically injected from real catalogue -->
         </div>
       `,
+
       'student:booking': `
         <div class="flex flex-wrap items-center justify-between gap-gutter-md">
           <div>
@@ -1586,28 +1576,47 @@ if (typeof module !== 'undefined') module.exports = globalThis.tailwind.config;
           </div>
           <button type="button" onclick="openTabView('student','overview')" class="px-gutter-md py-gutter-sm rounded-full bg-surface-container text-on-surface border border-outline-variant font-label text-label-lg">← Back to Overview</button>
         </div>
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter-xl">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter-xl my-gutter-md">
           <div class="lg:col-span-7 rounded-xl bg-surface-container border border-outline-variant p-gutter-lg flex flex-col gap-gutter-md">
             <h2 class="font-headline text-headline-md text-on-surface">Available Today · Recommended by Gemini 3.8 Flash</h2>
-            <button type="button" onclick="showToast('Smart slot locked: 14:00 – 16:00 · Mirror Bay 03')" class="w-full text-left p-gutter-md rounded-lg bg-surface-container-low border border-outline-variant hover:border-primary flex items-center justify-between gap-gutter-md">
-              <div><span class="font-title text-title-md text-on-surface block">14:00 – 16:00 · NVIDIA H100 (Mirror Bay 03)</span><span class="font-body text-body-md text-on-surface-variant">Zero conflict · High deadline priority</span></div>
+            
+            <button type="button" onclick="openBookingModal('equip_jetson_01', 'NVIDIA Jetson AGX Orin 64GB Industrial Dev Kit', 2)" class="w-full text-left p-gutter-md rounded-lg bg-surface-container-low border border-outline-variant hover:border-primary flex items-center justify-between gap-gutter-md transition">
+              <div>
+                <span class="font-title text-title-md text-on-surface block font-bold">14:00 – 15:00 · Jetson AGX Orin 64GB</span>
+                <span class="font-body text-body-md text-on-surface-variant">Robotics Center ECE-100 · 98% Deadline Fit</span>
+              </div>
               <span class="px-gutter-md py-gutter-xs rounded-full bg-tangerine-orange text-on-primary font-label text-label-sm">98% Match · Book</span>
             </button>
-            <button type="button" onclick="showToast('Smart slot locked: 16:30 – 18:30 · Bay 02 Off-Peak')" class="w-full text-left p-gutter-md rounded-lg bg-surface-container-low border border-outline-variant hover:border-primary flex items-center justify-between gap-gutter-md">
-              <div><span class="font-title text-title-md text-on-surface block">16:30 – 18:30 · NVIDIA H100 (Bay 02)</span><span class="font-body text-body-md text-on-surface-variant">Full 80GB HBM3 dedicated</span></div>
-              <span class="px-gutter-md py-gutter-xs rounded-full bg-warm-cream text-on-tertiary font-label text-label-sm">92% Match · Book</span>
+
+            <button type="button" onclick="openBookingModal('equip_rtx_01', 'Dual NVIDIA RTX 4090 AI Workstation Alpha', 2)" class="w-full text-left p-gutter-md rounded-lg bg-surface-container-low border border-outline-variant hover:border-primary flex items-center justify-between gap-gutter-md transition">
+              <div>
+                <span class="font-title text-title-md text-on-surface block font-bold">16:00 – 17:00 · Dual RTX 4090 Workstation</span>
+                <span class="font-body text-body-md text-on-surface-variant">CS AI Lab Bay 01 · Zero contention window</span>
+              </div>
+              <span class="px-gutter-md py-gutter-xs rounded-full bg-warm-cream text-on-tertiary font-label text-label-sm">94% Match · Book</span>
             </button>
+
+            <div class="mt-gutter-md p-gutter-md rounded-lg bg-surface-container-lowest border border-outline-variant flex flex-col gap-gutter-sm">
+              <span class="font-mono text-label-sm text-tangerine-orange">⚡ SIMULATE IRCTC CONTENTION &amp; MFPS ARBITRATION</span>
+              <p class="font-body text-body-sm text-on-surface-variant">Simulate 2 students colliding at the exact millisecond on the same workstation.</p>
+              <button type="button" onclick="simulateConflictArbitration()" class="self-start px-gutter-md py-gutter-xs rounded-full bg-tangerine-orange text-on-primary font-label text-label-sm hover:opacity-90">
+                Run IRCTC Multi-Factor Contention Test
+              </button>
+              <div id="arbitration-result" class="hidden text-xs font-mono p-gutter-sm rounded bg-surface-container border border-outline-variant mt-2 text-on-surface"></div>
+            </div>
           </div>
+
           <div class="lg:col-span-5 rounded-xl bg-hero-surface border border-outline-variant p-gutter-lg flex flex-col gap-gutter-md">
             <span class="font-mono text-label-sm text-warm-cream">YOUR SCHEDULE</span>
             <h2 class="font-headline text-headline-md text-warm-cream">Upcoming Confirmed</h2>
             <div class="rounded-lg bg-surface-container p-gutter-md border border-outline-variant flex items-center justify-between">
-              <div><span class="font-title text-title-md text-on-surface block">H100 Node · Bay 02</span><span class="font-mono text-mono-md text-on-surface-variant">14:00 – 16:00 Today</span></div>
+              <div><span class="font-title text-title-md text-on-surface block font-semibold">Jetson AGX Orin 64GB</span><span class="font-mono text-mono-md text-on-surface-variant">14:00 – 15:00 Today</span></div>
               <span class="px-gutter-sm py-gutter-xs rounded-full bg-tangerine-orange text-on-primary font-label text-label-sm">Confirmed</span>
             </div>
           </div>
         </div>
       `,
+
       'student:projects': `
         <div class="flex flex-wrap items-center justify-between gap-gutter-md">
           <div>
@@ -1620,17 +1629,11 @@ if (typeof module !== 'undefined') module.exports = globalThis.tailwind.config;
             <button type="button" onclick="openTabView('student','overview')" class="px-gutter-md py-gutter-sm rounded-full bg-surface-container text-on-surface border border-outline-variant font-label text-label-lg">← Overview</button>
           </div>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-gutter-lg">
-          <article class="rounded-xl bg-surface-container border border-outline-variant p-gutter-lg flex flex-col gap-gutter-sm">
-            <div class="flex items-center justify-between"><h2 class="font-title text-title-lg text-on-surface">CS-492 · Autonomous Vision</h2><span class="px-gutter-sm py-gutter-xs rounded-full bg-primary-container text-on-primary-container font-label text-label-sm">Pending</span></div>
-            <p class="font-body text-body-md text-on-surface-variant">48h NVIDIA H100 Node · Assigned Reviewer: Dr. Aris Thorne</p>
-          </article>
-          <article class="rounded-xl bg-surface-container border border-outline-variant p-gutter-lg flex flex-col gap-gutter-sm">
-            <div class="flex items-center justify-between"><h2 class="font-title text-title-lg text-on-surface">EE-310 · Edge Rover</h2><span class="px-gutter-sm py-gutter-xs rounded-full bg-secondary-container text-on-secondary-container font-label text-label-sm">Approved</span></div>
-            <p class="font-body text-body-md text-on-surface-variant">24h Jetson Orin Nano Kit · Active through Friday 18:00</p>
-          </article>
+        <div id="student-proposals-list" class="grid grid-cols-1 md:grid-cols-2 gap-gutter-lg my-gutter-md">
+          <!-- Dynamically populated from database -->
         </div>
       `,
+
       'teacher:analytics': `
         <div class="flex flex-wrap items-center justify-between gap-gutter-md">
           <div>
@@ -1640,12 +1643,13 @@ if (typeof module !== 'undefined') module.exports = globalThis.tailwind.config;
           </div>
           <button type="button" onclick="openTabView('teacher','overview')" class="px-gutter-md py-gutter-sm rounded-full bg-surface-container text-on-surface border border-outline-variant font-label text-label-lg">← Back to Overview</button>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-gutter-lg">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-gutter-lg my-gutter-md">
           <article class="rounded-xl bg-warm-cream text-on-tertiary p-gutter-lg flex flex-col gap-gutter-xs"><span class="font-mono text-label-sm">TOTAL HOURS</span><span class="font-display text-headline-lg tabular-nums">1,420h</span><span class="font-body text-body-md">+18% cross-dept sharing</span></article>
           <article class="rounded-xl bg-tangerine-orange text-on-primary p-gutter-lg flex flex-col gap-gutter-xs"><span class="font-mono text-label-sm">UTILIZATION</span><span class="font-display text-headline-lg tabular-nums">84.6%</span><span class="font-body text-body-md">Up from 61% pre-LabLink</span></article>
           <article class="rounded-xl bg-slate-blue text-on-secondary p-gutter-lg flex flex-col gap-gutter-xs"><span class="font-mono text-label-sm">CONFLICTS RESOLVED</span><span class="font-display text-headline-lg tabular-nums">38</span><span class="font-body text-body-md">Zero manual escalations</span></article>
         </div>
       `,
+
       'teacher:queue': `
         <div class="flex flex-wrap items-center justify-between gap-gutter-md">
           <div>
@@ -1655,17 +1659,11 @@ if (typeof module !== 'undefined') module.exports = globalThis.tailwind.config;
           </div>
           <button type="button" onclick="openTabView('teacher','overview')" class="px-gutter-md py-gutter-sm rounded-full bg-surface-container text-on-surface border border-outline-variant font-label text-label-lg">← Back to Overview</button>
         </div>
-        <div class="flex flex-col gap-gutter-md">
-          <article class="rounded-xl bg-surface-container border border-outline-variant p-gutter-lg flex flex-wrap items-center justify-between gap-gutter-md">
-            <div><h2 class="font-title text-title-lg text-on-surface">Maya Lin · CS-492 Autonomous Vision</h2><p class="font-body text-body-md text-on-surface-variant">48h NVIDIA H100 Node · 98% Fair Match · Due Friday</p></div>
-            <button type="button" onclick="this.textContent='Approved'; this.className='px-gutter-md py-gutter-sm rounded-full bg-secondary-container text-on-secondary-container font-label text-label-sm'; showToast('Maya Lin grant approved.');" class="px-gutter-md py-gutter-sm rounded-full bg-tangerine-orange text-on-primary font-label text-label-lg">Approve Grant</button>
-          </article>
-          <article class="rounded-xl bg-surface-container border border-outline-variant p-gutter-lg flex flex-wrap items-center justify-between gap-gutter-md">
-            <div><h2 class="font-title text-title-lg text-on-surface">Kian Patel · EE-310 Sim2Real Rover</h2><p class="font-body text-body-md text-on-surface-variant">24h Jetson Orin Kit · 91% Fair Match · Shift to Reserve #04</p></div>
-            <button type="button" onclick="this.textContent='Approved'; this.className='px-gutter-md py-gutter-sm rounded-full bg-secondary-container text-on-secondary-container font-label text-label-sm'; showToast('Kian Patel alt unit approved.');" class="px-gutter-md py-gutter-sm rounded-full bg-tangerine-orange text-on-primary font-label text-label-lg">Approve Alt Unit</button>
-          </article>
+        <div id="faculty-full-queue" class="flex flex-col gap-gutter-md my-gutter-md">
+          <!-- Dynamically populated from database -->
         </div>
       `,
+
       'teacher:cohorts': `
         <div class="flex flex-wrap items-center justify-between gap-gutter-md">
           <div>
@@ -1675,73 +1673,83 @@ if (typeof module !== 'undefined') module.exports = globalThis.tailwind.config;
           </div>
           <button type="button" onclick="openTabView('teacher','overview')" class="px-gutter-md py-gutter-sm rounded-full bg-surface-container text-on-surface border border-outline-variant font-label text-label-lg">← Back to Overview</button>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-gutter-lg">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-gutter-lg my-gutter-md">
           <article class="rounded-xl bg-surface-container border border-outline-variant p-gutter-lg flex items-center justify-between gap-gutter-md">
-            <div><h2 class="font-title text-title-lg text-on-surface">Team Alpha · Maya Lin</h2><p class="font-body text-body-md text-on-surface-variant">CS-492 · H100 Bay 02 · 28 / 48 hrs</p></div>
-            <button type="button" onclick="this.textContent='Boosted'; this.className='px-gutter-md py-gutter-sm rounded-full bg-secondary-container text-on-secondary-container font-label text-label-sm'; showToast('Friday priority boosted for Team Alpha.');" class="px-gutter-md py-gutter-sm rounded-full bg-tangerine-orange text-on-primary font-label text-label-sm">Boost Priority</button>
+            <div><h2 class="font-title text-title-lg text-on-surface font-semibold">Team Alpha · Maya Lin</h2><p class="font-body text-body-md text-on-surface-variant">CS-492 · Dual RTX 4090 · 28 / 48 hrs</p></div>
+            <span class="px-gutter-md py-gutter-xs rounded-full bg-secondary-container text-on-secondary-container font-label text-label-sm">Active</span>
           </article>
           <article class="rounded-xl bg-surface-container border border-outline-variant p-gutter-lg flex items-center justify-between gap-gutter-md">
-            <div><h2 class="font-title text-title-lg text-on-surface">Team Rover · Kian Patel</h2><p class="font-body text-body-md text-on-surface-variant">EE-310 · Jetson Orin · 14 / 30 hrs</p></div>
-            <button type="button" onclick="this.textContent='Approved'; this.className='px-gutter-md py-gutter-sm rounded-full bg-secondary-container text-on-secondary-container font-label text-label-sm'; showToast('Kit approved for Team Rover.');" class="px-gutter-md py-gutter-sm rounded-full bg-warm-cream text-on-tertiary font-label text-label-sm">Approve Kit</button>
+            <div><h2 class="font-title text-title-lg text-on-surface font-semibold">Team Rover · Kian Patel</h2><p class="font-body text-body-md text-on-surface-variant">EE-310 · Jetson AGX Orin · 18 / 24 hrs</p></div>
+            <span class="px-gutter-md py-gutter-xs rounded-full bg-secondary-container text-on-secondary-container font-label text-label-sm">Active</span>
           </article>
         </div>
       `,
+
       'admin:telemetry': `
         <div class="flex flex-wrap items-center justify-between gap-gutter-md">
           <div>
-            <span class="font-mono text-label-sm text-tangerine-orange uppercase tracking-wider">Lab Assistant · Live Sensors</span>
-            <h1 class="font-display text-display-lg-mobile lg:text-display-lg text-on-surface mt-gutter-xs">Bay Telemetry</h1>
-            <p class="font-body text-body-lg text-on-surface-variant">Real-time GPU thermals, power draw, and remote bay lock controls.</p>
+            <span class="font-mono text-label-sm text-tangerine-orange uppercase tracking-wider">Lab Assistant · Live Telemetry</span>
+            <h1 class="font-display text-display-lg-mobile lg:text-display-lg text-on-surface mt-gutter-xs">Bay Telemetry &amp; Environmental Sensors</h1>
+            <p class="font-body text-body-lg text-on-surface-variant">Live hardware temperature, power consumption, and slot occupancy across campus bays.</p>
           </div>
           <button type="button" onclick="openTabView('admin','overview')" class="px-gutter-md py-gutter-sm rounded-full bg-surface-container text-on-surface border border-outline-variant font-label text-label-lg">← Back to Overview</button>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-gutter-lg">
-          <article class="rounded-xl bg-surface-container border border-outline-variant p-gutter-lg flex items-center justify-between gap-gutter-md">
-            <div><h2 class="font-title text-title-lg text-on-surface">Bay 01–04 · NVIDIA H100 Cluster</h2><p class="font-mono text-mono-md text-on-surface-variant">62°C · 88% Load · 4.8 kW</p></div>
-            <button type="button" onclick="toggleBayLock(this)" class="px-gutter-md py-gutter-sm rounded-full bg-secondary-container text-on-secondary-container font-label text-label-sm">Healthy · Lock Bay</button>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-gutter-lg my-gutter-md">
+          <article class="rounded-xl bg-surface-container border border-outline-variant p-gutter-lg flex flex-col gap-gutter-xs">
+            <span class="font-mono text-label-sm text-on-surface-variant">BAY 01 · CS AI LAB</span>
+            <span class="font-headline text-headline-md text-on-surface">Dual RTX 4090 Workstation</span>
+            <span class="font-body text-body-sm text-secondary-container text-on-secondary-container px-2 py-0.5 rounded-full self-start">58°C · Nominal</span>
           </article>
-          <article class="rounded-xl bg-surface-container border border-outline-variant p-gutter-lg flex items-center justify-between gap-gutter-md">
-            <div><h2 class="font-title text-title-lg text-on-surface">Bay 07 · Formlabs Form 4 SLA</h2><p class="font-mono text-mono-md text-on-surface-variant">Resin 8% · Vat 31°C · Paused</p></div>
-            <button type="button" onclick="toggleBayLock(this)" class="px-gutter-md py-gutter-sm rounded-full bg-primary-container text-on-primary-container font-label text-label-sm">Maintenance · Unlock</button>
+          <article class="rounded-xl bg-surface-container border border-outline-variant p-gutter-lg flex flex-col gap-gutter-xs">
+            <span class="font-mono text-label-sm text-on-surface-variant">BAY 02 · ROBOTICS CELL</span>
+            <span class="font-headline text-headline-md text-on-surface">Universal Robots UR5e</span>
+            <span class="font-body text-body-sm text-secondary-container text-on-secondary-container px-2 py-0.5 rounded-full self-start">42°C · Calibrated</span>
+          </article>
+          <article class="rounded-xl bg-surface-container border border-outline-variant p-gutter-lg flex flex-col gap-gutter-xs">
+            <span class="font-mono text-label-sm text-on-surface-variant">BAY 03 · BIOTECH ROOM</span>
+            <span class="font-headline text-headline-md text-on-surface">Bio-Rad CFX96 qPCR</span>
+            <span class="font-body text-body-sm text-secondary-container text-on-secondary-container px-2 py-0.5 rounded-full self-start">Ready · Standby</span>
           </article>
         </div>
       `,
+
       'admin:maintenance': `
         <div class="flex flex-wrap items-center justify-between gap-gutter-md">
           <div>
-            <span class="font-mono text-label-sm text-tangerine-orange uppercase tracking-wider">Lab Assistant · Service Queue</span>
-            <h1 class="font-display text-display-lg-mobile lg:text-display-lg text-on-surface mt-gutter-xs">Maintenance Queue</h1>
-            <p class="font-body text-body-lg text-on-surface-variant">Complete consumable refills and calibrations before evening student slots.</p>
+            <span class="font-mono text-label-sm text-tangerine-orange uppercase tracking-wider">Lab Assistant · Preventive Maintenance</span>
+            <h1 class="font-display text-display-lg-mobile lg:text-display-lg text-on-surface mt-gutter-xs">Hardware Calibration Queue</h1>
+            <p class="font-body text-body-lg text-on-surface-variant">Scheduled calibrations, preventive maintenance windows, and bay locking.</p>
           </div>
           <button type="button" onclick="openTabView('admin','overview')" class="px-gutter-md py-gutter-sm rounded-full bg-surface-container text-on-surface border border-outline-variant font-label text-label-lg">← Back to Overview</button>
         </div>
-        <div class="flex flex-col gap-gutter-md">
+        <div class="flex flex-col gap-gutter-md my-gutter-md">
           <article class="rounded-xl bg-surface-container border border-outline-variant p-gutter-lg flex items-center justify-between gap-gutter-md">
-            <div><h2 class="font-title text-title-lg text-on-surface">Bay 07 · Resin Cartridge Refill</h2><p class="font-body text-body-md text-on-surface-variant">Cartridge at 8% · Swap Tough 2000 V2 lot #44B</p></div>
-            <button type="button" onclick="this.textContent='Signed Off'; this.className='px-gutter-md py-gutter-sm rounded-full bg-secondary-container text-on-secondary-container font-label text-label-sm'; showToast('Bay 07 refill signed off & unlocked.');" class="px-gutter-md py-gutter-sm rounded-full bg-tangerine-orange text-on-primary font-label text-label-lg">Mark Complete</button>
+            <div><h2 class="font-title text-title-lg text-on-surface font-semibold">Formlabs Form 4 SLA 3D Printer</h2><p class="font-body text-body-md text-on-surface-variant">Resin tank inspection due in 4 hours · ME-105</p></div>
+            <button type="button" onclick="toggleBayLock(this)" class="px-gutter-md py-gutter-xs rounded-full bg-secondary-container text-on-secondary-container font-label text-label-sm">Healthy · Lock Bay</button>
           </article>
           <article class="rounded-xl bg-surface-container border border-outline-variant p-gutter-lg flex items-center justify-between gap-gutter-md">
-            <div><h2 class="font-title text-title-lg text-on-surface">Bay 05 · Franka Arm Calibration</h2><p class="font-body text-body-md text-on-surface-variant">Scheduled 17:00 · 7-DoF zero-torque verification</p></div>
-            <button type="button" onclick="this.textContent='Signed Off'; this.className='px-gutter-md py-gutter-sm rounded-full bg-secondary-container text-on-secondary-container font-label text-label-sm'; showToast('Bay 05 calibration signed off.');" class="px-gutter-md py-gutter-sm rounded-full bg-warm-cream text-on-tertiary font-label text-label-lg">Mark Complete</button>
+            <div><h2 class="font-title text-title-lg text-on-surface font-semibold">Epilog Fusion Pro 48 CO2 Laser Cutter</h2><p class="font-body text-body-md text-on-surface-variant">Optics mirror alignment check · ME-110</p></div>
+            <button type="button" onclick="toggleBayLock(this)" class="px-gutter-md py-gutter-xs rounded-full bg-secondary-container text-on-secondary-container font-label text-label-sm">Healthy · Lock Bay</button>
           </article>
         </div>
       `,
+
       'admin:sharing': `
         <div class="flex flex-wrap items-center justify-between gap-gutter-md">
           <div>
-            <span class="font-mono text-label-sm text-tangerine-orange uppercase tracking-wider">Lab Assistant · Cross-Dept Policy</span>
-            <h1 class="font-display text-display-lg-mobile lg:text-display-lg text-on-surface mt-gutter-xs">Sharing Rules</h1>
-            <p class="font-body text-body-lg text-on-surface-variant">Control cross-department idle sharing windows and Gemini 3.8 Flash conflict weights.</p>
+            <span class="font-mono text-label-sm text-tangerine-orange uppercase tracking-wider">Lab Assistant · Campus Sharing Rules</span>
+            <h1 class="font-display text-display-lg-mobile lg:text-display-lg text-on-surface mt-gutter-xs">Cross-Department Borrowing Rules</h1>
+            <p class="font-body text-body-lg text-on-surface-variant">Enable automated cross-department loans between ECE, CSE, Mech, and Biotech.</p>
           </div>
           <button type="button" onclick="openTabView('admin','overview')" class="px-gutter-md py-gutter-sm rounded-full bg-surface-container text-on-surface border border-outline-variant font-label text-label-lg">← Back to Overview</button>
         </div>
-        <div class="flex flex-col gap-gutter-md">
+        <div class="flex flex-col gap-gutter-md my-gutter-md">
           <article class="rounded-xl bg-surface-container border border-outline-variant p-gutter-lg flex items-center justify-between gap-gutter-md">
-            <div><h2 class="font-title text-title-lg text-on-surface">CS AI Lab · H100 &amp; A100 Cluster</h2><p class="font-body text-body-md text-on-surface-variant">Open to ECE &amp; DS students after 14:00 · Max 6h/session</p></div>
+            <div><h2 class="font-title text-title-lg text-on-surface font-semibold">CS AI Lab · RTX 4090 &amp; A100 Nodes</h2><p class="font-body text-body-md text-on-surface-variant">Open to ECE &amp; Biotech students after 14:00 · Max 4h/session</p></div>
             <button type="button" onclick="this.textContent = this.textContent==='Enabled' ? 'Paused' : 'Enabled'; showToast('CS AI Lab sharing rule updated.');" class="px-gutter-md py-gutter-sm rounded-full bg-tangerine-orange text-on-primary font-label text-label-sm">Enabled</button>
           </article>
           <article class="rounded-xl bg-surface-container border border-outline-variant p-gutter-lg flex items-center justify-between gap-gutter-md">
-            <div><h2 class="font-title text-title-lg text-on-surface">ECE Dept · Jetson &amp; FPGA Kits</h2><p class="font-body text-body-md text-on-surface-variant">24h reserve checkout for capstone teams with faculty sign-off</p></div>
+            <div><h2 class="font-title text-title-lg text-on-surface font-semibold">ECE Dept · Jetson &amp; FPGA Kits</h2><p class="font-body text-body-md text-on-surface-variant">Reserve checkout for capstone teams with faculty sign-off</p></div>
             <button type="button" onclick="this.textContent = this.textContent==='Enabled' ? 'Paused' : 'Enabled'; showToast('ECE Dept sharing rule updated.');" class="px-gutter-md py-gutter-sm rounded-full bg-tangerine-orange text-on-primary font-label text-label-sm">Enabled</button>
           </article>
         </div>
@@ -1781,6 +1789,15 @@ if (typeof module !== 'undefined') module.exports = globalThis.tailwind.config;
         void subView.offsetWidth;
         subView.classList.add('animate-panel-enter');
         window.scrollTo({ top: 0, behavior: 'smooth' });
+
+        // Trigger dynamic subview hydration
+        if (target === 'discovery') {
+          renderEquipmentExplorer();
+        } else if (target === 'queue') {
+          renderFacultyFullQueue();
+        } else if (target === 'projects') {
+          renderStudentProposals();
+        }
       }
     }
 
@@ -1794,9 +1811,88 @@ if (typeof module !== 'undefined') module.exports = globalThis.tailwind.config;
       tab.addEventListener('click', () => switchPOV(tab.dataset.pov));
     });
 
-    const initialPov = new URLSearchParams(window.location.search).get('pov');
-    if (initialPov && povMeta[initialPov]) {
-      switchPOV(initialPov);
+    // --- Dynamic Equipment Catalog Loading & Filtering ---
+    let cachedEquipmentList = [];
+    let currentExplorerCategory = 'all';
+
+    function getHourlyCost(item) {
+      if (typeof item.hourly_rate === 'number') return item.hourly_rate;
+      if (item.hourly_cost_estimate) {
+        const parsed = parseFloat(String(item.hourly_cost_estimate).replace(/[^0-9.]/g, ''));
+        if (!isNaN(parsed)) return parsed;
+      }
+      return 2.0;
+    }
+
+    function getCategoryAndIcon(item) {
+      let category = 'compute';
+      let icon = 'memory';
+      let iconBg = 'bg-tangerine-orange text-on-primary';
+      const nameLower = (item.name + ' ' + item.department + ' ' + (item.category || '')).toLowerCase();
+
+      if (nameLower.includes('robot') || nameLower.includes('arm') || nameLower.includes('kuka') || nameLower.includes('ur5e')) {
+        category = 'robotics';
+        icon = 'precision_manufacturing';
+        iconBg = 'bg-secondary-container text-on-secondary-container';
+      } else if (nameLower.includes('scope') || nameLower.includes('oscilloscope') || nameLower.includes('vna') || nameLower.includes('spectrum') || nameLower.includes('logic') || nameLower.includes('sdr') || nameLower.includes('sourcemeter') || nameLower.includes('sensor')) {
+        category = 'sensors';
+        icon = 'sensors';
+        iconBg = 'bg-slate-blue text-on-secondary';
+      } else if (nameLower.includes('3d') || nameLower.includes('print') || nameLower.includes('pcr') || nameLower.includes('hplc') || nameLower.includes('centrifuge') || nameLower.includes('solder') || nameLower.includes('fab') || nameLower.includes('biotech')) {
+        category = 'fab';
+        icon = 'build';
+        iconBg = 'bg-warm-cream text-on-tertiary';
+      } else if (nameLower.includes('pi') || nameLower.includes('stm32') || nameLower.includes('arduino') || nameLower.includes('msp430') || nameLower.includes('esp32') || nameLower.includes('fpga') || nameLower.includes('jetson')) {
+        category = 'compute';
+        icon = 'developer_board';
+        iconBg = 'bg-secondary-container text-on-secondary-container';
+      }
+      return { category, icon, iconBg };
+    }
+
+    async function loadDynamicEquipment() {
+      const list = document.getElementById('equipment-list');
+      try {
+        const res = await apiFetch('/api/v1/equipment');
+        if (!res.ok) return;
+        cachedEquipmentList = await res.json();
+        if (!cachedEquipmentList || cachedEquipmentList.length === 0) return;
+
+        if (list) {
+          list.innerHTML = cachedEquipmentList.map(item => {
+            const { category, icon, iconBg } = getCategoryAndIcon(item);
+            const hourly = getHourlyCost(item);
+            const tier = hourly <= 1.5 ? 'Frugal Entry' : (hourly <= 5.0 ? 'Mid-Range' : 'High-End');
+            const tierClass = hourly <= 1.5 ? 'bg-secondary-container text-on-secondary-container' : (hourly <= 5.0 ? 'bg-surface-container-high text-on-surface' : 'bg-primary-container text-on-primary-container');
+            const safeName = escapeHtml(item.name);
+            const safeDept = escapeHtml(item.department);
+            const safeLoc = escapeHtml(item.location);
+            const rawNameJs = item.name.replace(/'/g, "\'");
+
+            return `
+              <article data-category="${category}" data-name="${safeName.toLowerCase()} ${safeDept.toLowerCase()} ${safeLoc.toLowerCase()}" class="equip-card rounded-xl bg-surface-container p-gutter-lg border border-outline-variant flex flex-col sm:flex-row sm:items-center justify-between gap-gutter-md transition-transform duration-state-change ease-state-change hover:-translate-y-0.5">
+                <div class="flex items-start sm:items-center gap-gutter-md">
+                  <span class="inline-flex items-center justify-center w-11 h-11 rounded-full ${iconBg} shrink-0">
+                    <span class="material-symbols-outlined text-[22px]">${icon}</span>
+                  </span>
+                  <div class="flex flex-col gap-gutter-xs">
+                    <div class="flex flex-wrap items-center gap-gutter-sm">
+                      <h3 class="font-title text-title-md text-on-surface font-semibold">${safeName}</h3>
+                      <span class="px-gutter-sm py-gutter-xs rounded-full ${tierClass} font-label text-label-sm">${tier} · $${hourly.toFixed(2)}/hr</span>
+                    </div>
+                    <p class="font-body text-body-md text-on-surface-variant">${safeDept} · ${safeLoc}</p>
+                  </div>
+                </div>
+                <button type="button" onclick="openBookingModal('${item.id}', '${rawNameJs}', 2)" class="shrink-0 px-gutter-md py-gutter-sm rounded-full bg-warm-cream text-on-tertiary font-label text-label-lg transition-all duration-state-change ease-state-change hover:-translate-y-0.5 hover:bg-tangerine-orange hover:text-on-primary shadow-sm">
+                  <span>Book Slot</span>
+                </button>
+              </article>
+            `;
+          }).join('');
+        }
+      } catch (e) {
+        console.warn('Failed to load dynamic equipment from API:', e);
+      }
     }
 
     function filterEquipment(category) {
@@ -1815,17 +1911,94 @@ if (typeof module !== 'undefined') module.exports = globalThis.tailwind.config;
       });
     }
 
+    // Equipment Explorer Rendering & Filtering
+    function renderEquipmentExplorer() {
+      const grid = document.getElementById('explorer-equipment-grid');
+      if (!grid) return;
+
+      if (!cachedEquipmentList || cachedEquipmentList.length === 0) {
+        grid.innerHTML = '<p class="text-on-surface-variant">Loading campus hardware catalog...</p>';
+        return;
+      }
+
+      grid.innerHTML = cachedEquipmentList.map(item => {
+        const { category, icon, iconBg } = getCategoryAndIcon(item);
+        const hourly = getHourlyCost(item);
+        const tier = hourly <= 1.5 ? 'Frugal Entry' : (hourly <= 5.0 ? 'Mid-Range' : 'High-End');
+        const tierClass = hourly <= 1.5 ? 'bg-secondary-container text-on-secondary-container' : (hourly <= 5.0 ? 'bg-surface-container-high text-on-surface' : 'bg-primary-container text-on-primary-container');
+        const safeName = escapeHtml(item.name);
+        const safeDept = escapeHtml(item.department);
+        const safeLoc = escapeHtml(item.location);
+        const rawNameJs = item.name.replace(/'/g, "\'");
+
+        return `
+          <article data-category="${category}" data-name="${safeName.toLowerCase()} ${safeDept.toLowerCase()} ${safeLoc.toLowerCase()}" class="explorer-card rounded-xl bg-surface-container border border-outline-variant p-gutter-lg flex flex-col justify-between gap-gutter-md hover:border-tangerine-orange/50 transition">
+            <div class="flex items-start justify-between gap-gutter-md">
+              <div class="flex items-center gap-gutter-sm">
+                <span class="inline-flex items-center justify-center w-10 h-10 rounded-full ${iconBg} shrink-0">
+                  <span class="material-symbols-outlined text-[20px]">${icon}</span>
+                </span>
+                <div>
+                  <h2 class="font-title text-title-lg text-on-surface font-semibold">${safeName}</h2>
+                  <p class="font-body text-body-md text-on-surface-variant">${safeDept} · ${safeLoc}</p>
+                </div>
+              </div>
+              <span class="px-gutter-sm py-gutter-xs rounded-full ${tierClass} font-label text-label-sm shrink-0">$${hourly.toFixed(2)}/hr</span>
+            </div>
+            <div class="flex items-center justify-between pt-gutter-sm border-t border-outline-variant">
+              <span class="font-mono text-label-sm text-secondary">32-Bit Slot Bitmask Active</span>
+              <button type="button" onclick="openBookingModal('${item.id}', '${rawNameJs}', 2)" class="px-gutter-md py-gutter-sm rounded-full bg-warm-cream text-on-tertiary font-label text-label-md hover:bg-tangerine-orange hover:text-on-primary transition">
+                Book Slot
+              </button>
+            </div>
+          </article>
+        `;
+      }).join('');
+    }
+
+    function filterExplorerItems(query) {
+      const q = (query || '').trim().toLowerCase();
+      document.querySelectorAll('.explorer-card').forEach((card) => {
+        const name = card.dataset.name || '';
+        const cat = card.dataset.category || '';
+        const matchesCat = currentExplorerCategory === 'all' || cat === currentExplorerCategory;
+        const matchesText = q.length === 0 || name.includes(q);
+        card.classList.toggle('hidden', !(matchesCat && matchesText));
+      });
+    }
+
+    function setExplorerCategory(cat, btn) {
+      currentExplorerCategory = cat;
+      document.querySelectorAll('.explorer-cat-btn').forEach((b) => {
+        const active = b === btn;
+        b.classList.toggle('bg-tangerine-orange', active);
+        b.classList.toggle('text-on-primary', active);
+        b.classList.toggle('bg-surface-container', !active);
+        b.classList.toggle('text-on-surface-variant', !active);
+      });
+      const input = document.getElementById('explorer-search-input');
+      filterExplorerItems(input ? input.value : '');
+    }
+
+    // Top Header Search Bar Listener
     const searchInput = document.getElementById('lab-search');
     if (searchInput) {
       searchInput.addEventListener('input', (e) => {
         const q = e.target.value.trim().toLowerCase();
+        // Filter overview cards
         document.querySelectorAll('.equip-card').forEach((card) => {
+          const name = card.dataset.name || '';
+          card.classList.toggle('hidden', q.length > 0 && !name.includes(q));
+        });
+        // Also filter explorer cards if active
+        document.querySelectorAll('.explorer-card').forEach((card) => {
           const name = card.dataset.name || '';
           card.classList.toggle('hidden', q.length > 0 && !name.includes(q));
         });
       });
     }
 
+    // --- Slot Booking Dialog & Execution ---
     let currentBookingEquipId = 'equip_rpi_01';
     let currentBookingEquipName = 'Raspberry Pi 5 Edge AI Prototyping Kit';
     let currentBookingDurationSlots = 2;
@@ -1836,7 +2009,7 @@ if (typeof module !== 'undefined') module.exports = globalThis.tailwind.config;
         currentBookingEquipName = maybeName;
       } else {
         currentBookingEquipName = equipIdOrName;
-        const match = (equipmentCatalog || []).find(e => (e.title || '').toLowerCase().includes((equipIdOrName || '').toLowerCase()));
+        const match = (cachedEquipmentList || []).find(e => (e.name || '').toLowerCase().includes((equipIdOrName || '').toLowerCase()));
         currentBookingEquipId = match ? match.id : 'equip_rpi_01';
       }
       currentBookingDurationSlots = durationSlots || 2;
@@ -1870,19 +2043,22 @@ if (typeof module !== 'undefined') module.exports = globalThis.tailwind.config;
 
     async function confirmBookingWithDetails(slotIndex, slotLabel) {
       closeBookingModal();
-      showToast(`Locking ${slotLabel} for ${currentBookingEquipName}...`);
+      showToast(`Reserving ${slotLabel} for ${currentBookingEquipName}...`);
+      const todayStr = new Date().toISOString().split('T')[0];
+
       try {
         const payload = {
           equipment_id: currentBookingEquipId,
-          student_id: 'stu_arjun_01',
-          student_name: 'Arjun Sharma',
+          student_id: 'stu_maya_01',
+          student_name: 'Maya Lin',
           project_id: 'proj_capstone_slam',
           project_title: 'Autonomous Campus Drone SLAM',
+          booking_date: todayStr,
           slot_index: slotIndex,
           duration_slots: currentBookingDurationSlots,
           purpose_abstract: `Student-selected allocation for ${currentBookingEquipName}`
         };
-        const res = await fetch('/api/v1/bookings', {
+        const res = await apiFetch('/api/v1/bookings', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload)
@@ -1892,7 +2068,7 @@ if (typeof module !== 'undefined') module.exports = globalThis.tailwind.config;
           showToast(`⚡ Slot Locked (${data.start_time} - ${data.end_time}) under BookMyShow 10-min Leased Hold!`);
         } else {
           const err = await res.json();
-          showToast(`⚡ ${err.detail || 'Slot contention handled by IRCTC priority engine.'}`);
+          showToast(`⚡ ${err.detail || 'Slot contention handled by IRCTC priority engine.'}`, true);
         }
       } catch (e) {
         showToast(`Smart slot reserved: ${slotLabel}`);
@@ -1903,71 +2079,257 @@ if (typeof module !== 'undefined') module.exports = globalThis.tailwind.config;
       confirmBookingWithDetails(6, slot);
     }
 
-    async function loadDynamicEquipment() {
-      const list = document.getElementById('equipment-list');
-      if (!list) return;
-
+    // --- Interactive Contention Simulation ---
+    async function simulateConflictArbitration() {
+      const resBox = document.getElementById('arbitration-result');
+      if (resBox) {
+        resBox.classList.remove('hidden');
+        resBox.textContent = 'Submitting simultaneous colliding requests to IRCTC arbiter...';
+      }
       try {
-        const res = await fetch('/api/v1/equipment');
-        if (!res.ok) return;
-        const items = await res.json();
-        if (!items || items.length === 0) return;
-
-        list.innerHTML = items.map(item => {
-          let category = 'compute';
-          let icon = 'memory';
-          let iconBg = 'bg-tangerine-orange text-on-primary';
-          const nameLower = (item.name + ' ' + item.department + ' ' + (item.category || '')).toLowerCase();
-
-          if (nameLower.includes('robot') || nameLower.includes('arm') || nameLower.includes('kuka') || nameLower.includes('ur5e')) {
-            category = 'robotics';
-            icon = 'precision_manufacturing';
-            iconBg = 'bg-secondary-container text-on-secondary-container';
-          } else if (nameLower.includes('scope') || nameLower.includes('oscilloscope') || nameLower.includes('vna') || nameLower.includes('spectrum') || nameLower.includes('logic') || nameLower.includes('sdr') || nameLower.includes('sourcemeter') || nameLower.includes('sensor')) {
-            category = 'sensors';
-            icon = 'sensors';
-            iconBg = 'bg-slate-blue text-on-secondary';
-          } else if (nameLower.includes('3d') || nameLower.includes('print') || nameLower.includes('pcr') || nameLower.includes('hplc') || nameLower.includes('centrifuge') || nameLower.includes('solder') || nameLower.includes('fab') || nameLower.includes('biotech')) {
-            category = 'fab';
-            icon = 'build';
-            iconBg = 'bg-warm-cream text-on-tertiary';
-          } else if (nameLower.includes('pi') || nameLower.includes('stm32') || nameLower.includes('arduino') || nameLower.includes('msp430') || nameLower.includes('esp32') || nameLower.includes('fpga') || nameLower.includes('jetson')) {
-            category = 'compute';
-            icon = 'developer_board';
-            iconBg = 'bg-secondary-container text-on-secondary-container';
+        const todayStr = new Date().toISOString().split('T')[0];
+        const res = await apiFetch('/api/v1/conflicts/resolve', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            equipment_id: 'equip_jetson_01',
+            booking_date: todayStr,
+            slot_index: 8,
+            duration_slots: 2,
+            competing_requests: [
+              {
+                student_id: 'stu_maya_01',
+                student_name: 'Maya Lin',
+                academic_tier: 'capstone',
+                submission_deadline_days: 0.25,
+                hours_used_this_month: 2.0,
+                safety_certified: true,
+                project_abstract: 'Urgent autonomous drone thesis defense in 6 hours.'
+              },
+              {
+                student_id: 'stu_kian_02',
+                student_name: 'Kian Patel',
+                academic_tier: 'course_lab',
+                submission_deadline_days: 14.0,
+                hours_used_this_month: 28.0,
+                safety_certified: true,
+                project_abstract: 'General exploration lab.'
+              }
+            ]
+          })
+        });
+        if (res.ok) {
+          const data = await res.json();
+          showToast(`⚡ Conflict Arbitrated! Winner: ${data.awarded_student_name} (Hold: ${data.hold_lease_duration_minutes}m)`);
+          if (resBox) {
+            resBox.textContent = `WINNER: ${data.awarded_student_name} | Score: ${data.winner_priority_score} | IRCTC Vikalp Runner-up: ${data.runner_up_resolution}`;
           }
-
-          const tier = item.hourly_rate <= 1.5 ? 'Frugal Entry' : (item.hourly_rate <= 5.0 ? 'Mid-Range' : 'High-End');
-          const tierClass = item.hourly_rate <= 1.5 ? 'bg-secondary-container text-on-secondary-container' : (item.hourly_rate <= 5.0 ? 'bg-surface-container-high text-on-surface' : 'bg-primary-container text-on-primary-container');
-
-          return `
-            <article data-category="${category}" data-name="${item.name.toLowerCase()} ${item.department.toLowerCase()} ${item.location.toLowerCase()}" class="equip-card rounded-xl bg-surface-container p-gutter-lg border border-outline-variant flex flex-col sm:flex-row sm:items-center justify-between gap-gutter-md transition-transform duration-state-change ease-state-change hover:-translate-y-0.5">
-              <div class="flex items-start sm:items-center gap-gutter-md">
-                <span class="inline-flex items-center justify-center w-11 h-11 rounded-full ${iconBg} shrink-0">
-                  <span class="material-symbols-outlined text-[22px]">${icon}</span>
-                </span>
-                <div class="flex flex-col gap-gutter-xs">
-                  <div class="flex flex-wrap items-center gap-gutter-sm">
-                    <h3 class="font-title text-title-md text-on-surface font-semibold">${item.name}</h3>
-                    <span class="px-gutter-sm py-gutter-xs rounded-full ${tierClass} font-label text-label-sm">${tier} · $${item.hourly_rate.toFixed(2)}/hr</span>
-                  </div>
-                  <p class="font-body text-body-md text-on-surface-variant">${item.department} · ${item.location}</p>
-                </div>
-              </div>
-              <button type="button" onclick="openBookingModal('${item.id}', '${item.name.replace(/'/g, "\\'")}', 2)" class="shrink-0 px-gutter-md py-gutter-sm rounded-full bg-warm-cream text-on-tertiary font-label text-label-lg transition-all duration-state-change ease-state-change hover:-translate-y-0.5 hover:bg-tangerine-orange hover:text-on-primary shadow-sm">
-                <span>Book Slot</span>
-              </button>
-            </article>
-          `;
-        }).join('');
+        } else {
+          const err = await res.json();
+          showToast(err.detail || 'Contention simulation completed', true);
+        }
       } catch (e) {
-        console.warn('Failed to load dynamic equipment, keeping static list:', e);
+        showToast('Arbitration simulation error', true);
       }
     }
 
-    // Load dynamic equipment on start
-    document.addEventListener('DOMContentLoaded', loadDynamicEquipment);
-    loadDynamicEquipment();
+    // --- Project Proposals & Faculty Approvals Data Engine ---
+    let activeProposals = [];
+
+    async function loadProposalsData() {
+      try {
+        const res = await apiFetch('/api/v1/approvals');
+        if (res.ok) {
+          activeProposals = await res.json();
+          renderFacultyOverviewQueue();
+          renderFacultyFullQueue();
+          renderStudentProposals();
+          updateFacultyPendingBadge();
+        }
+      } catch (e) {
+        console.warn('Could not load proposals from server:', e);
+      }
+    }
+
+    function updateFacultyPendingBadge() {
+      const pending = activeProposals.filter(p => p.status === 'PENDING').length;
+      const counter = document.getElementById('faculty-pending-count');
+      if (counter) counter.textContent = String(pending);
+    }
+
+    function renderFacultyOverviewQueue() {
+      const el = document.getElementById('faculty-overview-queue');
+      if (!el) return;
+
+      if (!activeProposals || activeProposals.length === 0) {
+        el.innerHTML = '<p class="text-on-surface-variant font-body text-body-sm">No pending student proposals.</p>';
+        return;
+      }
+
+      const pendingItems = activeProposals.filter(p => p.status === 'PENDING').slice(0, 3);
+      if (pendingItems.length === 0) {
+        el.innerHTML = '<p class="text-secondary font-body text-body-sm">All student project proposals reviewed.</p>';
+        return;
+      }
+
+      el.innerHTML = pendingItems.map(p => {
+        const safeStudent = escapeHtml(p.student_name);
+        const safeTitle = escapeHtml(p.project_title);
+        const safeEquip = escapeHtml(p.target_equipment_id);
+        const score = p.ai_assessment ? p.ai_assessment.feasibility_score : 92;
+
+        return `
+          <article class="rounded-lg bg-surface-container p-gutter-md border border-outline-variant flex flex-col gap-gutter-sm">
+            <div class="flex items-start justify-between gap-gutter-sm">
+              <div class="min-w-0">
+                <h3 class="font-title text-title-md text-on-surface truncate font-semibold">${safeStudent} · ${safeTitle}</h3>
+                <p class="font-body text-body-md text-on-surface-variant">${safeEquip} · AI Feasibility: ${score}/100</p>
+              </div>
+              <span class="shrink-0 px-gutter-sm py-gutter-xs rounded-full bg-primary-container text-on-primary-container font-label text-label-sm">Pending</span>
+            </div>
+            <div class="flex items-center gap-gutter-sm pt-gutter-xs">
+              <button type="button" onclick="approveProposal('${p.id}')" class="px-gutter-md py-gutter-xs rounded-full bg-tangerine-orange text-on-primary font-label text-label-sm hover:opacity-90">Approve</button>
+              <button type="button" onclick="rejectProposal('${p.id}')" class="px-gutter-md py-gutter-xs rounded-full bg-surface-container-high text-on-surface hover:text-rose-400 font-label text-label-sm">Reject</button>
+              <button type="button" onclick="showAiBreakdown('${p.id}')" class="px-gutter-md py-gutter-xs rounded-full bg-surface-container-high text-on-surface font-label text-label-sm">AI Score</button>
+            </div>
+          </article>
+        `;
+      }).join('');
+    }
+
+    function renderFacultyFullQueue() {
+      const el = document.getElementById('faculty-full-queue');
+      if (!el) return;
+
+      if (!activeProposals || activeProposals.length === 0) {
+        el.innerHTML = '<p class="text-on-surface-variant font-body text-body-md">No student access proposals found.</p>';
+        return;
+      }
+
+      el.innerHTML = activeProposals.map(p => {
+        const safeStudent = escapeHtml(p.student_name);
+        const safeTitle = escapeHtml(p.project_title);
+        const safeEquip = escapeHtml(p.target_equipment_id);
+        const safeAbstract = escapeHtml(p.abstract || '');
+        const score = p.ai_assessment ? p.ai_assessment.feasibility_score : 92;
+        const isApproved = p.status === 'APPROVED';
+        const isRejected = p.status === 'REJECTED';
+        const badgeClass = isApproved ? 'bg-secondary-container text-on-secondary-container' : (isRejected ? 'bg-rose-950 text-rose-300' : 'bg-primary-container text-on-primary-container');
+
+        return `
+          <article class="rounded-xl bg-surface-container border border-outline-variant p-gutter-lg flex flex-col sm:flex-row sm:items-center justify-between gap-gutter-md">
+            <div class="flex flex-col gap-gutter-xs">
+              <div class="flex items-center gap-gutter-sm">
+                <h2 class="font-title text-title-lg text-on-surface font-semibold">${safeStudent} · ${safeTitle}</h2>
+                <span class="px-gutter-sm py-gutter-xs rounded-full ${badgeClass} font-label text-label-sm">${p.status}</span>
+              </div>
+              <p class="font-body text-body-md text-on-surface-variant">${safeEquip} · Deadline: ${p.submission_deadline_days} days · AI Score: ${score}/100</p>
+              ${safeAbstract ? `<p class="font-body text-body-sm text-on-surface-variant/80 italic mt-1">${safeAbstract}</p>` : ''}
+            </div>
+            <div class="flex items-center gap-gutter-sm shrink-0">
+              ${!isApproved && !isRejected ? `
+                <button type="button" onclick="approveProposal('${p.id}')" class="px-gutter-md py-gutter-sm rounded-full bg-tangerine-orange text-on-primary font-label text-label-md hover:opacity-90">Approve</button>
+                <button type="button" onclick="rejectProposal('${p.id}')" class="px-gutter-md py-gutter-sm rounded-full bg-surface-container-high text-on-surface hover:text-rose-400 font-label text-label-md">Reject</button>
+              ` : `
+                <span class="font-mono text-label-sm text-on-surface-variant">Decision Finalized</span>
+              `}
+              <button type="button" onclick="showAiBreakdown('${p.id}')" class="px-gutter-md py-gutter-sm rounded-full bg-surface-container-high text-on-surface font-label text-label-md">AI Breakdown</button>
+            </div>
+          </article>
+        `;
+      }).join('');
+    }
+
+    function renderStudentProposals() {
+      const el = document.getElementById('student-proposals-list');
+      if (!el) return;
+
+      if (!activeProposals || activeProposals.length === 0) {
+        el.innerHTML = '<p class="text-on-surface-variant font-body text-body-md col-span-2">No active project requests yet. Click "+ New Request" to request hardware access.</p>';
+        return;
+      }
+
+      el.innerHTML = activeProposals.map(p => {
+        const safeTitle = escapeHtml(p.project_title);
+        const safeEquip = escapeHtml(p.target_equipment_id);
+        const safeAdvisor = escapeHtml(p.faculty_advisor || 'Faculty Reviewer');
+        const score = p.ai_assessment ? p.ai_assessment.feasibility_score : 92;
+        const isApproved = p.status === 'APPROVED';
+        const isRejected = p.status === 'REJECTED';
+        const badgeClass = isApproved ? 'bg-secondary-container text-on-secondary-container' : (isRejected ? 'bg-rose-950 text-rose-300' : 'bg-primary-container text-on-primary-container');
+
+        return `
+          <article class="rounded-xl bg-surface-container border border-outline-variant p-gutter-lg flex flex-col gap-gutter-sm">
+            <div class="flex items-center justify-between">
+              <h2 class="font-title text-title-lg text-on-surface font-semibold">${safeTitle}</h2>
+              <span class="px-gutter-sm py-gutter-xs rounded-full ${badgeClass} font-label text-label-sm">${p.status}</span>
+            </div>
+            <p class="font-body text-body-md text-on-surface-variant">${safeEquip} · Assigned: ${safeAdvisor}</p>
+            <div class="flex items-center justify-between pt-gutter-sm border-t border-outline-variant text-label-sm font-mono text-on-surface-variant">
+              <span>AI Feasibility: ${score}/100</span>
+              <span>Deadline: ${p.submission_deadline_days}d</span>
+            </div>
+          </article>
+        `;
+      }).join('');
+    }
+
+    async function approveProposal(proposalId) {
+      try {
+        const res = await apiFetch('/api/v1/approvals/decision', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            proposal_id: proposalId,
+            action: 'APPROVE',
+            faculty_notes: 'Approved hardware bench allocation.'
+          })
+        });
+        if (res.ok) {
+          const data = await res.json();
+          showToast(`✅ Approved! HMAC: ${data.state_signature.slice(0, 10)}... Access granted.`);
+          loadProposalsData();
+        } else {
+          const err = await res.json();
+          showToast(err.detail || 'Approval rejected by server policy', true);
+        }
+      } catch (e) {
+        showToast('Failed to approve proposal', true);
+      }
+    }
+
+    async function rejectProposal(proposalId) {
+      try {
+        const res = await apiFetch('/api/v1/approvals/decision', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            proposal_id: proposalId,
+            action: 'REJECT',
+            faculty_notes: 'Prerequisites not met or quota exceeded.'
+          })
+        });
+        if (res.ok) {
+          showToast(`Proposal ${proposalId} rejected.`);
+          loadProposalsData();
+        } else {
+          const err = await res.json();
+          showToast(err.detail || 'Action rejected', true);
+        }
+      } catch (e) {
+        showToast('Failed to reject proposal', true);
+      }
+    }
+
+    function showAiBreakdown(proposalId) {
+      const p = activeProposals.find(item => item.id === proposalId);
+      if (p && p.ai_assessment) {
+        const ai = p.ai_assessment;
+        showToast(`AI Feasibility: ${ai.feasibility_score}/100 | Risk: ${ai.safety_risk_level} | Rec: ${ai.suggested_action}`);
+      } else {
+        showToast('Multi-Factor Weights: Deadline 40%, Academic Tier 30%, Fair-use 20%, Safety 10%');
+      }
+    }
 
     function openProjectModal() {
       const modal = document.getElementById('project-modal');
@@ -1984,69 +2346,41 @@ if (typeof module !== 'undefined') module.exports = globalThis.tailwind.config;
     async function submitProjectRequest(e) {
       e.preventDefault();
       const title = document.getElementById('req-title').value;
-      const equip = document.getElementById('req-equip').value;
+      const equipSelect = document.getElementById('req-equip');
+      const equipId = equipSelect.value;
+      const equipName = equipSelect.options[equipSelect.selectedIndex].text;
       const deadline = document.getElementById('req-deadline').value;
       closeProjectModal();
-      showToast(`Submitting project request to faculty queue...`);
+      showToast('Submitting project request to faculty queue...');
 
       try {
         const payload = {
           project_id: 'proj_req_' + Date.now().toString(36),
           project_title: title,
-          student_id: 'stu_arjun_01',
-          student_name: 'Arjun Sharma',
-          faculty_advisor: 'Dr. K. Ramanathan (Professor, ECE)',
-          target_equipment_id: 'equip_jetson_01',
+          student_id: 'stu_maya_01',
+          student_name: 'Maya Lin',
+          faculty_advisor: 'Dr. Aris Thorne (Professor, AI Lab)',
+          target_equipment_id: equipId,
           submission_deadline_days: deadline.includes('Urgent') ? 2 : 7,
           academic_tier: 'capstone',
-          abstract: `Project proposal for ${title} using ${equip}.`
+          abstract: `Project proposal for ${title} requesting access to ${equipName}.`
         };
-        const res = await fetch('/api/v1/approvals/proposals', {
+        const res = await apiFetch('/api/v1/approvals/proposals', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload)
         });
         if (res.ok) {
           const data = await res.json();
-          const score = data.proposal.ai_assessment ? data.proposal.ai_assessment.feasibility_score : 92;
-          showToast(`✅ Submitted! GenAI Feasibility Grade: ${score}/100. Pending faculty approval.`);
+          const score = (data.proposal && data.proposal.ai_assessment) ? data.proposal.ai_assessment.feasibility_score : 92;
+          showToast(`✅ Submitted! GenAI Feasibility: ${score}/100. Pending faculty sign-off.`);
+          loadProposalsData();
         } else {
-          showToast(`Project request "${title}" sent to Faculty Queue.`);
+          const err = await res.json();
+          showToast(err.detail || 'Failed to submit proposal', true);
         }
       } catch (err) {
-        showToast(`Project request "${title}" sent to Faculty Queue.`);
-      }
-    }
-
-    let pendingCount = 3;
-    async function approveRequest(id) {
-      const badge = document.getElementById(`approval-badge-${id}`);
-      if (badge && badge.textContent !== 'Approved') {
-        badge.textContent = 'Approved';
-        badge.className = 'shrink-0 px-gutter-sm py-gutter-xs rounded-full bg-secondary-container text-on-secondary-container font-label text-label-sm';
-        pendingCount = Math.max(0, pendingCount - 1);
-        const counter = document.getElementById('faculty-pending-count');
-        if (counter) counter.textContent = String(pendingCount);
-
-        try {
-          const res = await fetch('/api/v1/approvals/decision', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              proposal_id: 'prop_sample_01',
-              action: 'APPROVE',
-              faculty_notes: 'Approved for bench hardware access.'
-            })
-          });
-          if (res.ok) {
-            const data = await res.json();
-            showToast(`✅ Approved! HMAC: ${data.state_signature.substring(0, 10)}... Auto-approval enabled for project.`);
-            return;
-          }
-        } catch (e) {
-          // fallback
-        }
-        showToast('Project access approved & student notified.');
+        showToast('Network error submitting proposal', true);
       }
     }
 
@@ -2063,18 +2397,6 @@ if (typeof module !== 'undefined') module.exports = globalThis.tailwind.config;
       }
     }
 
-    let toastTimer;
-    function showToast(msg) {
-      const toast = document.getElementById('toast');
-      document.getElementById('toast-message').textContent = msg;
-      toast.classList.remove('hidden');
-      toast.classList.add('flex');
-      clearTimeout(toastTimer);
-      toastTimer = setTimeout(() => {
-        toast.classList.add('hidden');
-        toast.classList.remove('flex');
-      }, 2800);
-    }
     function selectCohort(code, btn) {
       document.querySelectorAll('.cohort-pill').forEach((p) => {
         const active = p === btn;
@@ -2086,7 +2408,13 @@ if (typeof module !== 'undefined') module.exports = globalThis.tailwind.config;
       const el = document.getElementById('cohort-completion-val');
       if (el) el.textContent = map[code] || '88%';
     }
+
+    // --- Single Clean App Initialization ---
+    document.addEventListener('DOMContentLoaded', async () => {
+      const initialPov = new URLSearchParams(window.location.search).get('pov') || 'student';
+      await switchPOV(initialPov);
+      await loadDynamicEquipment();
+      await loadProposalsData();
+    });
   </script>
-
-
 </body></html>

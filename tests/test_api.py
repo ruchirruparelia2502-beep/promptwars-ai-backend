@@ -7,8 +7,7 @@ client = TestClient(app)
 def test_root_endpoint():
     response = client.get("/")
     assert response.status_code == 200
-    # Either HTML SPA or JSON is valid
-    assert "PromptWars" in response.text
+    assert "PromptWars" in response.text or "LabLink" in response.text
 
 
 def test_healthz_endpoint():
@@ -19,23 +18,29 @@ def test_healthz_endpoint():
     assert "version" in data
     assert "gemini_configured" in data
 
-def test_generate_endpoint_demo_or_live():
-    payload = {
-        "prompt": "Hello hackathon!",
-        "temperature": 0.5
-    }
-    response = client.post("/api/v1/generate", json=payload)
-    assert response.status_code == 200
-    data = response.json()
-    assert "text" in data
-    assert "model" in data
 
-def test_structured_endpoint():
-    payload = {
-        "prompt": "Extract person: Alice is 25 years old",
-        "instruction": "Return JSON with name and age",
-        "json_schema": {"name": "string", "age": "number"}
-    }
-    response = client.post("/api/v1/structured", json=payload)
-    assert response.status_code == 200
-    assert "data" in response.json() or "raw" in response.json()
+def test_auth_token_issuance():
+    # 1. Student token
+    res_stu = client.post("/api/v1/auth/token?role=student")
+    assert res_stu.status_code == 200
+    stu_data = res_stu.json()
+    assert "access_token" in stu_data
+    assert stu_data["user"]["role"] == "student"
+
+    # 2. Faculty token
+    res_fac = client.post("/api/v1/auth/token?role=faculty")
+    assert res_fac.status_code == 200
+    fac_data = res_fac.json()
+    assert "access_token" in fac_data
+    assert fac_data["user"]["role"] == "faculty"
+
+
+def test_auth_me_claims():
+    res_fac = client.post("/api/v1/auth/token?role=faculty")
+    token = res_fac.json()["access_token"]
+    
+    res_me = client.get("/api/v1/auth/me", headers={"Authorization": f"Bearer {token}"})
+    assert res_me.status_code == 200
+    user_info = res_me.json()["user"]
+    assert user_info["role"] == "faculty"
+    assert user_info["name"] == "Dr. Aris Thorne"

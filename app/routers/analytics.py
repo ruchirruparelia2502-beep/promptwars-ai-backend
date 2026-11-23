@@ -8,7 +8,7 @@ from fastapi import APIRouter
 from app.core.database import db
 from app.core.bitmask import calculate_utilization_percentage
 from app.schemas.lablink import LabAnalyticsResponse, DepartmentUtilization
-from app.services.gemini_assistant import generate_rebalancing_recommendations
+from app.services.genai_engine import generate_rebalancing_recommendations
 
 router = APIRouter(prefix="/api/v1/analytics", tags=["Resource Utilization & Analytics"])
 

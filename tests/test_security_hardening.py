@@ -53,3 +53,16 @@ def test_sliding_window_rate_limiter():
     allowed, remaining = limiter.is_allowed(client_ip)
     assert allowed is False
     assert remaining == 0
+
+
+def test_jwt_token_claims_and_tampering():
+    from app.core.security import create_access_token, decode_access_token
+    token = create_access_token("stu_123", "student", "Alice", "capstone", "ECE")
+    decoded = decode_access_token(token)
+    assert decoded is not None
+    assert decoded["sub"] == "stu_123"
+    assert decoded["role"] == "student"
+
+    # Tampered token check
+    tampered = token[:-4] + "fake"
+    assert decode_access_token(tampered) is None

@@ -13,7 +13,7 @@ from app.config import settings
 from app.core.security import SecurityHeadersMiddleware
 from app.routers import (
     health,
-    ai,
+    auth,
     equipment,
     bookings,
     conflicts,
@@ -29,7 +29,7 @@ app = FastAPI(
         "⚡ GenAI-powered campus laboratory resource-sharing platform. "
         "Enables cross-department equipment discovery, O(1) bitmask slot booking, "
         "IRCTC/BookMyShow non-random conflict resolution with leased holds, "
-        "and project-based faculty approvals with GenAI risk assessments."
+        "cryptographic JWT role authorization, and persistent date-partitioned availability."
     ),
     docs_url="/docs",
     redoc_url="/redoc",
@@ -38,18 +38,23 @@ app = FastAPI(
 # OWASP Hardened Security Headers Middleware
 app.add_middleware(SecurityHeadersMiddleware)
 
-# Universal CORS Middleware for frontend & API clients
+# Strict CORS Configuration (avoids wildcard with credentials vulnerability)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=[
+        "http://localhost:8000",
+        "http://127.0.0.1:8000",
+        "https://promptwars-ai.vercel.app"
+    ],
+    allow_origin_regex=r"https://.*\.vercel\.app",
     allow_credentials=True,
-    allow_methods=["*"],
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allow_headers=["*"],
 )
 
 # Register Core Platform Routers
 app.include_router(health.router)
-app.include_router(ai.router)
+app.include_router(auth.router)
 app.include_router(equipment.router)
 app.include_router(bookings.router)
 app.include_router(conflicts.router)

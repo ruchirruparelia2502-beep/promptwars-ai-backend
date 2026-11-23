@@ -7,7 +7,7 @@ from typing import List, Optional
 from fastapi import APIRouter, HTTPException, Query, status
 from app.core.database import db
 from app.schemas.lablink import EquipmentBase, EquipmentSearchRequest, EquipmentSearchResponse
-from app.services.gemini_assistant import analyze_semantic_equipment_search
+from app.services.genai_engine import analyze_semantic_equipment_search
 
 router = APIRouter(prefix="/api/v1/equipment", tags=["Equipment Discovery"])
 
@@ -15,13 +15,14 @@ router = APIRouter(prefix="/api/v1/equipment", tags=["Equipment Discovery"])
 @router.get("", response_model=List[EquipmentBase])
 def list_all_equipment(
     department: Optional[str] = Query(None, description="Filter by department"),
-    category: Optional[str] = Query(None, description="Filter by category")
+    category: Optional[str] = Query(None, description="Filter by category"),
+    booking_date: Optional[str] = Query(None, description="Optional YYYY-MM-DD date for date-partitioned bitmask availability")
 ):
     """
     Retrieves all specialized college laboratory hardware kits and workstations.
-    Supports multi-department filtering (ECE, CSE, Mech, Biotech).
+    Supports multi-department filtering (ECE, CSE, Mech, Biotech) and date-partitioned availability.
     """
-    items = db.get_all_equipment()
+    items = db.get_all_equipment(booking_date=booking_date)
     if department:
         items = [i for i in items if i["department"].lower() == department.lower()]
     if category:
@@ -30,11 +31,14 @@ def list_all_equipment(
 
 
 @router.get("/{equipment_id}", response_model=EquipmentBase)
-def get_equipment_detail(equipment_id: str):
+def get_equipment_detail(
+    equipment_id: str,
+    booking_date: Optional[str] = Query(None, description="Optional YYYY-MM-DD date for date-partitioned bitmask")
+):
     """
-    Retrieves real-time specs, location, and 32-bit daily slot bitmask for an equipment.
+    Retrieves real-time specs, location, and 32-bit slot bitmask for an equipment on a given date.
     """
-    item = db.get_equipment_by_id(equipment_id)
+    item = db.get_equipment_by_id(equipment_id, booking_date=booking_date)
     if not item:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,

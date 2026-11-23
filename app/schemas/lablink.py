@@ -21,6 +21,7 @@ class EquipmentBase(BaseModel):
     safety_level: str = Field(default="Standard", max_length=64)
     tier: Optional[str] = Field(default="MID_RANGE", max_length=32)
     hourly_cost_estimate: Optional[str] = Field(default="$2.00/hr", max_length=32)
+    hourly_rate: float = Field(default=2.00, description="Numeric cost per hour for calculations")
     daily_bitmask: int = Field(default=0, description="32-bit integer representing 24 daily slots")
     status: str = Field(default="OPERATIONAL", max_length=32)
     tags: List[str] = Field(default_factory=list)
@@ -52,6 +53,7 @@ class BookingCreateRequest(BaseModel):
     student_name: str = Field(..., max_length=128)
     project_id: str = Field(..., max_length=64)
     project_title: str = Field(..., max_length=200)
+    booking_date: Optional[str] = Field(default=None, description="Target date YYYY-MM-DD")
     slot_index: int = Field(..., ge=0, le=23, description="Starting slot (0..23)")
     duration_slots: int = Field(default=2, ge=1, le=8, description="Number of 30-min slots (1..8)")
     purpose_abstract: str = Field(..., max_length=1000)
@@ -68,6 +70,7 @@ class BookingResponse(BaseModel):
     equipment_name: str
     student_id: str
     student_name: str
+    booking_date: Optional[str] = None
     slot_index: int
     duration_slots: int
     start_time: str

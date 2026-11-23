@@ -6,7 +6,7 @@ Empowers students with AI hardware advisory while keeping all keys strictly in p
 from typing import List, Dict, Any
 from fastapi import APIRouter, HTTPException, status
 from app.schemas.copilot import CopilotChatRequest, CopilotChatResponse
-from app.services.copilot_service import process_copilot_chat
+from app.services.genai_engine import process_copilot_chat
 
 router = APIRouter(prefix="/api/v1/copilot", tags=["Lab Copilot AI"])
 
