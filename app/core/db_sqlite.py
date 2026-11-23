@@ -31,7 +31,17 @@ class SQLiteLabDatabase:
         self._init_db()
 
     def _get_connection(self) -> sqlite3.Connection:
-        return create_connection(self.db_path)
+        conn = create_connection(self.db_path)
+        try:
+            cursor = conn.cursor()
+            cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='equipment'")
+            if not cursor.fetchone():
+                with self._lock:
+                    init_schema(conn)
+                    seed_initial_data(conn)
+        except Exception:
+            pass
+        return conn
 
     def _init_db(self):
         with self._lock:

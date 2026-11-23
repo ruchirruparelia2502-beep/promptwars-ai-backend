@@ -93,7 +93,7 @@ def test_date_partitioned_bitmask_isolation():
     """Verifies that reserving slot 10 on Day 1 does NOT block slot 10 on Day 2."""
     day1 = "2026-12-05"
     day2 = "2026-12-06"
-    equip_id = "equip_tek_01"
+    equip_id = "equip_scope_01"
 
     # 1. Book on Day 1
     res1 = client.post("/api/v1/bookings", json={
@@ -224,7 +224,7 @@ def test_faculty_approvals_role_enforcement():
         "student_id": "stu_arjun_01",
         "student_name": "Arjun Sharma",
         "faculty_advisor": "Dr. Ramanathan",
-        "target_equipment_id": "equip_fpga_01",
+        "target_equipment_id": "equip_fpga_basys_01",
         "submission_deadline_days": 5,
         "academic_tier": "capstone",
         "abstract": "Synthesizing spiking neural network on Xilinx ZCU102 FPGA."
