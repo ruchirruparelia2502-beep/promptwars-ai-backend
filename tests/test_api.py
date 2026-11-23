@@ -7,9 +7,9 @@ client = TestClient(app)
 def test_root_endpoint():
     response = client.get("/")
     assert response.status_code == 200
-    data = response.json()
-    assert "PromptWars" in data["message"]
-    assert data["documentation"] == "/docs"
+    # Either HTML SPA or JSON is valid
+    assert "PromptWars" in response.text
+
 
 def test_healthz_endpoint():
     response = client.get("/healthz")

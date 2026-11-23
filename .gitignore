@@ -29,6 +29,32 @@ wheels/
 .env.local
 .env.*.local
 
+# Node / Frontend (Critical to prevent 10MB limit breach!)
+node_modules/
+.npm/
+.yarn/
+.pnpm/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.next/
+.nuxt/
+out/
+frontend/dist/
+frontend/build/
+frontend/node_modules/
+
+# Large binaries & media (Keep repo under 10MB)
+*.zip
+*.tar.gz
+*.mp4
+*.mov
+*.avi
+*.bin
+*.onnx
+*.pt
+*.safetensors
+
 # IDEs
 .vscode/
 .idea/
@@ -43,3 +69,4 @@ htmlcov/
 # OS specific
 .DS_Store
 Thumbs.db
+

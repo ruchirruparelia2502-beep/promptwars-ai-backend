@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PromptWars x Cynergy - AI Playground</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: { 500: '#6366f1', 600: '#4f46e5', 700: '#4338ca' }
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans antialiased">
+  <!-- Navbar -->
+  <header class="border-b border-slate-800 bg-slate-900/60 backdrop-blur sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-indigo-500 to-cyan-400 flex items-center justify-center font-bold text-white shadow-lg shadow-indigo-500/20">
+          ⚡
+        </div>
+        <span class="font-bold text-lg tracking-tight bg-gradient-to-r from-white to-slate-400 bg-clip-text text-transparent">
+          PromptWars <span class="text-indigo-400 font-mono text-sm px-1.5 py-0.5 rounded bg-indigo-950 border border-indigo-800 ml-1">x Cynergy</span>
+        </span>
+      </div>
+      <div class="flex items-center space-x-3 text-sm">
+        <span id="health-badge" class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-950 text-emerald-400 border border-emerald-800">
+          <span class="w-1.5 h-1.5 mr-1.5 bg-emerald-400 rounded-full animate-pulse"></span>
+          Backend Live
+        </span>
+        <a href="/docs" target="_blank" class="px-3 py-1.5 rounded-lg border border-slate-700 hover:bg-slate-800 text-slate-300 transition text-xs font-medium">
+          API Docs <i class="fa-solid fa-arrow-up-right-from-square ml-1 text-[10px]"></i>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="flex-1 max-w-6xl w-full mx-auto p-4 md:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
+    <!-- Left Column: Controls & Prompt -->
+    <div class="lg:col-span-5 flex flex-col space-y-4">
+      <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 shadow-xl flex flex-col space-y-4">
+        <div>
+          <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">System Persona / Instructions</label>
+          <textarea id="system-prompt" rows="2" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-200 focus:outline-none focus:border-indigo-500 transition resize-none placeholder-slate-600" placeholder="e.g. You are a fast, concise AI hackathon strategist.">You are a creative, high-impact AI assistant built for the PromptWars hackathon.</textarea>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Prompt / Query</label>
+          <textarea id="user-prompt" rows="5" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-200 focus:outline-none focus:border-indigo-500 transition resize-none placeholder-slate-600" placeholder="Type your prompt here...">Build a 30-second pitch for an AI product that automates bug triage for hackathon judges.</textarea>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Model</label>
+            <select id="model-select" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-2.5 text-xs text-slate-300 focus:outline-none focus:border-indigo-500">
+              <option value="gemini-2.5-flash">Gemini 2.5 Flash (Fast)</option>
+              <option value="gemini-1.5-pro">Gemini 1.5 Pro (Deep)</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Temperature (<span id="temp-val">0.7</span>)</label>
+            <input type="range" id="temperature" min="0" max="1" step="0.1" value="0.7" class="w-full accent-indigo-500 mt-2" oninput="document.getElementById('temp-val').innerText = this.value">
+          </div>
+        </div>
+
+        <div class="pt-2 flex space-x-3">
+          <button id="btn-stream" onclick="runStream()" class="flex-1 bg-indigo-600 hover:bg-indigo-500 text-white font-medium py-2.5 px-4 rounded-xl text-sm transition shadow-lg shadow-indigo-600/25 flex items-center justify-center space-x-2">
+            <i class="fa-solid fa-bolt text-xs"></i>
+            <span>Stream Output</span>
+          </button>
+          <button id="btn-generate" onclick="runGenerate()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 font-medium py-2.5 px-4 rounded-xl text-sm transition border border-slate-700">
+            Generate
+          </button>
+        </div>
+      </div>
+
+      <!-- Quick Tips Card -->
+      <div class="bg-indigo-950/30 border border-indigo-900/40 rounded-xl p-4 text-xs text-indigo-300 flex items-start space-x-3">
+        <i class="fa-solid fa-circle-info text-indigo-400 mt-0.5"></i>
+        <div>
+          <span class="font-semibold text-indigo-200">Single-Repo Deployment:</span>
+          This UI is served directly from <code class="bg-indigo-950 px-1 py-0.5 rounded text-indigo-200">/static</code> inside your FastAPI backend. Total package size is under 1MB!
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Column: Live Output -->
+    <div class="lg:col-span-7 flex flex-col">
+      <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 shadow-xl flex-1 flex flex-col min-h-[420px]">
+        <div class="flex items-center justify-between border-b border-slate-800 pb-3 mb-4">
+          <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider flex items-center space-x-2">
+            <span class="w-2 h-2 rounded-full bg-indigo-500"></span>
+            <span>Response Feed</span>
+          </span>
+          <button onclick="copyOutput()" class="text-xs text-slate-400 hover:text-slate-200 transition flex items-center space-x-1.5">
+            <i class="fa-regular fa-copy"></i>
+            <span id="copy-label">Copy</span>
+          </button>
+        </div>
+
+        <div id="output-box" class="flex-1 overflow-y-auto font-mono text-sm leading-relaxed text-slate-200 whitespace-pre-wrap select-text p-2 rounded-lg bg-slate-950/50 border border-slate-900 min-h-[300px]">
+Click "Stream Output" or "Generate" to test your AI backend in real-time...
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    async function runGenerate() {
+      const output = document.getElementById('output-box');
+      const prompt = document.getElementById('user-prompt').value;
+      const system = document.getElementById('system-prompt').value;
+      const model = document.getElementById('model-select').value;
+      const temp = parseFloat(document.getElementById('temperature').value);
+
+      output.innerText = "Generating response...";
+
+      try {
+        const res = await fetch('/api/v1/generate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            prompt: prompt,
+            system_instruction: system,
+            model: model,
+            temperature: temp
+          })
+        });
+        const data = await res.json();
+        output.innerText = data.text || JSON.stringify(data, null, 2);
+      } catch (err) {
+        output.innerText = "Error: " + err.message;
+      }
+    }
+
+    async function runStream() {
+      const output = document.getElementById('output-box');
+      const prompt = document.getElementById('user-prompt').value;
+      const system = document.getElementById('system-prompt').value;
+      const model = document.getElementById('model-select').value;
+      const temp = parseFloat(document.getElementById('temperature').value);
+
+      output.innerText = "";
+
+      try {
+        const res = await fetch('/api/v1/stream', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            prompt: prompt,
+            system_instruction: system,
+            model: model,
+            temperature: temp
+          })
+        });
+
+        const reader = res.body.getReader();
+        const decoder = new TextDecoder();
+
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+
+          const chunk = decoder.decode(value);
+          const lines = chunk.split('\n');
+          for (const line of lines) {
+            if (line.startsWith('data: ')) {
+              const dataStr = line.slice(6).trim();
+              if (dataStr === '[DONE]') continue;
+              try {
+                const parsed = JSON.parse(dataStr);
+                if (parsed.text) output.innerText += parsed.text;
+                if (parsed.error) output.innerText += "\n[Error: " + parsed.error + "]";
+              } catch (e) {}
+            }
+          }
+        }
+      } catch (err) {
+        output.innerText = "Streaming error: " + err.message;
+      }
+    }
+
+    function copyOutput() {
+      const text = document.getElementById('output-box').innerText;
+      navigator.clipboard.writeText(text);
+      const label = document.getElementById('copy-label');
+      label.innerText = "Copied!";
+      setTimeout(() => { label.innerText = "Copy"; }, 2000);
+    }
+  </script>
+</body>
+</html>
