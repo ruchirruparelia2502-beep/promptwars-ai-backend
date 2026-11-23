@@ -13,6 +13,7 @@ import sqlite3
 import json
 import time
 import datetime
+import tempfile
 import threading
 from typing import Dict, List, Optional, Any, Tuple
 from app.core.bitmask import (
@@ -26,14 +27,44 @@ from app.core.bitmask import (
 
 
 def get_db_path() -> str:
-    """Determines database path with fallback for Vercel serverless environments."""
-    if os.environ.get("VERCEL"):
-        return "/tmp/lablink.db"
-    
-    base_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-    data_dir = os.path.join(base_dir, "data")
-    os.makedirs(data_dir, exist_ok=True)
-    return os.path.join(data_dir, "lablink.db")
+    """
+    Determines database path with robust fallback for serverless environments
+    (Vercel, AWS Lambda, read-only containers).
+    """
+    # 1. Explicit override
+    if os.environ.get("DATABASE_PATH"):
+        return os.environ["DATABASE_PATH"]
+
+    tmp_dir = os.environ.get("TMPDIR") or tempfile.gettempdir() or "/tmp"
+    fallback_path = os.path.join(tmp_dir, "lablink.db")
+
+    # 2. Serverless detection
+    serverless_indicators = (
+        "VERCEL",
+        "VERCEL_ENV",
+        "VERCEL_URL",
+        "VERCEL_REGION",
+        "AWS_LAMBDA_FUNCTION_NAME",
+        "LAMBDA_TASK_ROOT",
+        "NOW_REGION"
+    )
+    if any(os.environ.get(k) for k in serverless_indicators):
+        return fallback_path
+
+    # 3. Test filesystem writability in repo directory
+    try:
+        base_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+        data_dir = os.path.join(base_dir, "data")
+        os.makedirs(data_dir, exist_ok=True)
+        test_file = os.path.join(data_dir, ".write_test")
+        with open(test_file, "w") as f:
+            f.write("ok")
+        if os.path.exists(test_file):
+            os.remove(test_file)
+        return os.path.join(data_dir, "lablink.db")
+    except Exception:
+        # Fallback to temp directory if data_dir is read-only
+        return fallback_path
 
 
 class SQLiteLabDatabase:
@@ -45,8 +76,17 @@ class SQLiteLabDatabase:
     def _get_connection(self) -> sqlite3.Connection:
         conn = sqlite3.connect(self.db_path, timeout=10.0)
         conn.row_factory = sqlite3.Row
-        conn.execute("PRAGMA journal_mode = WAL;")
-        conn.execute("PRAGMA foreign_keys = ON;")
+        try:
+            conn.execute("PRAGMA journal_mode = WAL;")
+        except Exception:
+            try:
+                conn.execute("PRAGMA journal_mode = DELETE;")
+            except Exception:
+                pass
+        try:
+            conn.execute("PRAGMA foreign_keys = ON;")
+        except Exception:
+            pass
         return conn
 
     def _init_db(self):
