@@ -1,6 +1,6 @@
 """
 GenAI Engine for LabLink
-Powered by Google Gemini 3.8 Flash via modern google.genai SDK.
+Powered by Google Gemini 2.5 Flash via modern google.genai SDK.
 Provides:
 - Frugal Hardware Advisory & Copilot Chat with response caching
 - Faculty Proposal Feasibility & Risk Assessment
@@ -48,9 +48,31 @@ def _get_client():
         return None
 
 
-# =============================================================================
-# 1. LAB COPILOT FRUGAL ADVISORY
-# =============================================================================
+def generate_arbitration_explanation_ai(
+    winner_name: str,
+    score: float,
+    contenders_count: int,
+    equip_name: str,
+    time_str: str
+) -> Optional[str]:
+    """Generates an authentic Gemini 2.5 Flash explanation for slot contention decisions."""
+    client = _get_client()
+    if not client:
+        return None
+    try:
+        prompt = (
+            f"You are the LabLink Academic Arbitrator. Summarize in 2 crisp sentences why {winner_name} "
+            f"won contention for {equip_name} ({time_str}) with an MFPS score of {score:.3f} over {contenders_count - 1} "
+            f"competing requests, emphasizing academic priority and fairness."
+        )
+        res = client.models.generate_content(
+            model=DEFAULT_MODEL,
+            contents=prompt
+        )
+        return res.text.strip()
+    except Exception as e:
+        logger.warning(f"Gemini arbitration summary generation failed: {e}")
+        return None
 
 def process_copilot_chat(request: CopilotChatRequest) -> CopilotChatResponse:
     """

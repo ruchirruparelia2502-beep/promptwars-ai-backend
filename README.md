@@ -3,8 +3,8 @@
 [![Python](https://img.shields.io/badge/Python-3.11%20%7C%203.12-3776AB.svg?logo=python&logoColor=white)](https://www.python.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.115+-009688.svg?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
 [![SQLite](https://img.shields.io/badge/Database-SQLite%20(WAL%20Mode)-003B57.svg?logo=sqlite&logoColor=white)](https://www.sqlite.org/)
-[![Gemini](https://img.shields.io/badge/GenAI-Gemini%203.8%20Flash-4285F4.svg?logo=google&logoColor=white)](https://ai.google.dev/)
-[![Tests](https://img.shields.io/badge/Tests-31%2F31%20Passing-brightgreen.svg)](tests/)
+[![Gemini](https://img.shields.io/badge/GenAI-Gemini%202.5%20Flash-4285F4.svg?logo=google&logoColor=white)](https://ai.google.dev/)
+[![Tests](https://img.shields.io/badge/Tests-33%2F33%20Passing-brightgreen.svg)](tests/)
 [![Security](https://img.shields.io/badge/Auth-JWT%20%2B%20HMAC--SHA256-blueviolet.svg)](app/core/security.py)
 
 ---
@@ -18,7 +18,7 @@ The platform eliminates manual spreadsheet scheduling and equipment hoarding thr
 2. **Multi-Factor Priority Scoring ($MFPS$)**: Non-random contention resolution arbitrating simultaneous requests via thesis deadline urgency, academic tiers, and anti-hoarding usage penalties.
 3. **BookMyShow 10-Minute Leased Holds**: Atomic lock windows that automatically expire if unconfirmed, auto-promoting waitlisted students.
 4. **Server-Side Anti-Spoofing & Role-Based Access Control**: Cryptographic JWT access tokens and constant-time HMAC-SHA256 signatures enforce strict student/faculty permissions (e.g. students cannot approve grants).
-5. **Frugal GenAI Recommendation Engine**: Powered by `gemini-3.8-flash` via the modern `google-genai` SDK, caching responses in SQLite and steering students toward minimum-viable hardware to preserve campus budgets.
+5. **Frugal GenAI Recommendation Engine**: Powered by official `gemini-2.5-flash` via modern `google-genai` SDK, caching responses in SQLite and steering students toward minimum-viable hardware to preserve campus budgets.
 
 ---
 
@@ -32,7 +32,7 @@ The platform eliminates manual spreadsheet scheduling and equipment hoarding thr
                 │                           │
    ┌────────────▼────────────┐ ┌────────────▼────────────┐
    │    Hardware Registry    │ │    Bitmask Engine       │
-   │  25 Real Campus Units   │ │ 32-bit Integer Slots    │
+   │  24 Real Campus Units   │ │ 32-bit Integer Slots    │
    │  ECE · CSE · MECH · BIO │ │ Date-Partitioned Masks  │
    └────────────┬────────────┘ └────────────┬────────────┘
                 │                           │
@@ -109,13 +109,14 @@ $$\text{MFPS} = 0.40 \cdot D(t) + 0.30 \cdot A + 0.20 \cdot F(u) + 0.10 \cdot S$
 ### Authentication & Identity
 | Method | Endpoint | Description |
 | :--- | :--- | :--- |
-| `POST` | `/api/v1/auth/token?role={role}` | Dispenses cryptographic JWT access token for requested persona |
+| `POST` | `/api/v1/auth/token` | Dispenses cryptographic JWT access token with role and passcode |
+| `POST` | `/api/v1/auth/login` | JSON login endpoint validating credentials and dispensing token |
 | `GET` | `/api/v1/auth/me` | Validates JWT claims and returns current user identity and permissions |
 
 ### Equipment Discovery
 | Method | Endpoint | Description |
 | :--- | :--- | :--- |
-| `GET` | `/api/v1/equipment` | Lists all 25 campus hardware kits with date-partitioned bitmask availability |
+| `GET` | `/api/v1/equipment` | Lists all 24 campus hardware kits with date-partitioned bitmask availability |
 | `GET` | `/api/v1/equipment/{id}` | Real-time hardware specifications, safety prerequisites, and hourly rates |
 | `POST` | `/api/v1/equipment/search/semantic` | GenAI semantic matching against natural language project descriptions |
 
@@ -123,29 +124,30 @@ $$\text{MFPS} = 0.40 \cdot D(t) + 0.30 \cdot A + 0.20 \cdot F(u) + 0.10 \cdot S$
 | Method | Endpoint | Description |
 | :--- | :--- | :--- |
 | `GET` | `/api/v1/bookings/slots/{id}` | Retrieves 24 half-hour slot availability bitmask for a target date |
-| `POST` | `/api/v1/bookings` | Atomic reservation under 10-minute BookMyShow leased hold |
-| `POST` | `/api/v1/bookings/{id}/confirm` | Cryptographic HMAC confirmation of a leased hold |
+| `POST` | `/api/v1/bookings/reserve` | Atomic reservation under 10-minute BookMyShow leased hold |
+| `POST` | `/api/v1/bookings/confirm` | Cryptographic HMAC confirmation of a leased hold |
+| `GET` | `/api/v1/bookings` | Lists active confirmed bookings and holds across campus |
 | `DELETE`| `/api/v1/bookings/{id}` | Cancels reservation and atomically frees bitmask slots |
-| `POST` | `/api/v1/conflicts/resolve` | Executes non-random $MFPS$ arbitration for simultaneous contenders |
+| `POST` | `/api/v1/conflicts/resolve` | Executes non-random $MFPS$ arbitration for simultaneous contenders (rejects occupied slots with 409) |
 
 ### Project Proposals & Faculty Approvals
 | Method | Endpoint | Description |
 | :--- | :--- | :--- |
-| `POST` | `/api/v1/approvals/proposals` | Submits project access request with automated GenAI feasibility scoring |
+| `POST` | `/api/v1/proposals` | Submits project access request with automated GenAI feasibility scoring |
 | `GET` | `/api/v1/approvals` | Lists campus proposals (role-restricted to faculty/admin) |
-| `POST` | `/api/v1/approvals/decision` | Faculty decision (`APPROVE` / `REJECT` / `REQUEST_REVISION`) with HMAC signature |
+| `POST` | `/api/v1/approvals/{id}/decision` | Faculty decision (`APPROVED` / `REJECTED`) with HMAC signature |
 
 ### Analytics & Health
 | Method | Endpoint | Description |
 | :--- | :--- | :--- |
-| `GET` | `/api/v1/analytics/utilization` | Capacity utilization, department load balancing, and popcounts |
+| `GET` | `/api/v1/analytics` | Capacity utilization, department load balancing, and popcounts |
 | `GET` | `/healthz` | System diagnostics, SQLite WAL integrity, and GenAI engine status |
 
 ---
 
 ## 🧪 Automated Testing Suite
 
-The repository includes **31 automated tests** covering all algorithm mechanics, API contracts, security boundaries, and persistence workflows:
+The repository includes **33 automated tests** covering all algorithm mechanics, API contracts, security boundaries, and persistence workflows:
 
 ```bash
 # Run complete test suite
@@ -158,34 +160,36 @@ tests/test_api.py::test_root_endpoint PASSED                             [  3%]
 tests/test_api.py::test_healthz_endpoint PASSED                          [  6%]
 tests/test_api.py::test_auth_token_issuance PASSED                       [  9%]
 tests/test_api.py::test_auth_me_claims PASSED                            [ 12%]
-tests/test_bitmask_engine.py::test_slot_time_conversion PASSED           [ 16%]
-tests/test_bitmask_engine.py::test_create_interval_mask PASSED           [ 19%]
-tests/test_bitmask_engine.py::test_availability_and_atomic_reservation PASSED [ 22%]
-tests/test_bitmask_engine.py::test_find_next_available_window PASSED     [ 25%]
-tests/test_bitmask_engine.py::test_utilization_calculation PASSED        [ 29%]
-tests/test_copilot.py::test_copilot_starter_prompts PASSED               [ 32%]
-tests/test_copilot.py::test_copilot_frugal_minimum_viable_selection PASSED [ 35%]
-tests/test_copilot.py::test_copilot_prompt_injection_safety PASSED       [ 38%]
-tests/test_lablink_api.py::test_root_and_security_headers PASSED         [ 41%]
+tests/test_bitmask_engine.py::test_slot_time_conversion PASSED           [ 15%]
+tests/test_bitmask_engine.py::test_create_interval_mask PASSED           [ 18%]
+tests/test_bitmask_engine.py::test_availability_and_atomic_reservation PASSED [ 21%]
+tests/test_bitmask_engine.py::test_find_next_available_window PASSED     [ 24%]
+tests/test_bitmask_engine.py::test_utilization_calculation PASSED        [ 27%]
+tests/test_copilot.py::test_copilot_starter_prompts PASSED               [ 30%]
+tests/test_copilot.py::test_copilot_frugal_minimum_viable_selection PASSED [ 33%]
+tests/test_copilot.py::test_copilot_prompt_injection_safety PASSED       [ 36%]
+tests/test_e2e_flow.py::test_complete_campus_lifecycle_e2e PASSED        [ 39%]
+tests/test_lablink_api.py::test_root_and_security_headers PASSED         [ 42%]
 tests/test_lablink_api.py::test_equipment_listing_and_filtering PASSED   [ 45%]
 tests/test_lablink_api.py::test_semantic_equipment_search PASSED         [ 48%]
 tests/test_lablink_api.py::test_slot_booking_and_conflict PASSED         [ 51%]
-tests/test_lablink_api.py::test_date_partitioned_bitmask_isolation PASSED [ 54%]
-tests/test_lablink_api.py::test_hold_lease_auto_expiration PASSED        [ 58%]
-tests/test_lablink_api.py::test_smart_conflict_resolution_and_persistence PASSED [ 61%]
-tests/test_lablink_api.py::test_faculty_approvals_role_enforcement PASSED [ 64%]
-tests/test_lablink_api.py::test_analytics_api PASSED                     [ 67%]
-tests/test_lablink_api.py::test_faculty_rejection_workflow PASSED        [ 70%]
-tests/test_lablink_api.py::test_booking_cryptographic_confirmation_workflow PASSED [ 74%]
-tests/test_security_hardening.py::test_prompt_injection_sanitization PASSED [ 77%]
-tests/test_security_hardening.py::test_hmac_state_signatures PASSED      [ 80%]
-tests/test_security_hardening.py::test_sliding_window_rate_limiter PASSED [ 83%]
+tests/test_date_partitioned_bitmask_isolation PASSED                     [ 54%]
+tests/test_lablink_api.py::test_hold_lease_auto_expiration PASSED        [ 57%]
+tests/test_lablink_api.py::test_smart_conflict_resolution_and_persistence PASSED [ 60%]
+tests/test_lablink_api.py::test_faculty_approvals_role_enforcement PASSED [ 63%]
+tests/test_lablink_api.py::test_analytics_api PASSED                     [ 66%]
+tests/test_lablink_api.py::test_faculty_rejection_workflow PASSED        [ 69%]
+tests/test_lablink_api.py::test_booking_cryptographic_confirmation_workflow PASSED [ 72%]
+tests/test_lablink_api.py::test_conflict_resolver_rejects_already_booked_slot PASSED [ 75%]
+tests/test_security_hardening.py::test_prompt_injection_sanitization PASSED [ 78%]
+tests/test_security_hardening.py::test_hmac_state_signatures PASSED      [ 81%]
+tests/test_security_hardening.py::test_sliding_window_rate_limiter PASSED [ 84%]
 tests/test_security_hardening.py::test_jwt_token_claims_and_tampering PASSED [ 87%]
 tests/test_smart_allocator.py::test_deadline_urgency_scoring PASSED      [ 90%]
 tests/test_smart_allocator.py::test_anti_hoarding_fairness PASSED        [ 93%]
 tests/test_smart_allocator.py::test_simultaneous_booking_contention_resolution PASSED [ 96%]
 tests/test_smart_allocator.py::test_allocator_benchmark PASSED           [100%]
-============================== 31 passed in 0.23s ==============================
+============================== 33 passed in 0.30s ==============================
 ```
 
 ---
@@ -213,7 +217,7 @@ cp .env.example .env
 ```
 Key configuration parameters:
 - `GEMINI_API_KEY`: Google Gemini API key (optional; system falls back gracefully to deterministic offline frugal heuristics if unset).
-- `GEMINI_MODEL`: Defaults to `gemini-3.8-flash`.
+- `DEFAULT_GEMINI_MODEL`: Defaults to `gemini-2.5-flash`.
 - `HMAC_SECRET`: Key for constant-time HMAC state signatures.
 - `JWT_SECRET`: Key for cryptographic role token encoding.
 
@@ -233,4 +237,4 @@ python3 -m uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
 ### Vercel Serverless Deployment
 The repository includes a root `vercel.json` configuring the FastAPI ASGI adapter via `api/index.py`:
 - In serverless environments where local filesystem access may be ephemeral, SQLite automatically initializes in `/tmp/lablink.db` with WAL mode.
-- Set `GEMINI_API_KEY`, `JWT_SECRET`, and `HMAC_SECRET` in the Vercel Project Environment Settings.
+- Set `GEMINI_API_KEY`, `DEFAULT_GEMINI_MODEL=gemini-2.5-flash`, `JWT_SECRET`, and `HMAC_SECRET` in the Vercel Project Environment Settings.

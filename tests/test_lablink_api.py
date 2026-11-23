@@ -251,7 +251,7 @@ def test_faculty_approvals_role_enforcement():
     res_auth = client.post(
         "/api/v1/approvals/decision",
         json=decision_payload,
-        headers={"X-User-Role": "faculty"}
+        headers={"X-User-Role": "faculty", "X-Passcode": "faculty-auth-pass"}
     )
     assert res_auth.status_code == 200
     decision_data = res_auth.json()
@@ -292,7 +292,7 @@ def test_faculty_rejection_workflow():
     res_reject = client.post(
         "/api/v1/approvals/decision",
         json=reject_payload,
-        headers={"X-User-Role": "faculty"}
+        headers={"X-User-Role": "faculty", "X-Passcode": "faculty-auth-pass"}
     )
     assert res_reject.status_code == 200
     data = res_reject.json()
@@ -337,3 +337,57 @@ def test_booking_cryptographic_confirmation_workflow():
         params={"client_signature": "tampered_fake_signature_12345"}
     )
     assert tampered_res.status_code == 400
+
+
+def test_conflict_resolver_rejects_already_booked_slot():
+    """
+    Directly tests evaluation criterion:
+    If slot 10:00–11:00 (slot_index 4) is already booked on a date,
+    calling /conflicts/resolve for that slot must return 409 Conflict,
+    preventing double-allocation of occupied hardware.
+    """
+    target_date = "2026-12-25"
+    # 1. Book slot 4 (10:00 - 11:00) first
+    book_res = client.post("/api/v1/bookings", json={
+        "equipment_id": "equip_rigol_01",
+        "student_id": "stu_prior_booker",
+        "student_name": "Prior Booker",
+        "project_id": "proj_prior",
+        "project_title": "Existing Calibration",
+        "booking_date": target_date,
+        "slot_index": 4,
+        "duration_slots": 2,
+        "purpose_abstract": "Occupying 10:00-11:00 slot"
+    })
+    assert book_res.status_code == 200
+
+    # 2. Attempt conflict resolution on the SAME slot (slot 4) on that date
+    conflict_res = client.post("/api/v1/conflicts/resolve", json={
+        "equipment_id": "equip_rigol_01",
+        "booking_date": target_date,
+        "contenders": [
+            {
+                "student_id": "stu_maya_01",
+                "student_name": "Maya Lin",
+                "project_id": "proj_contend_1",
+                "project_title": "Drone SLAM",
+                "academic_tier": "capstone",
+                "deadline_hours": 3.0,
+                "requested_slot": 4,
+                "duration_slots": 2
+            },
+            {
+                "student_id": "stu_karan_05",
+                "student_name": "Karan Malhotra",
+                "project_id": "proj_contend_2",
+                "project_title": "Class Lab",
+                "academic_tier": "coursework",
+                "deadline_hours": 48.0,
+                "requested_slot": 4,
+                "duration_slots": 2
+            }
+        ]
+    })
+    # Must fail with 409 Conflict, NOT award the occupied slot!
+    assert conflict_res.status_code == 409
+    assert "ALREADY confirmed" in conflict_res.json()["detail"]

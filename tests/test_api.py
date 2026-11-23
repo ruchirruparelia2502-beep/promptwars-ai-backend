@@ -20,15 +20,19 @@ def test_healthz_endpoint():
 
 
 def test_auth_token_issuance():
-    # 1. Student token
+    # 1. Student token (open for student discovery)
     res_stu = client.post("/api/v1/auth/token?role=student")
     assert res_stu.status_code == 200
     stu_data = res_stu.json()
     assert "access_token" in stu_data
     assert stu_data["user"]["role"] == "student"
 
-    # 2. Faculty token
-    res_fac = client.post("/api/v1/auth/token?role=faculty")
+    # 2. Faculty token without passcode -> 401 Unauthorized
+    res_unauth = client.post("/api/v1/auth/token?role=faculty")
+    assert res_unauth.status_code == 401
+
+    # 3. Faculty token with correct demo passcode -> 200 OK
+    res_fac = client.post("/api/v1/auth/token?role=faculty&passcode=faculty-auth-pass")
     assert res_fac.status_code == 200
     fac_data = res_fac.json()
     assert "access_token" in fac_data
@@ -36,7 +40,7 @@ def test_auth_token_issuance():
 
 
 def test_auth_me_claims():
-    res_fac = client.post("/api/v1/auth/token?role=faculty")
+    res_fac = client.post("/api/v1/auth/token?role=faculty&passcode=faculty-auth-pass")
     token = res_fac.json()["access_token"]
     
     res_me = client.get("/api/v1/auth/me", headers={"Authorization": f"Bearer {token}"})

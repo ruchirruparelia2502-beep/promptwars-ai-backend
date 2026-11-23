@@ -47,7 +47,7 @@ def resolve_contention_endpoint(
     Validates against existing booked bitmasks, saves the winning reservation,
     and dispatches IRCTC Vikalp rerouting for runner-ups.
     """
-    date_str = booking_date or datetime.date.today().isoformat()
+    date_str = request.booking_date or booking_date or datetime.date.today().isoformat()
     equip = db.get_equipment_by_id(request.equipment_id, booking_date=date_str)
     if not equip:
         raise HTTPException(
@@ -83,6 +83,20 @@ def resolve_contention_endpoint(
     target_mask = create_interval_mask(first_req.requested_slot, first_req.duration_slots)
     is_already_booked = not is_interval_available(current_mask, target_mask)
 
+    if is_already_booked:
+        req_start, req_end = slot_index_to_time(first_req.requested_slot)
+        next_free = find_next_available_window(current_mask, first_req.duration_slots, start_from=first_req.requested_slot + 1)
+        if next_free is None:
+            next_free = find_next_available_window(current_mask, first_req.duration_slots, start_from=0)
+        next_hint = f" Nearest available alternative window is slot {next_free} ({slot_index_to_time(next_free)[0]})." if next_free is not None else ""
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail=(
+                f"Contention Resolution Rejected: Target slot {first_req.requested_slot} ({req_start} - {req_end}) "
+                f"is ALREADY confirmed by an existing booking on {date_str}.{next_hint}"
+            )
+        )
+
     # Find department alternatives for Vikalp recommendations
     all_equip = db.get_all_equipment(booking_date=date_str)
     alternatives = [
@@ -102,22 +116,19 @@ def resolve_contention_endpoint(
     )
 
     allocated_slot = result.allocated_slot
-    # If the requested slot was ALREADY booked by someone else earlier,
-    # award the winner the nearest feasible Vikalp window instead of falsely claiming the occupied slot
-    if is_already_booked:
-        alt_slot = find_next_available_window(current_mask, result.duration_slots, start_from=first_req.requested_slot + 1)
-        if alt_slot is None:
-            alt_slot = find_next_available_window(current_mask, result.duration_slots, start_from=0)
-        if alt_slot is not None:
-            allocated_slot = alt_slot
 
     # 3. Commit Winning Allocation to SQLite Database
-    success, new_mask, _ = db.reserve_slot_atomic(
+    success, new_mask, reason = db.reserve_slot_atomic(
         request.equipment_id,
         allocated_slot,
         result.duration_slots,
         booking_date=date_str
     )
+    if not success:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail=f"Slot reservation failed during arbitration commit: {reason}."
+        )
 
     booking_id = f"book_arb_{uuid.uuid4().hex[:8]}"
     start_str, _ = slot_index_to_time(allocated_slot)
@@ -148,14 +159,22 @@ def resolve_contention_endpoint(
         "created_at": time.time()
     })
 
-    # Dynamic transparent arbitration explanation
-    conflict_note = " (Target slot was previously occupied; automatically rerouted to nearest available Vikalp window)" if is_already_booked else ""
-    ai_summary = (
+    # Call Gemini for authentic arbitration summary if configured
+    from app.services.genai_engine import generate_arbitration_explanation_ai
+    gemini_summary = generate_arbitration_explanation_ai(
+        winner_name=result.winner_name,
+        score=result.priority_score,
+        contenders_count=len(request.contenders),
+        equip_name=equip["name"],
+        time_str=f"{start_str} - {end_str}"
+    )
+
+    ai_summary = gemini_summary or (
         f"Smart Priority Arbitration Completed on {date_str}: Evaluated {len(request.contenders)} competing requests "
         f"using verified server profiles. Winner {result.winner_name} secured {start_str} - {end_str} "
         f"(MFPS score: {result.priority_score:.3f}) based on deadline urgency ({result.score_breakdown['deadline_urgency']:.2f}) "
-        f"and anti-hoarding equity ({result.score_breakdown['fairness_quotient']:.2f})."
-        f"{conflict_note} Runner-ups placed in IRCTC WL-1 with Vikalp recommendations."
+        f"and anti-hoarding equity ({result.score_breakdown['fairness_quotient']:.2f}). "
+        f"Runner-ups placed in IRCTC WL-1 with Vikalp recommendations."
     )
 
     return ContentionResolveResponse(
@@ -167,7 +186,7 @@ def resolve_contention_endpoint(
         lease_expires_at=lease_expires,
         priority_score=result.priority_score,
         score_breakdown=result.score_breakdown,
-        rationale=result.rationale + conflict_note,
+        rationale=result.rationale,
         ai_arbitration_summary=ai_summary,
         runner_ups=result.runner_ups,
         vikalp_alternatives=result.vikalp_alternatives

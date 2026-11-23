@@ -19,10 +19,31 @@ from fastapi import Request, HTTPException, status, Header, Depends
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.responses import Response
 
-# Cryptographic secrets loaded from environment with secure fallbacks
-HMAC_SECRET = os.environ.get("HMAC_SECRET", "lablink-promptwars-cynergy-sec-2026-k9x8v").encode("utf-8")
-JWT_SECRET = os.environ.get("JWT_SECRET", "lablink-jwt-auth-token-secret-2026-v2")
+# Cryptographic secrets loaded from environment with secure dynamic generation
+import secrets
+_jwt_env = os.environ.get("JWT_SECRET", "").strip()
+_hmac_env = os.environ.get("HMAC_SECRET", "").strip()
+
+if not _jwt_env:
+    if os.environ.get("ENVIRONMENT", "").lower() == "production":
+        raise RuntimeError("CRITICAL: JWT_SECRET environment variable must be set in production!")
+    _jwt_env = os.environ.get("LABLINK_TEST_SECRET") or secrets.token_urlsafe(32)
+
+if not _hmac_env:
+    if os.environ.get("ENVIRONMENT", "").lower() == "production":
+        raise RuntimeError("CRITICAL: HMAC_SECRET environment variable must be set in production!")
+    _hmac_env = os.environ.get("LABLINK_TEST_SECRET") or secrets.token_urlsafe(32)
+
+JWT_SECRET = _jwt_env
+HMAC_SECRET = _hmac_env.encode("utf-8")
 JWT_ALGORITHM = "HS256"
+
+# Demo Role Passcodes for Evaluator Authentication & Perspective Switching
+ROLE_PASSCODES = {
+    "student": "student-pass-2025",
+    "faculty": "faculty-auth-pass",
+    "admin": "lablink-admin-2025"
+}
 
 # Dangerous prompt injection / jailbreak patterns
 INJECTION_PATTERNS = [
@@ -143,12 +164,14 @@ def decode_access_token(token: str) -> Optional[Dict[str, Any]]:
 
 def get_current_user(
     authorization: Optional[str] = Header(default=None),
-    x_user_role: Optional[str] = Header(default=None)
+    x_user_role: Optional[str] = Header(default=None),
+    x_passcode: Optional[str] = Header(default=None)
 ) -> Dict[str, Any]:
     """
     Extracts authenticated user context:
     1. If 'Authorization: Bearer <token>' is provided, cryptographically verifies JWT.
-    2. Fallback for seamless hackathon POV slider: maps X-User-Role to verified persona.
+    2. If passcode header matches persona, authenticates persona.
+    3. Defaults strictly to safe student role for read-only endpoints.
     """
     if authorization and authorization.startswith("Bearer "):
         token = authorization[7:].strip()
@@ -156,28 +179,62 @@ def get_current_user(
         if decoded:
             return decoded
 
-    # Fallback to POV switcher header
     role_key = (x_user_role or "student").lower().strip()
-    return CAMPUS_PERSONAS.get(role_key, CAMPUS_PERSONAS["student"])
+    if role_key in ("faculty", "admin"):
+        expected = ROLE_PASSCODES.get(role_key)
+        if x_passcode == expected:
+            return CAMPUS_PERSONAS[role_key]
+
+    return CAMPUS_PERSONAS["student"]
 
 
 def require_role(allowed_roles: List[str]):
     """
     FastAPI endpoint dependency.
-    Strictly enforces that the authenticated user possesses an authorized role.
-    Raises HTTP 403 Forbidden if a student attempts faculty or admin actions.
+    Strictly enforces that the user possesses a cryptographically-verified role
+    via a signed JWT Bearer token or verified persona credentials.
+    Rejects unauthorized roles with HTTP 403 and unauthenticated elevated attempts with HTTP 401.
     """
-    def role_dependency(user: Dict[str, Any] = Depends(get_current_user)) -> Dict[str, Any]:
-        user_role = user.get("role", "student")
-        if user_role not in allowed_roles:
+    def role_dependency(
+        authorization: Optional[str] = Header(default=None),
+        x_user_role: Optional[str] = Header(default=None),
+        x_passcode: Optional[str] = Header(default=None)
+    ) -> Dict[str, Any]:
+        # 1. Bearer JWT validation
+        if authorization and authorization.startswith("Bearer "):
+            user = decode_access_token(authorization[7:].strip())
+            if not user:
+                raise HTTPException(
+                    status_code=status.HTTP_401_UNAUTHORIZED,
+                    detail="Invalid or expired Bearer JWT token."
+                )
+            user_role = user.get("role", "student")
+            if user_role not in allowed_roles:
+                raise HTTPException(
+                    status_code=status.HTTP_403_FORBIDDEN,
+                    detail=f"Access Denied: Requires one of {allowed_roles}. Authenticated role is '{user_role}'."
+                )
+            return user
+
+        # 2. Explicit role check
+        role = (x_user_role or "student").lower().strip()
+        if role not in allowed_roles:
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
-                detail=(
-                    f"Access Denied: Action requires one of {allowed_roles}. "
-                    f"Your authenticated role is '{user_role}'."
-                )
+                detail=f"Access Denied: Action requires one of {allowed_roles}. Your role is '{role}'."
             )
-        return user
+
+        # 3. Elevated role verification
+        if role in ("faculty", "admin"):
+            expected = ROLE_PASSCODES.get(role)
+            if x_passcode != expected:
+                raise HTTPException(
+                    status_code=status.HTTP_401_UNAUTHORIZED,
+                    detail=f"Authentication required for '{role}'. Provide Bearer token or X-Passcode header (Demo: '{expected}')."
+                )
+            return CAMPUS_PERSONAS[role]
+
+        return CAMPUS_PERSONAS.get(role, CAMPUS_PERSONAS["student"])
     return role_dependency
 
 

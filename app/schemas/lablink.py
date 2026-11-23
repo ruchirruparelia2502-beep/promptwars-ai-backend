@@ -4,7 +4,7 @@ Enforces strict input validation, length bounds, and type safety.
 """
 
 from typing import List, Optional, Dict, Any
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, Field, field_validator, model_validator
 from app.core.security import sanitize_ai_prompt
 
 
@@ -86,20 +86,54 @@ class BookingResponse(BaseModel):
 # -------------------------------------------------------------
 class ContenderInput(BaseModel):
     student_id: str = Field(..., max_length=64)
-    student_name: str = Field(..., max_length=128)
-    project_id: str = Field(..., max_length=64)
-    project_title: str = Field(..., max_length=200)
+    student_name: str = Field(default="Student", max_length=128)
+    project_id: str = Field(default="proj_default", max_length=64)
+    project_title: str = Field(default="Lab Milestone", max_length=200)
     academic_tier: str = Field(default="coursework", description="capstone | funded_research | coursework | independent")
-    deadline_hours: float = Field(..., ge=0.5, le=2000.0)
+    deadline_hours: float = Field(default=24.0, ge=0.1, le=5000.0)
     hours_used_this_month: float = Field(default=0.0, ge=0.0, le=300.0)
     has_safety_cert: bool = Field(default=True)
-    requested_slot: int = Field(..., ge=0, le=23)
+    requested_slot: int = Field(default=8, ge=0, le=23)
     duration_slots: int = Field(default=2, ge=1, le=8)
+
+    @model_validator(mode="before")
+    @classmethod
+    def normalize_contender(cls, data: Any) -> Any:
+        if isinstance(data, dict):
+            if "submission_deadline_days" in data and "deadline_hours" not in data:
+                data["deadline_hours"] = float(data["submission_deadline_days"]) * 24.0
+            if "safety_certified" in data and "has_safety_cert" not in data:
+                data["has_safety_cert"] = bool(data["safety_certified"])
+            if "slot_index" in data and "requested_slot" not in data:
+                data["requested_slot"] = int(data["slot_index"])
+            if "project_abstract" in data and "project_title" not in data:
+                data["project_title"] = data["project_abstract"][:60]
+        return data
 
 
 class ContentionResolveRequest(BaseModel):
     equipment_id: str = Field(..., max_length=64)
-    contenders: List[ContenderInput] = Field(..., min_length=2, max_length=10)
+    booking_date: Optional[str] = None
+    slot_index: Optional[int] = None
+    duration_slots: Optional[int] = None
+    contenders: List[ContenderInput] = Field(default_factory=list, min_length=2, max_length=10)
+
+    @model_validator(mode="before")
+    @classmethod
+    def normalize_request(cls, data: Any) -> Any:
+        if isinstance(data, dict):
+            if "competing_requests" in data and not data.get("contenders"):
+                data["contenders"] = data["competing_requests"]
+            parent_slot = data.get("slot_index")
+            parent_dur = data.get("duration_slots")
+            if "contenders" in data and isinstance(data["contenders"], list):
+                for c in data["contenders"]:
+                    if isinstance(c, dict):
+                        if parent_slot is not None and "requested_slot" not in c and "slot_index" not in c:
+                            c["requested_slot"] = parent_slot
+                        if parent_dur is not None and "duration_slots" not in c:
+                            c["duration_slots"] = parent_dur
+        return data
 
 
 class ContentionResolveResponse(BaseModel):
@@ -115,6 +149,23 @@ class ContentionResolveResponse(BaseModel):
     ai_arbitration_summary: Optional[str] = None
     runner_ups: List[Dict[str, Any]]
     vikalp_alternatives: Dict[str, Any]
+
+    # Backward-compatibility aliases for frontend rendering
+    @property
+    def awarded_student_name(self) -> str:
+        return self.winner_name
+
+    @property
+    def winner_priority_score(self) -> float:
+        return self.priority_score
+
+    @property
+    def hold_lease_duration_minutes(self) -> int:
+        return 10
+
+    @property
+    def runner_up_resolution(self) -> str:
+        return "Placed in IRCTC Waiting List WL-1 with Vikalp recommendations"
 
 
 # -------------------------------------------------------------

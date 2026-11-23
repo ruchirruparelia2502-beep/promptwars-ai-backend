@@ -11,7 +11,7 @@ import time
 import uuid
 import datetime
 from typing import List, Dict, Any, Optional
-from fastapi import APIRouter, HTTPException, Query, status, Body
+from fastapi import APIRouter, HTTPException, Query, status, Body, Depends
 from app.core.database import db
 from app.core.bitmask import (
     TOTAL_SLOTS,
@@ -21,7 +21,7 @@ from app.core.bitmask import (
     find_next_available_window,
     calculate_utilization_percentage
 )
-from app.core.security import generate_state_signature, verify_state_signature
+from app.core.security import generate_state_signature, verify_state_signature, get_current_user
 from app.schemas.lablink import BookingCreateRequest, BookingResponse
 
 router = APIRouter(prefix="/api/v1/bookings", tags=["Slot Booking"])
@@ -69,11 +69,14 @@ def get_equipment_slots(
 
 
 @router.post("", response_model=BookingResponse)
-def create_slot_booking(request: BookingCreateRequest):
+def create_slot_booking(
+    request: BookingCreateRequest,
+    current_user: Dict[str, Any] = Depends(get_current_user)
+):
     """
     Creates an atomic slot reservation using date-partitioned O(1) bitwise operations.
-    Implements BookMyShow 10-Minute Leased Hold pattern:
-    Slot is locked in 'HOLD_LEASE' status for 10 minutes.
+    Takes student identity strictly from the verified JWT token to prevent spoofing.
+    Implements BookMyShow 10-Minute Leased Hold pattern.
     """
     date_str = request.booking_date or datetime.date.today().isoformat()
     equip = db.get_equipment_by_id(request.equipment_id, booking_date=date_str)
@@ -82,6 +85,10 @@ def create_slot_booking(request: BookingCreateRequest):
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"Equipment '{request.equipment_id}' not found."
         )
+
+    # Enforce verified identity from token
+    student_id = current_user.get("sub") or request.student_id
+    student_name = current_user.get("name") or request.student_name
 
     # 1. Create bitmask for the requested interval in O(1)
     req_mask = create_interval_mask(request.slot_index, request.duration_slots)
@@ -133,8 +140,8 @@ def create_slot_booking(request: BookingCreateRequest):
         "booking_id": booking_id,
         "equipment_id": request.equipment_id,
         "equipment_name": equip["name"],
-        "student_id": request.student_id,
-        "student_name": request.student_name,
+        "student_id": student_id,
+        "student_name": student_name,
         "project_id": request.project_id,
         "project_title": request.project_title,
         "booking_date": date_str,
