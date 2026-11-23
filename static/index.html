@@ -865,9 +865,15 @@ if (typeof module !== 'undefined') module.exports = globalThis.tailwind.config;
           <label class="flex flex-col gap-gutter-xs">
             <span class="font-label text-label-sm text-on-surface-variant">Target Equipment</span>
             <select id="req-equip" class="w-full px-gutter-md py-gutter-sm rounded-lg bg-surface-container-low border border-outline-variant text-body-md text-on-surface focus:outline-none focus:border-primary focus-visible:ring-2 focus-visible:ring-primary">
-              <option>48h H100 Node · CS AI Lab</option>
-              <option>Jetson Orin Kit · ECE Dept</option>
-              <option>Franka Arm · Mech &amp; Robotics</option>
+              <option value="equip_rpi_01">Raspberry Pi 5 + Hailo NPU (13 TOPS) · Frugal Entry ($0.50/hr)</option>
+              <option value="equip_jetson_01">Jetson AGX Orin 64GB Industrial Kit · ECE Robotics ($12.00/hr)</option>
+              <option value="equip_rtx_01">Dual RTX 4090 AI Workstation Alpha · CS AI Lab ($10.00/hr)</option>
+              <option value="equip_fpga_01">Xilinx Zynq UltraScale+ FPGA ZCU102 · ECE VLSI ($15.00/hr)</option>
+              <option value="equip_ur5e_01">Universal Robots UR5e Collaborative Arm · Mech Cell ($15.00/hr)</option>
+              <option value="equip_ender_01">Creality Ender-3 V3 FDM 3D Printer · Rapid Fab ($0.70/hr)</option>
+              <option value="equip_pcr_01">Bio-Rad CFX96 qPCR Detection System · Biotech ($18.00/hr)</option>
+              <option value="equip_tek_01">Tektronix 4-GHz Mixed Signal Scope · ECE RF ($18.00/hr)</option>
+              <option value="equip_hpc_01">Campus HPC GPU Cluster Node (4x A100) · Data Center ($35.00/hr)</option>
             </select>
           </label>
           <label class="flex flex-col gap-gutter-xs">
@@ -995,53 +1001,226 @@ if (typeof module !== 'undefined') module.exports = globalThis.tailwind.config;
     };
 
     const equipmentCatalog = [
+      // Frugal Entry Tier
       {
-        title: 'NVIDIA H100 Tensor Core (Bay 02)',
-        tags: ['llm', 'vision', 'transformer', 'train', 'gpu', 'vram', 'deep', 'learning', 'multimodal', 'model', 'ai', '60gb', '80gb'],
-        why: '80GB HBM3 VRAM & FP8 Tensor Cores — ideal for large vision transformers, multimodal training, and LLM fine-tuning.',
-        meta: 'CS AI Lab · Available Now · Mirror Bay 03 open at 14:00',
-        action: 'Book H100',
-        toast: 'NVIDIA H100 Tensor Core slot queued for your project.'
+        id: 'equip_rpi_01',
+        title: 'Raspberry Pi 5 Edge AI Prototyping Kit',
+        tags: ['raspberry', 'pi', 'rpi', 'edge', 'iot', 'hailo', 'npu', 'vision', 'lightweight', 'frugal', 'low-cost'],
+        why: 'Bare-minimum ideal edge platform: 13 TOPS Hailo NPU runs YOLO/MobileNet smoothly at $0.50/hr.',
+        meta: 'IoT Lab CS-C08 · Frugal Entry ($0.50/hr) · Available Now',
+        action: 'Book RPi5',
+        toast: 'Raspberry Pi 5 Edge AI Kit reserved at Station CS-C08.'
       },
       {
-        title: 'Jetson Orin Nano Dev Kit (Unit #04)',
-        tags: ['rover', 'edge', 'autonomous', 'robot', 'inference', 'embedded', 'drone', 'camera', 'real-time', 'ai'],
-        why: '40 TOPS low-power edge AI module — built for onboard autonomous rover navigation and real-time sensor fusion.',
-        meta: 'ECE Dept · Reserve Unit #04 idle · 24h Checkout',
-        action: 'Reserve Kit',
-        toast: 'Jetson Orin Nano Dev Kit #04 reserved for your project.'
+        id: 'equip_stm32_01',
+        title: 'STM32H7 Dual-Core Nucleo Prototyping Station',
+        tags: ['stm32', 'arm', 'cortex', 'mcu', 'microcontroller', 'embedded', 'freertos', 'bare-metal', 'frugal'],
+        why: '480MHz Cortex-M7 dual-core board for real-time control, sensor interfacing, and low-power IoT at $0.30/hr.',
+        meta: 'Embedded Lab ECE-102 · Frugal Entry ($0.30/hr) · Available Now',
+        action: 'Book STM32',
+        toast: 'STM32H7 Dual-Core Nucleo Station reserved at Bench ECE-102.'
       },
       {
-        title: 'Franka Emika Panda Arm (Bay 05)',
-        tags: ['arm', 'robot', 'robotic', 'grasp', 'tactile', 'manipulation', 'autonomous', 'kinematics', 'force', 'torque'],
-        why: '7-DoF force-torque sensing manipulator — suited for closed-loop grasping, sim2real, and robotic control.',
-        meta: 'Mech & Robotics · Available Now · Bay 05',
-        action: 'Book Arm',
-        toast: 'Franka Emika Panda Arm slot booked at Bay 05.'
+        id: 'equip_rigol_01',
+        title: 'Rigol DS1054Z 50-MHz 4-Channel Digital Oscilloscope',
+        tags: ['oscilloscope', 'rigol', 'circuits', 'debugging', 'voltage', 'waveform', 'bench', 'frugal'],
+        why: '4-channel 50-MHz digital scope with 24 Mpts memory depth for standard circuit debugging at $0.80/hr.',
+        meta: 'Circuits Lab ECE-107 · Frugal Entry ($0.80/hr) · Available Now',
+        action: 'Book Scope',
+        toast: 'Rigol DS1054Z Oscilloscope booked at Bench ECE-107.'
       },
       {
-        title: 'Leica BLK360 3D Scanner (Bay 08)',
-        tags: ['3d', 'scan', 'point', 'cloud', 'nerf', 'spatial', 'lidar', 'reconstruction', 'gaussian', 'mapping', 'capture'],
-        why: 'High-density LiDAR + HDR spherical imaging — captures clean point clouds for NeRF & 3D Gaussian Splatting.',
-        meta: 'Spatial Lab · Available Now · 96% Battery',
-        action: 'Book Scanner',
-        toast: 'Leica BLK360 3D Scanner reserved at Spatial Lab Bay 08.'
+        id: 'equip_ender_01',
+        title: 'Creality Ender-3 V3 Plus FDM 3D Printer',
+        tags: ['3d', 'print', 'fdm', 'creality', 'ender3', 'pla', 'petg', 'prototyping', 'brackets', 'chassis', 'frugal'],
+        why: 'Fast 600 mm/s FDM printing for structural enclosures and brackets using affordable PLA/PETG ($20/spool).',
+        meta: 'Rapid Fab Room ME-101 · Frugal Entry ($0.70/hr) · Available Now',
+        action: 'Book Ender-3',
+        toast: 'Creality Ender-3 FDM print slot reserved at Room ME-101.'
       },
       {
-        title: 'Xilinx Alveo U280 FPGA (Bay 09)',
-        tags: ['fpga', 'hardware', 'verilog', 'hdl', 'accelerator', 'latency', 'dsp', 'kernel', 'ece', 'edge'],
-        why: 'HBM2 FPGA accelerator card — optimal for custom hardware kernels, low-latency inference, and ECE synthesis.',
-        meta: 'ECE Compute · Available Now · Bay 09',
+        id: 'equip_pcr_mini_01',
+        title: 'Bento Lab Compact DNA Amplification & Gel Kit',
+        tags: ['pcr', 'dna', 'gel', 'electrophoresis', 'bento', 'molecular', 'frugal', 'entry', 'biotech'],
+        why: 'Portable 32-tube thermal cycler and Blue LED transilluminator for student genetic assays at $1.20/hr.',
+        meta: 'Undergrad Bio Lab BT-104 · Frugal Entry ($1.20/hr) · Available Now',
+        action: 'Book Bento',
+        toast: 'Bento Lab Compact DNA kit reserved at Bench BT-104.'
+      },
+      {
+        id: 'equip_fpga_basys_01',
+        title: 'Digilent Basys 3 Artix-7 FPGA Trainer Board',
+        tags: ['fpga', 'basys3', 'artix7', 'verilog', 'vhdl', 'digital', 'logic', 'frugal'],
+        why: 'Artix-7 XC7A35T board with 16 switches and 7-segment displays for digital logic coursework at $0.60/hr.',
+        meta: 'Digital Lab ECE-103 · Frugal Entry ($0.60/hr) · Available Now',
+        action: 'Book Basys 3',
+        toast: 'Basys 3 Artix-7 FPGA board reserved at Bench ECE-103.'
+      },
+
+      // Mid-Range Tier
+      {
+        id: 'equip_jetson_nano_01',
+        title: 'NVIDIA Jetson Orin Nano 8GB Dev Kit',
+        tags: ['jetson', 'orin', 'nano', 'gpu', 'cuda', 'edge', 'robotics', 'camera', 'vision'],
+        why: '40 TOPS low-power Ampere module — built for onboard autonomous rover navigation and sensor fusion.',
+        meta: 'Robotics Center ECE-100 · Mid-Range ($2.50/hr) · Conflict 14:00',
+        action: 'Resolve Slot',
+        toast: 'Jetson Orin Nano Dev Kit reserved at Bench ECE-100.'
+      },
+      {
+        id: 'equip_strat_01',
+        title: 'Stratasys F170 Industrial FDM 3D Printer',
+        tags: ['3d', 'print', 'fdm', 'stratasys', 'abs', 'tpu', 'chassis', 'cad', 'enclosure', 'brackets'],
+        why: '±0.200 mm dimensional accuracy with tough ABS & TPU 92A for durable functional prototyping.',
+        meta: 'Rapid Prototyping ME-105 · Mid-Range ($4.50/hr) · Available Now',
+        action: 'Book F170',
+        toast: 'Stratasys F170 industrial print slot reserved in Room ME-105.'
+      },
+      {
+        id: 'equip_laser_01',
+        title: 'Epilog Fusion Pro 48 CO2 Laser Cutter (80W)',
+        tags: ['laser', 'cutter', 'epilog', 'acrylic', 'plywood', 'chassis', 'flat-pack', 'cutting'],
+        why: '80W CO2 laser cutting 1219 x 914 mm sheets of acrylic, Delrin, and plywood for robot chassis.',
+        meta: 'Makerspace ME-110 · Mid-Range ($6.00/hr) · Available Now',
+        action: 'Book Laser',
+        toast: 'Epilog Laser Cutter slot booked at Makerspace ME-110.'
+      },
+      {
+        id: 'equip_flir_01',
+        title: 'FLIR T865 High-Res Thermal Imaging Camera',
+        tags: ['thermal', 'flir', 'infrared', 'temperature', 'heat', 'pcb', 'diagnostics'],
+        why: '640 x 480 IR resolution with <30 mK sensitivity for PCB thermal hotspot analysis and building energy audits.',
+        meta: 'Materials Lab ME-302 · Mid-Range ($8.00/hr) · Available Now',
+        action: 'Book FLIR',
+        toast: 'FLIR T865 Thermal Camera reserved at Bench ME-302.'
+      },
+      {
+        id: 'equip_vr_quest_01',
+        title: 'Meta Quest Pro & Valve Index Spatial Computing Bench',
+        tags: ['vr', 'ar', 'spatial', 'unity', 'unreal', 'quest', 'valve', 'index', 'tracking'],
+        why: 'Base Station 2.0 full-body tracking with RTX 4080 compute for immersive HCI and digital twin simulations.',
+        meta: 'HCI Lab CS-D04 · Mid-Range ($3.00/hr) · Available Now',
+        action: 'Book VR Bench',
+        toast: 'Spatial Computing VR Bench booked at Station CS-D04.'
+      },
+
+      // High-End Capstone & Research Tier
+      {
+        id: 'equip_rtx_01',
+        title: 'Dual NVIDIA RTX 4090 AI Workstation Alpha',
+        tags: ['rtx', '4090', 'gpu', 'vram', 'deep', 'learning', 'llm', 'transformers', 'pytorch', 'cuda', '48gb'],
+        why: '48GB combined VRAM with 32-core Threadripper and 256GB ECC RAM for LLM fine-tuning and vision transformers.',
+        meta: 'Advanced AI Lab CS-B12 · High-End ($10.00/hr) · Available Now',
+        action: 'Book RTX 4090',
+        toast: 'Dual RTX 4090 Workstation Alpha slot queued at Station CS-B12.'
+      },
+      {
+        id: 'equip_rtx_02',
+        title: 'Dual NVIDIA RTX 4090 AI Workstation Beta',
+        tags: ['rtx', '4090', 'gpu', 'vram', 'deep', 'learning', 'llm', 'transformers', 'pytorch', 'cuda', '48gb'],
+        why: 'Twin compute cluster station dedicated to capstone deep learning models requiring 24+ hour training runs.',
+        meta: 'Advanced AI Lab CS-B14 · High-End ($10.00/hr) · Available Now',
+        action: 'Book RTX 4090',
+        toast: 'Dual RTX 4090 Workstation Beta slot queued at Station CS-B14.'
+      },
+      {
+        id: 'equip_jetson_01',
+        title: 'NVIDIA Jetson AGX Orin 64GB Industrial Dev Kit',
+        tags: ['jetson', 'orin', 'agx', 'gpu', 'cuda', 'slam', 'lidar', 'autonomous', 'robotics', 'heavy', '275tops'],
+        why: '275 TOPS AI compute and 64GB LPDDR5 bandwidth for real-time 3D point-cloud LiDAR SLAM on mobile robots.',
+        meta: 'Robotics Center ECE-101 · High-End ($12.00/hr) · Conflict at 14:00',
+        action: 'Resolve Slot',
+        toast: 'Jetson AGX Orin 64GB slot requested at Bench ECE-101.'
+      },
+      {
+        id: 'equip_fpga_01',
+        title: 'Xilinx Zynq UltraScale+ MPSoC ZCU102',
+        tags: ['fpga', 'xilinx', 'zynq', 'ultrascale', 'verilog', 'vhdl', 'dsp', 'vlsi', 'rtl', 'heavy'],
+        why: 'XCZU9EG UltraScale+ FPGA with quad ARM A53 cores and 8GB DDR4 for custom RTL acceleration pipelines.',
+        meta: 'VLSI Design Lab ECE-104 · High-End ($15.00/hr) · Available Now',
         action: 'Book FPGA',
-        toast: 'Xilinx Alveo U280 FPGA slot requested at Bay 09.'
+        toast: 'Xilinx ZCU102 UltraScale+ slot booked at Bench ECE-104.'
       },
       {
-        title: 'Formlabs Form 4 SLA (Bay 07)',
-        tags: ['print', '3d', 'mount', 'enclosure', 'prototype', 'cad', 'chassis', 'bracket', 'fabrication', 'rover'],
-        why: 'High-precision resin 3D printing — ideal for custom sensor brackets, rover chassis mounts, and enclosures.',
-        meta: 'Fabrication Lab · Ready at 16:30 after resin refill',
-        action: 'Queue Print',
+        id: 'equip_tek_01',
+        title: 'Tektronix 4-GHz Mixed Signal Oscilloscope',
+        tags: ['oscilloscope', 'tektronix', 'rf', 'signal', 'high-speed', 'debugging', 'waveform', '4ghz'],
+        why: '4 GHz bandwidth with 25 GS/s sampling and 16 digital logic channels for high-speed bus timing verification.',
+        meta: 'RF Lab ECE-109 · High-End ($18.00/hr) · Available Now',
+        action: 'Book Scope',
+        toast: 'Tektronix 4-GHz Scope booked at Bench ECE-109.'
+      },
+      {
+        id: 'equip_ur5e_01',
+        title: 'Universal Robots UR5e Collaborative Robotic Arm',
+        tags: ['ur5e', 'robotics', 'arm', 'manipulation', 'kinematics', 'ros', 'automation', 'mechatronics'],
+        why: '6-axis precision collaborative arm with 850mm reach and force/torque control for autonomous manipulation.',
+        meta: 'Robotics Cell ME-205 · High-End ($15.00/hr) · Available Now',
+        action: 'Book Arm',
+        toast: 'Universal Robots UR5e Arm slot booked at Cell ME-205.'
+      },
+      {
+        id: 'equip_kuka_01',
+        title: 'KUKA youBot Omnidirectional Mobile Robot',
+        tags: ['kuka', 'youbot', 'mobile', 'robot', 'mecanum', 'slam', 'ros', 'manipulation', 'heavy'],
+        why: '4 Mecanum omnidirectional wheels with 5-DOF gripper arm and Hokuyo LiDAR for autonomous logistics.',
+        meta: 'Robotics Cell ME-208 · High-End ($14.00/hr) · Available Now',
+        action: 'Book KUKA',
+        toast: 'KUKA youBot Mobile Robot booked at Cell ME-208.'
+      },
+      {
+        id: 'equip_form_01',
+        title: 'Formlabs Form 4 SLA Precision Resin 3D Printer',
+        tags: ['3d', 'print', 'sla', 'formlabs', 'resin', 'precision', '50-micron', 'medical', 'heavy'],
+        why: '50-micron Low Force Display (LFD) precision with engineering & biocompatible resins for tight micro-fluidic tolerances.',
+        meta: 'Rapid Fab ME-102 · High-End ($16.00/hr) · Available 16:30',
+        action: 'Queue SLA',
         toast: 'Formlabs Form 4 SLA print slot queued for 16:30.'
+      },
+      {
+        id: 'equip_pcr_01',
+        title: 'Bio-Rad CFX96 Real-Time Quantitative PCR System',
+        tags: ['pcr', 'qpcr', 'genomics', 'dna', 'rna', 'biotech', 'molecular', 'thermal', 'cycler'],
+        why: '96-well 5-target multiplex real-time qPCR for clinical and genomic expression quantification.',
+        meta: 'Molecular Lab BT-201 · High-End ($18.00/hr) · Available Now',
+        action: 'Book qPCR',
+        toast: 'Bio-Rad CFX96 qPCR System slot booked in Room BT-201.'
+      },
+      {
+        id: 'equip_hplc_01',
+        title: 'Agilent 1260 Infinity II HPLC System',
+        tags: ['hplc', 'chromatography', 'agilent', 'chemical', 'purification', 'spectrometry', 'assay'],
+        why: '600-bar quaternary pump with Diode Array Detector for chemical purification and compound characterization.',
+        meta: 'Analytical Suite BT-305 · High-End ($20.00/hr) · Available Now',
+        action: 'Book HPLC',
+        toast: 'Agilent 1260 HPLC System slot booked in Room BT-305.'
+      },
+      {
+        id: 'equip_hpc_01',
+        title: 'Campus HPC GPU Cluster Node (4x A100 80GB)',
+        tags: ['a100', 'hpc', 'cluster', 'supercomputing', 'distributed', 'slurm', 'llm', 'heavy'],
+        why: '4x NVIDIA A100 80GB SXM4 with 200Gb/s InfiniBand interconnect for multi-node distributed AI training.',
+        meta: 'Data Center Rack 04-HPC · High-End ($35.00/hr) · Slurm Queue',
+        action: 'Request Node',
+        toast: 'Slurm job batch requested on Campus HPC A100 Cluster.'
+      },
+      {
+        id: 'equip_usrp_01',
+        title: 'NI USRP-2974 High-Performance SDR',
+        tags: ['sdr', 'usrp', 'radio', '5g', 'telecom', 'wireless', 'rf', 'satellite'],
+        why: '10 MHz to 6 GHz coverage with 160 MHz real-time bandwidth and onboard Core i7 for 5G beamforming experiments.',
+        meta: 'Telecom Lab ECE-202 · High-End ($14.00/hr) · Available Now',
+        action: 'Book SDR',
+        toast: 'NI USRP-2974 SDR slot booked at Bench ECE-202.'
+      },
+      {
+        id: 'equip_keysight_01',
+        title: 'Keysight E5080B 4.5-GHz Vector Network Analyzer',
+        tags: ['vna', 'keysight', 'rf', 'microwave', 'antenna', 'impedance', 's-parameters'],
+        why: '4-port 140 dB dynamic range network analyzer for antenna matching and RF filter characterization.',
+        meta: 'RF Lab RF-301 · High-End ($22.00/hr) · Available Now',
+        action: 'Book VNA',
+        toast: 'Keysight E5080B VNA slot booked at Bench RF-301.'
       }
     ];
 
