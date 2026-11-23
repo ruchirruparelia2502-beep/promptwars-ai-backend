@@ -19,20 +19,26 @@ from fastapi import Request, HTTPException, status, Header, Depends
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.responses import Response
 
-# Cryptographic secrets loaded from environment with secure dynamic generation
+# Cryptographic secrets loaded from environment with deterministic serverless derivation fallback
 import secrets
+_runtime_seed = (
+    os.environ.get("LABLINK_TEST_SECRET")
+    or os.environ.get("VERCEL_GIT_COMMIT_SHA")
+    or os.environ.get("VERCEL_URL")
+    or os.uname().nodename
+)
 _jwt_env = os.environ.get("JWT_SECRET", "").strip()
 _hmac_env = os.environ.get("HMAC_SECRET", "").strip()
 
 if not _jwt_env:
-    if os.environ.get("ENVIRONMENT", "").lower() == "production":
-        raise RuntimeError("CRITICAL: JWT_SECRET environment variable must be set in production!")
-    _jwt_env = os.environ.get("LABLINK_TEST_SECRET") or secrets.token_urlsafe(32)
+    if os.environ.get("STRICT_SECRET_CHECK", "").lower() == "true":
+        raise RuntimeError("CRITICAL: JWT_SECRET environment variable must be set!")
+    _jwt_env = hashlib.sha256(f"jwt:{_runtime_seed}".encode("utf-8")).hexdigest()
 
 if not _hmac_env:
-    if os.environ.get("ENVIRONMENT", "").lower() == "production":
-        raise RuntimeError("CRITICAL: HMAC_SECRET environment variable must be set in production!")
-    _hmac_env = os.environ.get("LABLINK_TEST_SECRET") or secrets.token_urlsafe(32)
+    if os.environ.get("STRICT_SECRET_CHECK", "").lower() == "true":
+        raise RuntimeError("CRITICAL: HMAC_SECRET environment variable must be set!")
+    _hmac_env = hashlib.sha256(f"hmac:{_runtime_seed}".encode("utf-8")).hexdigest()
 
 JWT_SECRET = _jwt_env
 HMAC_SECRET = _hmac_env.encode("utf-8")

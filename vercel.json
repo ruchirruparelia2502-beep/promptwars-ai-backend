@@ -16,5 +16,9 @@
       "src": "/(.*)",
       "dest": "api/index.py"
     }
-  ]
+  ],
+  "env": {
+    "DEFAULT_GEMINI_MODEL": "gemini-2.5-flash",
+    "PYTHONUNBUFFERED": "1"
+  }
 }
