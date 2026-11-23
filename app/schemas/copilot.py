@@ -1,6 +1,7 @@
 """
 Pydantic Schemas for Lab Copilot Feature
-Strict input sanitization, bounds checking, and zero-secrets leakage.
+Strict input sanitization, bounds checking, zero-secrets leakage,
+and Frugal / Minimum-Viable Equipment Recommendation.
 """
 
 from typing import List, Optional, Dict, Any
@@ -38,11 +39,16 @@ class EquipmentRecommendation(BaseModel):
     fit_reason: str
     specifications_highlight: str
     safety_prerequisites: str
+    is_cost_effective_choice: bool = Field(default=True, description="True if chosen for resource frugality")
 
 
 class CopilotChatResponse(BaseModel):
     reply: str
     recommended_equipment: List[EquipmentRecommendation] = Field(default_factory=list)
     suggested_duration_slots: int = Field(default=2, ge=1, le=8)
+    resource_efficiency_note: str = Field(
+        ...,
+        description="Explains why this is the bare minimum feasible, cost-conscious choice avoiding lab resource waste."
+    )
     actionable_next_step: str
     model_used: str
