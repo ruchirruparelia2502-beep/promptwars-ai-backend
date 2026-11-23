@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PromptWars x Cynergy - AI Playground</title>
+  <title>LabLink — PromptWars x Cynergy Campus Laboratory Platform</title>
+  <!-- Tailwind CSS via CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -11,190 +12,1080 @@
       theme: {
         extend: {
           colors: {
-            brand: { 500: '#6366f1', 600: '#4f46e5', 700: '#4338ca' }
+            brand: { 50: '#eef2ff', 100: '#e0e7ff', 500: '#6366f1', 600: '#4f46e5', 700: '#4338ca', 900: '#312e81' },
+            accent: { 400: '#38bdf8', 500: '#0ea5e9' },
+            success: { 500: '#10b981', 600: '#059669' },
+            warning: { 500: '#f59e0b' },
+            danger: { 500: '#ef4444' }
           }
         }
       }
     }
   </script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* WCAG 2.1 AA Compliant Focus Rings */
+    *:focus-visible {
+      outline: 2px solid #38bdf8 !important;
+      outline-offset: 2px !important;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #334155;
+      border-radius: 9999px;
+    }
+  </style>
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans antialiased">
-  <!-- Navbar -->
-  <header class="border-b border-slate-800 bg-slate-900/60 backdrop-blur sticky top-0 z-50">
-    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans antialiased selection:bg-indigo-500 selection:text-white">
+
+  <!-- ========================================================= -->
+  <!-- Top Accessibility Announcement (Screen Readers)           -->
+  <!-- ========================================================= -->
+  <div id="sr-announcements" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+
+  <!-- ========================================================= -->
+  <!-- Header with Instant Role-Switcher (Zero Login Barrier)   -->
+  <!-- ========================================================= -->
+  <header class="border-b border-slate-800 bg-slate-900/90 backdrop-blur-md sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex flex-wrap items-center justify-between gap-4">
+      
+      <!-- Logo & System Status -->
       <div class="flex items-center space-x-3">
-        <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-indigo-500 to-cyan-400 flex items-center justify-center font-bold text-white shadow-lg shadow-indigo-500/20">
-          ⚡
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 via-indigo-500 to-cyan-400 flex items-center justify-center font-black text-xl text-white shadow-lg shadow-indigo-500/25">
+          <i class="fa-solid fa-microchip"></i>
         </div>
-        <span class="font-bold text-lg tracking-tight bg-gradient-to-r from-white to-slate-400 bg-clip-text text-transparent">
-          PromptWars <span class="text-indigo-400 font-mono text-sm px-1.5 py-0.5 rounded bg-indigo-950 border border-indigo-800 ml-1">x Cynergy</span>
-        </span>
+        <div>
+          <div class="flex items-center space-x-2">
+            <h1 class="font-extrabold text-xl tracking-tight bg-gradient-to-r from-white via-slate-100 to-slate-400 bg-clip-text text-transparent">
+              LabLink
+            </h1>
+            <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-indigo-950/80 text-indigo-300 border border-indigo-700">
+              GenAI Campus Mesh
+            </span>
+          </div>
+          <p class="text-xs text-slate-400">Making College Laboratories Accessible Across Departments</p>
+        </div>
       </div>
-      <div class="flex items-center space-x-3 text-sm">
-        <span id="health-badge" class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-950 text-emerald-400 border border-emerald-800">
-          <span class="w-1.5 h-1.5 mr-1.5 bg-emerald-400 rounded-full animate-pulse"></span>
-          Backend Live
+
+      <!-- Center: Role Switcher (No Login Page Requirement) -->
+      <nav aria-label="Role Switcher" class="flex items-center bg-slate-950/80 p-1.5 rounded-xl border border-slate-800 shadow-inner">
+        <span class="text-xs font-semibold text-slate-400 px-2.5 mr-1 flex items-center">
+          <i class="fa-solid fa-user-gear mr-1.5 text-indigo-400"></i> Role:
         </span>
-        <a href="/docs" target="_blank" class="px-3 py-1.5 rounded-lg border border-slate-700 hover:bg-slate-800 text-slate-300 transition text-xs font-medium">
-          API Docs <i class="fa-solid fa-arrow-up-right-from-square ml-1 text-[10px]"></i>
+        <button id="role-student" onclick="setRole('student')" 
+          class="px-3 py-1.5 rounded-lg text-xs font-medium transition-all flex items-center space-x-1.5 bg-indigo-600 text-white shadow"
+          aria-pressed="true">
+          <i class="fa-solid fa-user-graduate"></i>
+          <span>Student</span>
+        </button>
+        <button id="role-faculty" onclick="setRole('faculty')" 
+          class="px-3 py-1.5 rounded-lg text-xs font-medium transition-all text-slate-300 hover:text-white hover:bg-slate-800 flex items-center space-x-1.5"
+          aria-pressed="false">
+          <i class="fa-solid fa-chalkboard-user"></i>
+          <span>Faculty</span>
+        </button>
+        <button id="role-admin" onclick="setRole('lab_admin')" 
+          class="px-3 py-1.5 rounded-lg text-xs font-medium transition-all text-slate-300 hover:text-white hover:bg-slate-800 flex items-center space-x-1.5"
+          aria-pressed="false">
+          <i class="fa-solid fa-screwdriver-wrench"></i>
+          <span>Lab Admin</span>
+        </button>
+      </nav>
+
+      <!-- Right: Badges & API Docs -->
+      <div class="flex items-center space-x-2 text-xs">
+        <span class="hidden md:inline-flex items-center px-2.5 py-1 rounded-full bg-emerald-950 text-emerald-400 border border-emerald-800">
+          <span class="w-1.5 h-1.5 mr-1.5 bg-emerald-400 rounded-full animate-pulse"></span>
+          O(1) Bitmask Online
+        </span>
+        <a href="/docs" target="_blank" class="px-3 py-1.5 rounded-lg border border-slate-700 bg-slate-800/80 hover:bg-slate-700 text-slate-200 transition font-medium flex items-center">
+          <i class="fa-solid fa-book-open mr-1.5 text-indigo-400"></i> API Docs
         </a>
       </div>
     </div>
   </header>
 
-  <!-- Main Content -->
-  <main class="flex-1 max-w-6xl w-full mx-auto p-4 md:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
-    <!-- Left Column: Controls & Prompt -->
-    <div class="lg:col-span-5 flex flex-col space-y-4">
-      <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 shadow-xl flex flex-col space-y-4">
-        <div>
-          <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">System Persona / Instructions</label>
-          <textarea id="system-prompt" rows="2" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-200 focus:outline-none focus:border-indigo-500 transition resize-none placeholder-slate-600" placeholder="e.g. You are a fast, concise AI hackathon strategist.">You are a creative, high-impact AI assistant built for the PromptWars hackathon.</textarea>
+  <!-- ========================================================= -->
+  <!-- Navigation Tabs (WCAG 2.1 AA Tablist)                    -->
+  <!-- ========================================================= -->
+  <section class="border-b border-slate-800 bg-slate-900/40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 flex overflow-x-auto custom-scrollbar space-x-1 py-2" role="tablist" aria-label="Portal Navigation Tabs">
+      <button onclick="switchTab('discovery')" id="tab-discovery" role="tab" aria-selected="true" aria-controls="view-discovery"
+        class="tab-btn px-4 py-2 rounded-lg text-xs font-semibold flex items-center space-x-2 bg-indigo-600/20 text-indigo-300 border border-indigo-500/40">
+        <i class="fa-solid fa-compass"></i>
+        <span>Equipment Discovery & Booking</span>
+      </button>
+
+      <button onclick="switchTab('contention')" id="tab-contention" role="tab" aria-selected="false" aria-controls="view-contention"
+        class="tab-btn px-4 py-2 rounded-lg text-xs font-semibold flex items-center space-x-2 text-slate-400 hover:text-slate-200 hover:bg-slate-800/60 transition">
+        <i class="fa-solid fa-bolt-lightning text-amber-400"></i>
+        <span>Smart Contention Resolver (IRCTC & BMS)</span>
+      </button>
+
+      <button onclick="switchTab('faculty')" id="tab-faculty" role="tab" aria-selected="false" aria-controls="view-faculty"
+        class="tab-btn px-4 py-2 rounded-lg text-xs font-semibold flex items-center space-x-2 text-slate-400 hover:text-slate-200 hover:bg-slate-800/60 transition">
+        <i class="fa-solid fa-stamp text-sky-400"></i>
+        <span>Faculty Approval Hub</span>
+        <span id="pending-badge" class="px-1.5 py-0.2 rounded-full text-[10px] bg-sky-900 text-sky-300 border border-sky-700">1</span>
+      </button>
+
+      <button onclick="switchTab('analytics')" id="tab-analytics" role="tab" aria-selected="false" aria-controls="view-analytics"
+        class="tab-btn px-4 py-2 rounded-lg text-xs font-semibold flex items-center space-x-2 text-slate-400 hover:text-slate-200 hover:bg-slate-800/60 transition">
+        <i class="fa-solid fa-chart-pie text-emerald-400"></i>
+        <span>Campus Utilization & Rebalancing</span>
+      </button>
+
+      <button onclick="switchTab('security')" id="tab-security" role="tab" aria-selected="false" aria-controls="view-security"
+        class="tab-btn px-4 py-2 rounded-lg text-xs font-semibold flex items-center space-x-2 text-slate-400 hover:text-slate-200 hover:bg-slate-800/60 transition">
+        <i class="fa-solid fa-shield-halved text-purple-400"></i>
+        <span>Security & a11y Audit</span>
+      </button>
+    </div>
+  </section>
+
+  <!-- ========================================================= -->
+  <!-- Main Content Container                                    -->
+  <!-- ========================================================= -->
+  <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6">
+
+    <!-- ------------------------------------------------------- -->
+    <!-- VIEW 1: Equipment Discovery & Smart Booking             -->
+    <!-- ------------------------------------------------------- -->
+    <section id="view-discovery" role="tabpanel" aria-labelledby="tab-discovery" class="space-y-6">
+      
+      <!-- GenAI Semantic Search & Filter Bar -->
+      <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-5 shadow-xl space-y-4">
+        <div class="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
+          <div class="relative flex-1">
+            <label for="search-input" class="sr-only">Search specialized laboratory equipment</label>
+            <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-500">
+              <i class="fa-solid fa-wand-magic-sparkles text-indigo-400"></i>
+            </div>
+            <input type="text" id="search-input"
+              placeholder="Ask GenAI: 'FPGA for real-time DSP filter' or 'SDR for 5G wireless experiment'..."
+              class="w-full pl-10 pr-24 py-2.5 rounded-xl bg-slate-950 border border-slate-700/80 text-sm placeholder-slate-500 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 text-slate-100 transition">
+            <button onclick="handleSemanticSearch()" 
+              class="absolute right-1.5 top-1.5 bottom-1.5 px-4 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold rounded-lg transition shadow-sm">
+              Discover
+            </button>
+          </div>
+
+          <!-- Department Quick Filters -->
+          <div class="flex items-center space-x-2 overflow-x-auto text-xs" role="group" aria-label="Department Filter">
+            <button onclick="filterDepartment('all')" class="dept-btn px-3 py-1.5 rounded-lg bg-indigo-600 text-white font-medium">All</button>
+            <button onclick="filterDepartment('ECE')" class="dept-btn px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700 font-medium">ECE</button>
+            <button onclick="filterDepartment('CSE')" class="dept-btn px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700 font-medium">CSE / AI</button>
+            <button onclick="filterDepartment('Mechanical')" class="dept-btn px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700 font-medium">Mech / Robotics</button>
+            <button onclick="filterDepartment('Biotechnology')" class="dept-btn px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700 font-medium">Biotech</button>
+          </div>
         </div>
 
-        <div>
-          <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Prompt / Query</label>
-          <textarea id="user-prompt" rows="5" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-200 focus:outline-none focus:border-indigo-500 transition resize-none placeholder-slate-600" placeholder="Type your prompt here...">Build a 30-second pitch for an AI product that automates bug triage for hackathon judges.</textarea>
+        <!-- GenAI Semantic Match Banner -->
+        <div id="ai-insight-box" class="hidden p-3.5 rounded-xl bg-indigo-950/40 border border-indigo-800/60 text-xs text-indigo-200 flex items-start space-x-3">
+          <div class="p-1 bg-indigo-900/60 rounded text-indigo-400 mt-0.5">
+            <i class="fa-solid fa-brain"></i>
+          </div>
+          <div>
+            <span class="font-semibold text-indigo-300">GenAI Semantic Match Analysis:</span>
+            <p id="ai-insight-text" class="mt-0.5 text-slate-300 leading-relaxed"></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Equipment Cards Grid -->
+      <div id="equipment-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5" aria-live="polite">
+        <!-- Rendered dynamically via JavaScript -->
+        <div class="col-span-full py-12 text-center text-slate-500">
+          <i class="fa-solid fa-spinner fa-spin text-2xl text-indigo-400"></i>
+          <p class="mt-2 text-sm">Loading specialized laboratory inventory...</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ------------------------------------------------------- -->
+    <!-- VIEW 2: IRCTC & BookMyShow Smart Contention Simulator   -->
+    <!-- ------------------------------------------------------- -->
+    <section id="view-contention" role="tabpanel" aria-labelledby="tab-contention" class="hidden space-y-6">
+      
+      <!-- Conceptual Banner -->
+      <div class="bg-gradient-to-r from-amber-950/40 via-slate-900 to-indigo-950/40 border border-amber-500/30 rounded-2xl p-6 shadow-xl space-y-3">
+        <div class="flex items-center space-x-3">
+          <div class="w-10 h-10 rounded-xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-400 font-bold text-lg">
+            ⚡
+          </div>
+          <div>
+            <h2 class="text-lg font-bold text-slate-100">IRCTC & BookMyShow Non-Random Smart Contention Resolver</h2>
+            <p class="text-xs text-slate-400">
+              When two students submit booking requests for the exact same equipment slot at the exact same millisecond,
+              LabLink evaluates a deterministic Multi-Factor Priority Score (MFPS) instead of a naive race condition or random pick.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Interactive Contention Simulator Playground -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        
+        <!-- Contenders Form (Student A vs Student B) -->
+        <div class="lg:col-span-5 bg-slate-900/80 border border-slate-800 rounded-2xl p-5 space-y-5">
+          <h3 class="text-sm font-bold text-slate-200 flex items-center">
+            <i class="fa-solid fa-people-arrows mr-2 text-indigo-400"></i> Simultaneous Booking Collision Setup
+          </h3>
+
+          <!-- Student A Card -->
+          <div class="p-4 rounded-xl bg-slate-950 border border-indigo-900/60 space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-indigo-300">👤 Student A (Urgent Capstone)</span>
+              <span class="text-[10px] px-2 py-0.5 rounded bg-indigo-950 text-indigo-400 border border-indigo-800 font-mono">REQ_01</span>
+            </div>
+            <div class="grid grid-cols-2 gap-2 text-xs">
+              <div>
+                <label class="text-slate-400 block text-[11px]">Academic Tier</label>
+                <select id="sim-tier-a" class="w-full mt-1 bg-slate-900 border border-slate-700 rounded p-1.5 text-slate-200">
+                  <option value="capstone" selected>Capstone / Thesis (1.00)</option>
+                  <option value="funded_research">Funded Research (0.85)</option>
+                  <option value="coursework">Course Lab (0.65)</option>
+                  <option value="independent">Hobby (0.35)</option>
+                </select>
+              </div>
+              <div>
+                <label class="text-slate-400 block text-[11px]">Deadline Proximity</label>
+                <select id="sim-deadline-a" class="w-full mt-1 bg-slate-900 border border-slate-700 rounded p-1.5 text-slate-200">
+                  <option value="6.0" selected>In 6 Hours (Critical)</option>
+                  <option value="24.0">In 24 Hours</option>
+                  <option value="120.0">In 5 Days</option>
+                </select>
+              </div>
+              <div class="col-span-2">
+                <label class="text-slate-400 block text-[11px]">Past 30-Day Usage (Anti-Hoarding)</label>
+                <input type="number" id="sim-usage-a" value="2.5" step="0.5" class="w-full mt-1 bg-slate-900 border border-slate-700 rounded p-1.5 text-slate-200">
+                <span class="text-[10px] text-slate-500">Low prior usage -> High fairness bonus</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Student B Card -->
+          <div class="p-4 rounded-xl bg-slate-950 border border-amber-900/60 space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-amber-300">👤 Student B (Coursework Lab)</span>
+              <span class="text-[10px] px-2 py-0.5 rounded bg-amber-950 text-amber-400 border border-amber-800 font-mono">REQ_02</span>
+            </div>
+            <div class="grid grid-cols-2 gap-2 text-xs">
+              <div>
+                <label class="text-slate-400 block text-[11px]">Academic Tier</label>
+                <select id="sim-tier-b" class="w-full mt-1 bg-slate-900 border border-slate-700 rounded p-1.5 text-slate-200">
+                  <option value="capstone">Capstone / Thesis (1.00)</option>
+                  <option value="coursework" selected>Course Lab (0.65)</option>
+                  <option value="independent">Hobby (0.35)</option>
+                </select>
+              </div>
+              <div>
+                <label class="text-slate-400 block text-[11px]">Deadline Proximity</label>
+                <select id="sim-deadline-b" class="w-full mt-1 bg-slate-900 border border-slate-700 rounded p-1.5 text-slate-200">
+                  <option value="6.0">In 6 Hours</option>
+                  <option value="72.0" selected>In 3 Days</option>
+                  <option value="200.0">In 2 Weeks</option>
+                </select>
+              </div>
+              <div class="col-span-2">
+                <label class="text-slate-400 block text-[11px]">Past 30-Day Usage (Anti-Hoarding)</label>
+                <input type="number" id="sim-usage-b" value="28.0" step="0.5" class="w-full mt-1 bg-slate-900 border border-slate-700 rounded p-1.5 text-slate-200">
+                <span class="text-[10px] text-slate-500">High prior usage -> Anti-hoarding penalty</span>
+              </div>
+            </div>
+          </div>
+
+          <button onclick="triggerSimulatedContention()" 
+            class="w-full py-3 bg-gradient-to-r from-amber-600 via-indigo-600 to-indigo-700 hover:from-amber-500 hover:to-indigo-600 text-white text-xs font-bold rounded-xl transition shadow-lg flex items-center justify-center space-x-2">
+            <i class="fa-solid fa-play"></i>
+            <span>Simulate Simultaneous Booking Collision</span>
+          </button>
         </div>
 
+        <!-- Contention Results Output -->
+        <div class="lg:col-span-7 bg-slate-900/80 border border-slate-800 rounded-2xl p-5 space-y-4">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+            <h3 class="text-sm font-bold text-slate-200 flex items-center">
+              <i class="fa-solid fa-gavel mr-2 text-amber-400"></i> Arbitration & Allocation Engine Output
+            </h3>
+            <span id="arbitration-status-badge" class="text-[10px] px-2.5 py-1 rounded-full bg-slate-800 text-slate-400 border border-slate-700">
+              Ready to arbitrate
+            </span>
+          </div>
+
+          <div id="contention-result-area" class="space-y-4">
+            <div class="p-8 text-center text-slate-500 text-xs">
+              <i class="fa-solid fa-scale-balanced text-3xl mb-3 text-slate-600"></i>
+              <p>Click "Simulate Simultaneous Booking Collision" to test the IRCTC & BookMyShow smart arbitration pipeline.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ------------------------------------------------------- -->
+    <!-- VIEW 3: Faculty Approval Hub                            -->
+    <!-- ------------------------------------------------------- -->
+    <section id="view-faculty" role="tabpanel" aria-labelledby="tab-faculty" class="hidden space-y-6">
+      
+      <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-5 shadow-xl flex items-center justify-between">
+        <div>
+          <h2 class="text-base font-bold text-slate-100 flex items-center">
+            <i class="fa-solid fa-stamp mr-2 text-sky-400"></i> Faculty Proposal Review & AI Assessment Hub
+          </h2>
+          <p class="text-xs text-slate-400 mt-1">
+            Student project proposals requesting specialized laboratory equipment undergo automated GenAI risk & feasibility grading.
+          </p>
+        </div>
+        <div class="text-right">
+          <span class="text-xs font-mono text-slate-400">Active Faculty Advisor:</span>
+          <p class="text-xs font-bold text-sky-300">Dr. K. Ramanathan (Professor, ECE)</p>
+        </div>
+      </div>
+
+      <div id="proposals-list" class="space-y-4">
+        <!-- Rendered dynamically via JavaScript -->
+        <div class="p-8 text-center text-slate-500 text-xs">
+          <i class="fa-solid fa-spinner fa-spin text-xl text-sky-400"></i>
+          <p class="mt-2">Loading pending proposals...</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ------------------------------------------------------- -->
+    <!-- VIEW 4: Campus Utilization & Rebalancing Analytics      -->
+    <!-- ------------------------------------------------------- -->
+    <section id="view-analytics" role="tabpanel" aria-labelledby="tab-analytics" class="hidden space-y-6">
+      
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="p-5 rounded-2xl bg-slate-900/80 border border-slate-800 shadow">
+          <div class="flex items-center justify-between text-xs text-slate-400">
+            <span>Overall Utilization</span>
+            <i class="fa-solid fa-chart-line text-indigo-400"></i>
+          </div>
+          <div id="stat-overall-util" class="text-2xl font-black text-slate-100 mt-2">--%</div>
+          <span class="text-[10px] text-emerald-400 flex items-center mt-1">
+            <i class="fa-solid fa-circle-check mr-1"></i> Real-time Bitmask Popcount
+          </span>
+        </div>
+
+        <div class="p-5 rounded-2xl bg-slate-900/80 border border-slate-800 shadow">
+          <div class="flex items-center justify-between text-xs text-slate-400">
+            <span>Total Hardware Units</span>
+            <i class="fa-solid fa-microchip text-sky-400"></i>
+          </div>
+          <div id="stat-total-equip" class="text-2xl font-black text-slate-100 mt-2">--</div>
+          <span class="text-[10px] text-slate-400 mt-1 block">Across 4 Departments</span>
+        </div>
+
+        <div class="p-5 rounded-2xl bg-slate-900/80 border border-slate-800 shadow">
+          <div class="flex items-center justify-between text-xs text-slate-400">
+            <span>Active Leased Holds</span>
+            <i class="fa-solid fa-clock text-amber-400"></i>
+          </div>
+          <div id="stat-active-leases" class="text-2xl font-black text-amber-300 mt-2">--</div>
+          <span class="text-[10px] text-amber-400/80 mt-1 block">BookMyShow 10-Min Locks</span>
+        </div>
+
+        <div class="p-5 rounded-2xl bg-slate-900/80 border border-slate-800 shadow">
+          <div class="flex items-center justify-between text-xs text-slate-400">
+            <span>Confirmed Bookings</span>
+            <i class="fa-solid fa-calendar-check text-emerald-400"></i>
+          </div>
+          <div id="stat-confirmed" class="text-2xl font-black text-emerald-300 mt-2">--</div>
+          <span class="text-[10px] text-emerald-400/80 mt-1 block">Faculty Cleared</span>
+        </div>
+      </div>
+
+      <!-- Department Utilization Breakdown -->
+      <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-5 shadow-xl space-y-4">
+        <h3 class="text-sm font-bold text-slate-200 flex items-center">
+          <i class="fa-solid fa-layer-group mr-2 text-indigo-400"></i> Departmental Capacity Matrix
+        </h3>
+        <div id="dept-matrix-container" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+
+      <!-- GenAI Cross-Department Rebalancing Suggestions -->
+      <div class="bg-slate-900/80 border border-indigo-900/50 rounded-2xl p-5 shadow-xl space-y-3">
+        <h3 class="text-sm font-bold text-indigo-300 flex items-center">
+          <i class="fa-solid fa-robot mr-2 text-indigo-400"></i> GenAI Automated Resource Rebalancing Insights
+        </h3>
+        <ul id="rebalancing-list" class="space-y-2 text-xs text-slate-300">
+          <!-- Populated by JS -->
+        </ul>
+      </div>
+    </section>
+
+    <!-- ------------------------------------------------------- -->
+    <!-- VIEW 5: Security & Accessibility Live Audit             -->
+    <!-- ------------------------------------------------------- -->
+    <section id="view-security" role="tabpanel" aria-labelledby="tab-security" class="hidden space-y-6">
+      
+      <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-4">
+        <div class="flex items-center space-x-3">
+          <div class="w-10 h-10 rounded-xl bg-purple-500/20 border border-purple-500/40 flex items-center justify-center text-purple-400 text-lg">
+            <i class="fa-solid fa-shield-halved"></i>
+          </div>
+          <div>
+            <h2 class="text-base font-bold text-slate-100">LabLink Enterprise Security & WCAG 2.1 AA Audit</h2>
+            <p class="text-xs text-slate-400">Real-time verification of security controls, anti-bot guards, and accessibility compliance.</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-3">
+          
+          <!-- Security Vector Card -->
+          <div class="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-3">
+            <h4 class="text-xs font-bold text-indigo-300 flex items-center">
+              <i class="fa-solid fa-lock mr-2 text-indigo-400"></i> OWASP Top-10 Security Vector Checks
+            </h4>
+            <div class="space-y-2 text-xs">
+              <div class="flex items-center justify-between p-2 rounded bg-slate-900 border border-slate-800">
+                <span class="text-slate-300">Prompt Injection Guardrail</span>
+                <span class="text-emerald-400 font-mono font-semibold">ACTIVE [Regex Filter + Token Limit]</span>
+              </div>
+              <div class="flex items-center justify-between p-2 rounded bg-slate-900 border border-slate-800">
+                <span class="text-slate-300">HMAC-SHA256 State Signatures</span>
+                <span class="text-emerald-400 font-mono font-semibold">ENFORCED [Tamper-Proof]</span>
+              </div>
+              <div class="flex items-center justify-between p-2 rounded bg-slate-900 border border-slate-800">
+                <span class="text-slate-300">Sliding Window Rate Limiter</span>
+                <span class="text-emerald-400 font-mono font-semibold">ACTIVE [60 req/min/IP]</span>
+              </div>
+              <div class="flex items-center justify-between p-2 rounded bg-slate-900 border border-slate-800">
+                <span class="text-slate-300">Security Response Headers</span>
+                <span class="text-emerald-400 font-mono font-semibold">CSP, HSTS, X-Frame DENY</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Accessibility Vector Card -->
+          <div class="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-3">
+            <h4 class="text-xs font-bold text-sky-300 flex items-center">
+              <i class="fa-solid fa-universal-access mr-2 text-sky-400"></i> WCAG 2.1 AA Inclusiveness Audit
+            </h4>
+            <div class="space-y-2 text-xs">
+              <div class="flex items-center justify-between p-2 rounded bg-slate-900 border border-slate-800">
+                <span class="text-slate-300">Color Contrast Ratio</span>
+                <span class="text-emerald-400 font-mono font-semibold">PASS [4.8:1 to 12.5:1]</span>
+              </div>
+              <div class="flex items-center justify-between p-2 rounded bg-slate-900 border border-slate-800">
+                <span class="text-slate-300">Screen Reader ARIA Roles</span>
+                <span class="text-emerald-400 font-mono font-semibold">PASS [aria-live, tablist, alert]</span>
+              </div>
+              <div class="flex items-center justify-between p-2 rounded bg-slate-900 border border-slate-800">
+                <span class="text-slate-300">Keyboard Tab Navigation</span>
+                <span class="text-emerald-400 font-mono font-semibold">PASS [Custom Focus Rings]</span>
+              </div>
+              <div class="flex items-center justify-between p-2 rounded bg-slate-900 border border-slate-800">
+                <span class="text-slate-300">No Login Friction</span>
+                <span class="text-emerald-400 font-mono font-semibold">PASS [Zero Login Wall]</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ========================================================= -->
+  <!-- Booking & Slot Modal (Accessible Modal Dialog)            -->
+  <!-- ========================================================= -->
+  <div id="booking-modal" class="hidden fixed inset-0 z-50 overflow-y-auto bg-black/80 backdrop-blur-sm flex items-center justify-center p-4" 
+    role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    
+    <div class="bg-slate-900 border border-slate-700 rounded-2xl max-w-xl w-full p-6 space-y-5 shadow-2xl relative">
+      <button onclick="closeBookingModal()" class="absolute right-4 top-4 text-slate-400 hover:text-white p-1 rounded-lg" aria-label="Close booking modal">
+        <i class="fa-solid fa-xmark text-lg"></i>
+      </button>
+
+      <div>
+        <span id="modal-dept-badge" class="text-[10px] font-semibold px-2 py-0.5 rounded bg-indigo-950 text-indigo-300 border border-indigo-800">Department</span>
+        <h3 id="modal-title" class="text-lg font-bold text-slate-100 mt-1">Book Equipment Slot</h3>
+        <p id="modal-location" class="text-xs text-slate-400">Location Bench</p>
+      </div>
+
+      <!-- Visual 24-Slot Bitmask Matrix -->
+      <div class="space-y-2">
+        <label class="text-xs font-semibold text-slate-300 block">
+          Select Starting Slot (24 Half-Hour Intervals: 08:00 to 20:00)
+        </label>
+        <div id="modal-slots-matrix" class="grid grid-cols-4 sm:grid-cols-6 gap-2 max-h-48 overflow-y-auto custom-scrollbar p-1">
+          <!-- Populated by JS -->
+        </div>
+        <div class="flex items-center space-x-4 text-[11px] text-slate-400 pt-1">
+          <span class="flex items-center"><span class="w-2.5 h-2.5 rounded bg-emerald-500 mr-1.5"></span> Available</span>
+          <span class="flex items-center"><span class="w-2.5 h-2.5 rounded bg-rose-600 mr-1.5"></span> Booked / Occupied</span>
+          <span class="flex items-center"><span class="w-2.5 h-2.5 rounded bg-indigo-500 mr-1.5"></span> Selected</span>
+        </div>
+      </div>
+
+      <!-- Booking Form -->
+      <form id="booking-form" onsubmit="submitSlotBooking(event)" class="space-y-3 text-xs">
         <div class="grid grid-cols-2 gap-3">
           <div>
-            <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Model</label>
-            <select id="model-select" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-2.5 text-xs text-slate-300 focus:outline-none focus:border-indigo-500">
-              <option value="gemini-2.5-flash">Gemini 2.5 Flash (Fast)</option>
-              <option value="gemini-1.5-pro">Gemini 1.5 Pro (Deep)</option>
+            <label class="text-slate-400 block mb-1">Duration (30-min units)</label>
+            <select id="book-duration" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2 text-slate-200">
+              <option value="1">1 slot (30 min)</option>
+              <option value="2" selected>2 slots (1 hour)</option>
+              <option value="3">3 slots (1.5 hours)</option>
+              <option value="4">4 slots (2 hours)</option>
             </select>
           </div>
           <div>
-            <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Temperature (<span id="temp-val">0.7</span>)</label>
-            <input type="range" id="temperature" min="0" max="1" step="0.1" value="0.7" class="w-full accent-indigo-500 mt-2" oninput="document.getElementById('temp-val').innerText = this.value">
+            <label class="text-slate-400 block mb-1">Project Identifier</label>
+            <input type="text" id="book-project-id" value="proj_drone_slam_01" required class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2 text-slate-200">
           </div>
         </div>
 
-        <div class="pt-2 flex space-x-3">
-          <button id="btn-stream" onclick="runStream()" class="flex-1 bg-indigo-600 hover:bg-indigo-500 text-white font-medium py-2.5 px-4 rounded-xl text-sm transition shadow-lg shadow-indigo-600/25 flex items-center justify-center space-x-2">
-            <i class="fa-solid fa-bolt text-xs"></i>
-            <span>Stream Output</span>
-          </button>
-          <button id="btn-generate" onclick="runGenerate()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 font-medium py-2.5 px-4 rounded-xl text-sm transition border border-slate-700">
-            Generate
-          </button>
-        </div>
-      </div>
-
-      <!-- Quick Tips Card -->
-      <div class="bg-indigo-950/30 border border-indigo-900/40 rounded-xl p-4 text-xs text-indigo-300 flex items-start space-x-3">
-        <i class="fa-solid fa-circle-info text-indigo-400 mt-0.5"></i>
         <div>
-          <span class="font-semibold text-indigo-200">Single-Repo Deployment:</span>
-          This UI is served directly from <code class="bg-indigo-950 px-1 py-0.5 rounded text-indigo-200">/static</code> inside your FastAPI backend. Total package size is under 1MB!
+          <label class="text-slate-400 block mb-1">Project Title</label>
+          <input type="text" id="book-project-title" value="Autonomous Edge Quadrotor SLAM" required class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2 text-slate-200">
         </div>
-      </div>
+
+        <div>
+          <label class="text-slate-400 block mb-1">Experimental Purpose & Justification</label>
+          <textarea id="book-abstract" rows="2" required class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2 text-slate-200" placeholder="Brief experimental plan...">Bench testing point-cloud registration algorithm with live stereo sensor feed.</textarea>
+        </div>
+
+        <div id="booking-error-box" class="hidden p-3 rounded-lg bg-rose-950/60 border border-rose-800 text-rose-300 text-xs"></div>
+
+        <button type="submit" id="btn-submit-booking"
+          class="w-full py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl transition shadow flex items-center justify-center space-x-2">
+          <i class="fa-solid fa-lock"></i>
+          <span>Secure Slot with 10-Minute Leased Hold</span>
+        </button>
+      </form>
     </div>
+  </div>
 
-    <!-- Right Column: Live Output -->
-    <div class="lg:col-span-7 flex flex-col">
-      <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 shadow-xl flex-1 flex flex-col min-h-[420px]">
-        <div class="flex items-center justify-between border-b border-slate-800 pb-3 mb-4">
-          <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider flex items-center space-x-2">
-            <span class="w-2 h-2 rounded-full bg-indigo-500"></span>
-            <span>Response Feed</span>
-          </span>
-          <button onclick="copyOutput()" class="text-xs text-slate-400 hover:text-slate-200 transition flex items-center space-x-1.5">
-            <i class="fa-regular fa-copy"></i>
-            <span id="copy-label">Copy</span>
-          </button>
-        </div>
-
-        <div id="output-box" class="flex-1 overflow-y-auto font-mono text-sm leading-relaxed text-slate-200 whitespace-pre-wrap select-text p-2 rounded-lg bg-slate-950/50 border border-slate-900 min-h-[300px]">
-Click "Stream Output" or "Generate" to test your AI backend in real-time...
-        </div>
-      </div>
-    </div>
-  </main>
-
+  <!-- ========================================================= -->
+  <!-- Client JavaScript Logic (Asynchronous & Accessible)       -->
+  <!-- ========================================================= -->
   <script>
-    async function runGenerate() {
-      const output = document.getElementById('output-box');
-      const prompt = document.getElementById('user-prompt').value;
-      const system = document.getElementById('system-prompt').value;
-      const model = document.getElementById('model-select').value;
-      const temp = parseFloat(document.getElementById('temperature').value);
+    // Global State
+    let currentRole = 'student';
+    let equipmentData = [];
+    let selectedEquipmentId = null;
+    let selectedSlotIndex = null;
 
-      output.innerText = "Generating response...";
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', () => {
+      loadEquipment();
+      loadProposals();
+      loadAnalytics();
+    });
+
+    // Screen Reader Announcer
+    function announce(msg) {
+      const el = document.getElementById('sr-announcements');
+      if (el) el.textContent = msg;
+    }
+
+    // Role Switcher
+    function setRole(role) {
+      currentRole = role;
+      ['student', 'faculty', 'lab_admin'].forEach(r => {
+        const btn = document.getElementById(`role-${r === 'lab_admin' ? 'admin' : r}`);
+        if (btn) {
+          const isActive = r === role;
+          btn.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+          btn.className = isActive 
+            ? 'px-3 py-1.5 rounded-lg text-xs font-medium transition-all flex items-center space-x-1.5 bg-indigo-600 text-white shadow'
+            : 'px-3 py-1.5 rounded-lg text-xs font-medium transition-all text-slate-300 hover:text-white hover:bg-slate-800 flex items-center space-x-1.5';
+        }
+      });
+      announce(`Switched active portal role to ${role.replace('_', ' ')}`);
+      
+      // Auto switch tabs based on role convenience
+      if (role === 'faculty') switchTab('faculty');
+      else if (role === 'lab_admin') switchTab('analytics');
+      else switchTab('discovery');
+    }
+
+    // Tab Switcher
+    function switchTab(tabName) {
+      const tabs = ['discovery', 'contention', 'faculty', 'analytics', 'security'];
+      tabs.forEach(t => {
+        const btn = document.getElementById(`tab-${t}`);
+        const panel = document.getElementById(`view-${t}`);
+        if (t === tabName) {
+          btn.classList.add('bg-indigo-600/20', 'text-indigo-300', 'border', 'border-indigo-500/40');
+          btn.classList.remove('text-slate-400');
+          btn.setAttribute('aria-selected', 'true');
+          panel.classList.remove('hidden');
+        } else {
+          btn.classList.remove('bg-indigo-600/20', 'text-indigo-300', 'border', 'border-indigo-500/40');
+          btn.classList.add('text-slate-400');
+          btn.setAttribute('aria-selected', 'false');
+          panel.classList.add('hidden');
+        }
+      });
+      announce(`Viewing ${tabName} tab`);
+    }
+
+    // Load Equipment Catalog
+    async function loadEquipment(query = '', dept = '') {
+      try {
+        let url = '/api/v1/equipment';
+        const params = new URLSearchParams();
+        if (dept && dept !== 'all') params.append('department', dept);
+        if (params.toString()) url += '?' + params.toString();
+
+        const res = await fetch(url);
+        equipmentData = await res.json();
+        renderEquipment(equipmentData);
+      } catch (err) {
+        console.error('Failed to load equipment:', err);
+      }
+    }
+
+    function renderEquipment(items) {
+      const grid = document.getElementById('equipment-grid');
+      if (!items || items.length === 0) {
+        grid.innerHTML = '<div class="col-span-full py-12 text-center text-slate-500 text-sm">No specialized hardware found matching your criteria.</div>';
+        return;
+      }
+
+      grid.innerHTML = items.map(item => {
+        // Calculate daily utilization from bitmask
+        const setBits = (item.daily_bitmask.toString(2).match(/1/g) || []).length;
+        const utilPercent = Math.round((setBits / 24) * 100);
+
+        return `
+          <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 hover:border-slate-700 transition flex flex-col justify-between shadow-xl">
+            <div class="space-y-3">
+              <div class="flex items-start justify-between">
+                <span class="text-[10px] font-semibold px-2 py-0.5 rounded bg-slate-800 text-indigo-300 border border-slate-700">
+                  ${item.department}
+                </span>
+                <span class="text-[10px] px-2 py-0.5 rounded ${utilPercent > 40 ? 'bg-amber-950 text-amber-300 border border-amber-800' : 'bg-emerald-950 text-emerald-300 border border-emerald-800'}">
+                  ${utilPercent}% Today
+                </span>
+              </div>
+
+              <div>
+                <h3 class="font-bold text-sm text-slate-100">${item.name}</h3>
+                <p class="text-xs text-slate-400 mt-0.5">${item.category}</p>
+              </div>
+
+              <div class="text-[11px] text-slate-400 flex items-center space-x-1">
+                <i class="fa-solid fa-location-dot text-slate-500"></i>
+                <span>${item.location}</span>
+              </div>
+
+              <!-- Specs Pills -->
+              <div class="flex flex-wrap gap-1.5 pt-1">
+                ${Object.entries(item.specifications || {}).map(([k, v]) => `
+                  <span class="text-[10px] px-2 py-0.5 rounded bg-slate-950 text-slate-400 border border-slate-800 font-mono">
+                    ${k}: ${v}
+                  </span>
+                `).join('')}
+              </div>
+            </div>
+
+            <div class="pt-4 mt-4 border-t border-slate-800/80 flex items-center justify-between">
+              <span class="text-[10px] text-slate-500">Safety: <strong class="text-slate-300">${item.safety_level}</strong></span>
+              <button onclick="openBookingModal('${item.id}')"
+                class="px-3.5 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold rounded-lg transition shadow-sm flex items-center space-x-1.5">
+                <i class="fa-solid fa-calendar-plus"></i>
+                <span>Check Slots</span>
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Semantic Discovery
+    async function handleSemanticSearch() {
+      const query = document.getElementById('search-input').value.trim();
+      if (!query) return loadEquipment();
+
+      const insightBox = document.getElementById('ai-insight-box');
+      const insightText = document.getElementById('ai-insight-text');
 
       try {
-        const res = await fetch('/api/v1/generate', {
+        const res = await fetch('/api/v1/equipment/search/semantic', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ query: query })
+        });
+        const data = await res.json();
+        renderEquipment(data.items);
+
+        if (data.semantic_insights) {
+          insightText.textContent = data.semantic_insights;
+          insightBox.classList.remove('hidden');
+        }
+      } catch (err) {
+        console.error('Semantic search error:', err);
+      }
+    }
+
+    function filterDepartment(dept) {
+      document.querySelectorAll('.dept-btn').forEach(btn => {
+        btn.classList.remove('bg-indigo-600', 'text-white');
+        btn.classList.add('bg-slate-800', 'text-slate-300');
+      });
+      event.target.classList.add('bg-indigo-600', 'text-white');
+      event.target.classList.remove('bg-slate-800', 'text-slate-300');
+      
+      const deptMap = {
+        'ECE': 'Electronics & Communication',
+        'CSE': 'Computer Science & Engineering',
+        'Mechanical': 'Mechanical & Mechatronics',
+        'Biotechnology': 'Biotechnology'
+      };
+      loadEquipment('', deptMap[dept] || '');
+    }
+
+    // Booking Modal & Bitmask Slots
+    async function openBookingModal(equipId) {
+      selectedEquipmentId = equipId;
+      selectedSlotIndex = null;
+      const modal = document.getElementById('booking-modal');
+      const equip = equipmentData.find(e => e.id === equipId);
+      if (!equip) return;
+
+      document.getElementById('modal-title').textContent = equip.name;
+      document.getElementById('modal-location').textContent = equip.location;
+      document.getElementById('modal-dept-badge').textContent = equip.department;
+      document.getElementById('booking-error-box').classList.add('hidden');
+
+      try {
+        const res = await fetch(`/api/v1/bookings/slots/${equipId}`);
+        const data = await res.json();
+        renderSlotsMatrix(data.slots);
+        modal.classList.remove('hidden');
+      } catch (err) {
+        console.error('Error fetching slots:', err);
+      }
+    }
+
+    function renderSlotsMatrix(slots) {
+      const container = document.getElementById('modal-slots-matrix');
+      container.innerHTML = slots.map(s => `
+        <button type="button" onclick="selectSlot(${s.slot_index}, ${s.is_available})"
+          id="slot-btn-${s.slot_index}"
+          class="p-2 rounded-lg text-center text-xs font-mono transition border ${s.is_available ? 'bg-emerald-950/40 text-emerald-300 border-emerald-800/80 hover:bg-emerald-900/60' : 'bg-rose-950/40 text-rose-400 border-rose-900/60 cursor-not-allowed opacity-60'}"
+          ${!s.is_available ? 'disabled' : ''}>
+          <div class="font-bold">${s.start_time}</div>
+          <div class="text-[9px] text-slate-400">${s.is_available ? 'FREE' : 'TAKEN'}</div>
+        </button>
+      `).join('');
+    }
+
+    function selectSlot(index, isAvailable) {
+      if (!isAvailable) return;
+      selectedSlotIndex = index;
+      document.querySelectorAll('#modal-slots-matrix button').forEach(b => {
+        b.classList.remove('ring-2', 'ring-indigo-400', 'bg-indigo-600', 'text-white');
+      });
+      const activeBtn = document.getElementById(`slot-btn-${index}`);
+      if (activeBtn) {
+        activeBtn.classList.add('ring-2', 'ring-indigo-400', 'bg-indigo-600', 'text-white');
+      }
+    }
+
+    function closeBookingModal() {
+      document.getElementById('booking-modal').classList.add('hidden');
+    }
+
+    async function submitSlotBooking(e) {
+      e.preventDefault();
+      const errBox = document.getElementById('booking-error-box');
+      if (selectedSlotIndex === null) {
+        errBox.textContent = 'Please choose an available starting time slot.';
+        errBox.classList.remove('hidden');
+        return;
+      }
+
+      const payload = {
+        equipment_id: selectedEquipmentId,
+        student_id: 'stu_arjun_01',
+        student_name: 'Arjun Sharma',
+        project_id: document.getElementById('book-project-id').value.trim(),
+        project_title: document.getElementById('book-project-title').value.trim(),
+        slot_index: selectedSlotIndex,
+        duration_slots: parseInt(document.getElementById('book-duration').value, 10),
+        purpose_abstract: document.getElementById('book-abstract').value.trim()
+      };
+
+      try {
+        const res = await fetch('/api/v1/bookings', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        if (!res.ok) {
+          const errData = await res.json();
+          errBox.textContent = errData.detail || 'Slot booking error.';
+          errBox.classList.remove('hidden');
+          return;
+        }
+
+        const data = await res.json();
+        alert(`🎉 ${data.message}\nSlot: ${data.start_time} - ${data.end_time}\nStatus: ${data.status}`);
+        closeBookingModal();
+        loadEquipment();
+        loadAnalytics();
+      } catch (err) {
+        errBox.textContent = 'Network or server error submitting booking.';
+        errBox.classList.remove('hidden');
+      }
+    }
+
+    // Trigger Simulated Simultaneous Contention
+    async function triggerSimulatedContention() {
+      const btn = event.target;
+      const statusBadge = document.getElementById('arbitration-status-badge');
+      const resultArea = document.getElementById('contention-result-area');
+
+      statusBadge.textContent = 'Arbitrating O(K log K)...';
+      statusBadge.className = 'text-[10px] px-2.5 py-1 rounded-full bg-amber-950 text-amber-400 border border-amber-800 animate-pulse';
+
+      const payload = {
+        equipment_id: 'equip_jetson_01',
+        contenders: [
+          {
+            student_id: 'stu_01',
+            student_name: 'Arjun Sharma (Capstone Team)',
+            project_id: 'proj_slam_quad',
+            project_title: 'Autonomous Edge Quadrotor SLAM',
+            academic_tier: document.getElementById('sim-tier-a').value,
+            deadline_hours: parseFloat(document.getElementById('sim-deadline-a').value),
+            hours_used_this_month: parseFloat(document.getElementById('sim-usage-a').value),
+            has_safety_cert: true,
+            requested_slot: 6,
+            duration_slots: 2
+          },
+          {
+            student_id: 'stu_02',
+            student_name: 'Priya Nair (Coursework Team)',
+            project_id: 'proj_cv_basic',
+            project_title: 'Basic OpenCV Object Tracking',
+            academic_tier: document.getElementById('sim-tier-b').value,
+            deadline_hours: parseFloat(document.getElementById('sim-deadline-b').value),
+            hours_used_this_month: parseFloat(document.getElementById('sim-usage-b').value),
+            has_safety_cert: true,
+            requested_slot: 6,
+            duration_slots: 2
+          }
+        ]
+      };
+
+      try {
+        const res = await fetch('/api/v1/conflicts/resolve', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+
+        statusBadge.textContent = 'Arbitration Resolved (Non-Random)';
+        statusBadge.className = 'text-[10px] px-2.5 py-1 rounded-full bg-emerald-950 text-emerald-400 border border-emerald-800';
+
+        resultArea.innerHTML = `
+          <!-- Winner Box -->
+          <div class="p-4 rounded-xl bg-emerald-950/40 border border-emerald-800/80 space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-emerald-300 flex items-center">
+                <i class="fa-solid fa-trophy mr-1.5 text-amber-400"></i> Primary Allocation Winner
+              </span>
+              <span class="text-[10px] px-2 py-0.5 rounded bg-emerald-900 text-emerald-200 font-mono">
+                Priority Score: ${(data.priority_score * 100).toFixed(1)} / 100
+              </span>
+            </div>
+            <div>
+              <h4 class="font-bold text-sm text-white">${data.winner_name}</h4>
+              <p class="text-xs text-slate-300 mt-1">${data.rationale}</p>
+            </div>
+            <!-- Score Breakdown -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-2 border-t border-emerald-800/40 text-[11px]">
+              <div><span class="text-slate-400">Deadline Urgency:</span> <strong class="text-emerald-300">${(data.score_breakdown.deadline_urgency * 100).toFixed(0)}%</strong></div>
+              <div><span class="text-slate-400">Academic Tier:</span> <strong class="text-emerald-300">${(data.score_breakdown.academic_weight * 100).toFixed(0)}%</strong></div>
+              <div><span class="text-slate-400">Fairness Bonus:</span> <strong class="text-emerald-300">${(data.score_breakdown.fairness_quotient * 100).toFixed(0)}%</strong></div>
+              <div><span class="text-slate-400">Safety Clear:</span> <strong class="text-emerald-300">100%</strong></div>
+            </div>
+            <!-- BookMyShow Leased Hold Timer -->
+            <div class="p-2 rounded bg-slate-900/80 border border-emerald-700/60 text-xs flex items-center justify-between">
+              <span class="text-slate-300"><i class="fa-solid fa-stopwatch text-amber-400 mr-1.5"></i> BookMyShow 10-Min Seat Lock:</span>
+              <span class="font-mono text-amber-300 font-bold">10:00 Remaining (Atomic Hold)</span>
+            </div>
+          </div>
+
+          <!-- IRCTC Vikalp Alternative Box for Runner-Up -->
+          <div class="p-4 rounded-xl bg-slate-950 border border-indigo-900/60 space-y-3">
+            <h4 class="text-xs font-bold text-indigo-300 flex items-center">
+              <i class="fa-solid fa-shuffle mr-1.5 text-indigo-400"></i> IRCTC 'Vikalp' Alternate Recommendations (Unallocated Students)
+            </h4>
+            <div class="space-y-2 text-xs">
+              ${data.vikalp_alternatives.same_equipment_alternative ? `
+                <div class="p-2.5 rounded bg-slate-900 border border-slate-800 flex items-center justify-between">
+                  <div>
+                    <span class="font-semibold text-slate-200">Alternative Slot on Same Hardware:</span>
+                    <p class="text-slate-400 text-[11px]">${data.vikalp_alternatives.same_equipment_alternative.time_window}</p>
+                  </div>
+                  <button class="px-2.5 py-1 bg-indigo-600 hover:bg-indigo-500 rounded text-[11px] font-semibold text-white">Accept Vikalp Slot</button>
+                </div>
+              ` : ''}
+              ${(data.vikalp_alternatives.equivalent_equipment_alternatives || []).map(alt => `
+                <div class="p-2.5 rounded bg-slate-900 border border-slate-800 flex items-center justify-between">
+                  <div>
+                    <span class="font-semibold text-slate-200">Compatible Alternate: ${alt.equipment_name}</span>
+                    <p class="text-slate-400 text-[11px]">${alt.location} • Status: ${alt.status}</p>
+                  </div>
+                  <button class="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 rounded text-[11px] font-semibold text-slate-200">Book Alternative</button>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      } catch (err) {
+        console.error('Contention error:', err);
+      }
+    }
+
+    // Faculty Proposals Hub
+    async function loadProposals() {
+      try {
+        const res = await fetch('/api/v1/approvals/pending');
+        const list = await res.json();
+        const container = document.getElementById('proposals-list');
+        const badge = document.getElementById('pending-badge');
+        badge.textContent = list.length;
+
+        if (!list || list.length === 0) {
+          container.innerHTML = '<div class="p-8 text-center text-slate-500 text-xs">No pending student proposals awaiting faculty review.</div>';
+          return;
+        }
+
+        container.innerHTML = list.map(p => `
+          <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 space-y-4 shadow-xl">
+            <div class="flex items-start justify-between">
+              <div>
+                <span class="text-[10px] font-semibold px-2 py-0.5 rounded bg-indigo-950 text-indigo-300 border border-indigo-800 uppercase">
+                  ${p.academic_tier} Project
+                </span>
+                <h3 class="font-bold text-base text-slate-100 mt-1">${p.project_title}</h3>
+                <p class="text-xs text-slate-400 mt-0.5">Submitted by <strong>${p.student_name}</strong> (${p.student_id})</p>
+              </div>
+              <span class="text-xs px-2.5 py-1 rounded-full ${p.status === 'APPROVED' ? 'bg-emerald-950 text-emerald-400 border border-emerald-800' : 'bg-sky-950 text-sky-400 border border-sky-800'}">
+                ${p.status}
+              </span>
+            </div>
+
+            <p class="text-xs text-slate-300 leading-relaxed bg-slate-950/60 p-3 rounded-xl border border-slate-800/80">
+              ${p.abstract}
+            </p>
+
+            <!-- GenAI Feasibility Assessment Card -->
+            ${p.ai_assessment ? `
+              <div class="p-3.5 rounded-xl bg-indigo-950/30 border border-indigo-800/60 space-y-2">
+                <div class="flex items-center justify-between text-xs font-semibold text-indigo-300">
+                  <span class="flex items-center"><i class="fa-solid fa-robot mr-1.5 text-indigo-400"></i> GenAI Feasibility Grade</span>
+                  <span class="font-mono text-emerald-400 font-bold">${p.ai_assessment.feasibility_score} / 100</span>
+                </div>
+                <div class="text-[11px] text-slate-300 space-y-1">
+                  <p><strong>Hardware Match:</strong> ${p.ai_assessment.equipment_appropriateness}</p>
+                  <p><strong>Safety Verification:</strong> ${p.ai_assessment.safety_check}</p>
+                  <p class="text-indigo-200"><strong>Recommendation:</strong> ${p.ai_assessment.recommendation}</p>
+                </div>
+              </div>
+            ` : ''}
+
+            <!-- 1-Click Action Buttons -->
+            ${p.status === 'PENDING_FACULTY' ? `
+              <div class="flex items-center space-x-3 pt-2">
+                <button onclick="recordDecision('${p.proposal_id}', 'APPROVE')"
+                  class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold rounded-xl transition shadow flex items-center space-x-1.5">
+                  <i class="fa-solid fa-check"></i>
+                  <span>1-Click Approve Access</span>
+                </button>
+                <button onclick="recordDecision('${p.proposal_id}', 'REQUEST_REVISION')"
+                  class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold rounded-xl transition border border-slate-700">
+                  Request Revision
+                </button>
+                <button onclick="recordDecision('${p.proposal_id}', 'REJECT')"
+                  class="px-4 py-2 bg-rose-950/80 hover:bg-rose-900 text-rose-300 text-xs font-semibold rounded-xl transition border border-rose-800">
+                  Reject
+                </button>
+              </div>
+            ` : ''}
+          </div>
+        `).join('');
+      } catch (err) {
+        console.error('Proposals error:', err);
+      }
+    }
+
+    async function recordDecision(proposalId, action) {
+      try {
+        const res = await fetch('/api/v1/approvals/decision', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            prompt: prompt,
-            system_instruction: system,
-            model: model,
-            temperature: temp
+            proposal_id: proposalId,
+            action: action,
+            faculty_notes: 'Reviewed and verified by faculty advisor.'
           })
         });
         const data = await res.json();
-        output.innerText = data.text || JSON.stringify(data, null, 2);
+        alert(`Status updated to: ${data.status}\nHMAC Signature: ${data.state_signature.substring(0, 16)}...`);
+        loadProposals();
       } catch (err) {
-        output.innerText = "Error: " + err.message;
+        console.error('Decision error:', err);
       }
     }
 
-    async function runStream() {
-      const output = document.getElementById('output-box');
-      const prompt = document.getElementById('user-prompt').value;
-      const system = document.getElementById('system-prompt').value;
-      const model = document.getElementById('model-select').value;
-      const temp = parseFloat(document.getElementById('temperature').value);
-
-      output.innerText = "";
-
+    // Load Analytics
+    async function loadAnalytics() {
       try {
-        const res = await fetch('/api/v1/stream', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            prompt: prompt,
-            system_instruction: system,
-            model: model,
-            temperature: temp
-          })
-        });
+        const res = await fetch('/api/v1/analytics/utilization');
+        const data = await res.json();
 
-        const reader = res.body.getReader();
-        const decoder = new TextDecoder();
+        document.getElementById('stat-overall-util').textContent = `${data.overall_campus_utilization_percent}%`;
+        document.getElementById('stat-total-equip').textContent = data.total_equipment;
+        document.getElementById('stat-active-leases').textContent = data.active_leases_count;
+        document.getElementById('stat-confirmed').textContent = data.confirmed_bookings_count;
 
-        while (true) {
-          const { done, value } = await reader.read();
-          if (done) break;
+        const matrix = document.getElementById('dept-matrix-container');
+        matrix.innerHTML = (data.department_metrics || []).map(d => `
+          <div class="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-2">
+            <div class="flex items-center justify-between text-xs font-bold text-slate-200">
+              <span>${d.department}</span>
+              <span class="text-indigo-400 font-mono">${d.average_utilization_percent}% Capacity</span>
+            </div>
+            <div class="w-full bg-slate-900 rounded-full h-2">
+              <div class="bg-indigo-500 h-2 rounded-full" style="width: ${d.average_utilization_percent}%"></div>
+            </div>
+            <div class="flex items-center justify-between text-[11px] text-slate-400 pt-1">
+              <span>Units: <strong>${d.equipment_count}</strong></span>
+              <span>Bottleneck Hardware: <strong class="text-slate-300">${d.busiest_hardware}</strong></span>
+            </div>
+          </div>
+        `).join('');
 
-          const chunk = decoder.decode(value);
-          const lines = chunk.split('\n');
-          for (const line of lines) {
-            if (line.startsWith('data: ')) {
-              const dataStr = line.slice(6).trim();
-              if (dataStr === '[DONE]') continue;
-              try {
-                const parsed = JSON.parse(dataStr);
-                if (parsed.text) output.innerText += parsed.text;
-                if (parsed.error) output.innerText += "\n[Error: " + parsed.error + "]";
-              } catch (e) {}
-            }
-          }
-        }
+        const rebalance = document.getElementById('rebalancing-list');
+        rebalance.innerHTML = (data.rebalancing_recommendations || []).map(r => `
+          <li class="flex items-start space-x-2 p-2 rounded bg-slate-950 border border-slate-800/80">
+            <i class="fa-solid fa-arrow-trend-up text-indigo-400 mt-1"></i>
+            <span>${r}</span>
+          </li>
+        `).join('');
       } catch (err) {
-        output.innerText = "Streaming error: " + err.message;
+        console.error('Analytics error:', err);
       }
-    }
-
-    function copyOutput() {
-      const text = document.getElementById('output-box').innerText;
-      navigator.clipboard.writeText(text);
-      const label = document.getElementById('copy-label');
-      label.innerText = "Copied!";
-      setTimeout(() => { label.innerText = "Copy"; }, 2000);
     }
   </script>
 </body>
